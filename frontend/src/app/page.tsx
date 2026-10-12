@@ -3,7 +3,7 @@
 import React, { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import heroImg from "@/app/assests/hero-image.png";
+import { CLOUDINARY_IMAGES } from "@/lib/cloudinaryImages";
 import { getToken } from "@/lib/utils";
 import { decodeJwt, DecodedTokenPayload } from "@/lib/jwt";
 import {
@@ -398,7 +398,7 @@ export default function HomePage() {
             <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 sm:p-3 shadow-xl overflow-hidden transition-all hover:shadow-2xl">
               <div className="relative w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-950">
                 <Image
-                  src={heroImg}
+                  src={CLOUDINARY_IMAGES.heroImage}
                   alt="LeadFlow CRM Console Dashboard Preview"
                   priority
                   width={1792}
@@ -804,6 +804,19 @@ export default function HomePage() {
                 <span className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
                   Audit & KPIs
                 </span>
+              </div>
+            </div>
+
+            {/* Pipeline Mockup Showcase */}
+            <div className="mt-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 sm:p-3 shadow-md overflow-hidden">
+              <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-800 bg-slate-950">
+                <Image
+                  src={CLOUDINARY_IMAGES.pipelineFlowMockup}
+                  alt="End-to-End Lead Pipeline Flow Architecture"
+                  fill
+                  sizes="(max-width: 1200px) 100vw, 1100px"
+                  className="object-cover"
+                />
               </div>
             </div>
           </div>
@@ -1387,6 +1400,23 @@ export default function HomePage() {
                   </span>
                 </li>
               </ul>
+
+              <div className="pt-2">
+                <div className="relative w-full h-44 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-2xs group bg-slate-950">
+                  <Image
+                    src={CLOUDINARY_IMAGES.teamLeaderWorkspace}
+                    alt="Team Leader Operations Console"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 500px"
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-3">
+                    <span className="text-[11px] font-semibold text-white drop-shadow-xs">
+                      Team Leader Distribution Console
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Sales Executive Box */}
@@ -1424,6 +1454,23 @@ export default function HomePage() {
                   </span>
                 </li>
               </ul>
+
+              <div className="pt-2">
+                <div className="relative w-full h-44 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-2xs group bg-slate-950">
+                  <Image
+                    src={CLOUDINARY_IMAGES.salesExecutiveWorkspace}
+                    alt="Sales Executive Lead Workspace"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 500px"
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-3">
+                    <span className="text-[11px] font-semibold text-white drop-shadow-xs">
+                      Sales Executive Focused Queue
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
