@@ -2,6 +2,7 @@ import { ConversationType, MessageType } from "@prisma/client";
 import { prisma } from "../config/db.js";
 import { z } from "zod";
 import { emitToUser } from "../config/socket.js";
+import { CloudinaryService } from "./cloudinary.service.js";
 
 export const sendSchema = z.object({
   content: z
@@ -149,6 +150,96 @@ export class ConversationService {
       return message;
     } catch (error) {
       console.error("Error creating message:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Create an attachment message (image or file) backed by Cloudinary storage.
+   *
+   * The attachment metadata is persisted as a JSON string in `content`
+   * (no schema migration required) so it can be read back by the client.
+   */
+  static async createAttachmentMessage(
+    conversationId: string,
+    senderId: string,
+    file: { buffer: Buffer; originalname: string; mimetype: string; size: number },
+    options: { caption?: string } = {},
+  ) {
+    try {
+      // Verify conversation exists and user is a participant
+      const conversation = await prisma.conversation.findUnique({
+        where: { id: conversationId },
+        include: { participants: true },
+      });
+
+      if (!conversation) {
+        throw new Error("Conversation not found");
+      }
+
+      const isParticipant = conversation.participants.some(
+        (p) => p.userId === senderId,
+      );
+      if (!isParticipant) {
+        throw new Error("User is not a participant of this conversation");
+      }
+
+      // Upload to Cloudinary (server-side; secret never leaves the backend)
+      const upload = await CloudinaryService.uploadBuffer(file.buffer, {
+        originalName: file.originalname,
+      });
+
+      const isImage = (file.mimetype || "").toLowerCase().startsWith("image/");
+      const type = isImage ? MessageType.IMAGE : MessageType.FILE;
+
+      const attachment = {
+        url: upload.secureUrl,
+        publicId: upload.publicId,
+        resourceType: upload.resourceType,
+        format: upload.format,
+        bytes: upload.bytes ?? file.size,
+        width: upload.width,
+        height: upload.height,
+        fileName: file.originalname,
+        mimeType: file.mimetype,
+        caption: options.caption?.trim() || undefined,
+      };
+
+      const message = await prisma.message.create({
+        data: {
+          conversationId,
+          senderId,
+          content: JSON.stringify(attachment),
+          type,
+        },
+        include: {
+          sender: {
+            select: { id: true, name: true, email: true, role: true },
+          },
+        },
+      });
+
+      // Update conversation updatedAt timestamp
+      await prisma.conversation.update({
+        where: { id: conversationId },
+        data: { updatedAt: new Date() },
+      });
+
+      // Safely emit to conversation participants
+      try {
+        for (const participant of conversation.participants) {
+          if (participant.userId !== senderId) {
+            emitToUser(participant.userId, "message", message);
+            emitToUser(participant.userId, "message:new", message);
+          }
+        }
+      } catch (socketError) {
+        console.warn("Socket emission warning:", socketError);
+      }
+
+      return message;
+    } catch (error) {
+      console.error("Error creating attachment message:", error);
       throw error;
     }
   }

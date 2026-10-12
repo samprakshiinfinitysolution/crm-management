@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { Loader2, ShieldAlert } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { logout, setCredentials } from "@/store/slices/authSlice";
+import { setCredentials } from "@/store/slices/authSlice";
 import { useGetMeQuery } from "@/store/api/authApi";
+import { performLogout } from "@/lib/authService";
 import { UserRole } from "@/types/api.types";
 import { Button } from "../ui";
 
@@ -59,7 +59,6 @@ export function ProtectedRoute({
   children,
   allowedRoles,
 }: ProtectedRouteProps) {
-  const router = useRouter();
   const dispatch = useAppDispatch();
   const isLoggingOut = useAppSelector((state) => state.auth.isLoggingOut);
   const { data, isLoading, isError } = useGetMeQuery(undefined, {
@@ -70,12 +69,18 @@ export function ProtectedRoute({
   useEffect(() => {
     if (isLoggingOut) return;
     if (isError) {
-      dispatch(logout());
-      router.replace("/login");
+      // The session is no longer valid (expired/revoked, or the account behind
+      // the token no longer exists). Route through the canonical logout flow so
+      // the httpOnly auth cookie is actually cleared server-side and the user is
+      // hard-redirected to /login. Dispatching `logout()` alone only resets Redux
+      // state, leaves the stale cookie in place (causing an endless 401 loop) and
+      // strands the UI on the "Signing out…" loader because `isLoggingOut` never
+      // resets after a soft navigation.
+      void performLogout({ callBackend: true, redirectTo: "/login" });
       return;
     }
     if (user) dispatch(setCredentials({ user }));
-  }, [dispatch, isError, router, user, isLoggingOut]);
+  }, [dispatch, isError, user, isLoggingOut]);
 
   if (isLoggingOut) {
     return (
@@ -107,7 +112,7 @@ export function ProtectedRoute({
           <div className="mt-4">
             <Button
               variant="outline"
-              onClick={() => router.back()}
+              onClick={() => window.history.back()}
               className="rounded-full"
             >
               Go back

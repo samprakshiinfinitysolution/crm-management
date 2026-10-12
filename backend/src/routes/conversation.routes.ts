@@ -6,7 +6,9 @@ import {
   getMessages,
   sendMessage,
   readMessage,
+  sendAttachment,
 } from "../controllers/conversation.controller.js";
+import { uploadChatAttachment } from "../middleware/upload.middleware.js";
 
 const conversationRouter = Router();
 
@@ -40,6 +42,18 @@ conversationRouter.get("/:id/messages", getMessages);
  * @access  Private
  */
 conversationRouter.post("/:id/messages", sendMessage);
+
+/**
+ * @route   POST /api/conversations/:id/attachments
+ * @desc    Upload an image/file attachment (Cloudinary) and persist it as a message
+ * @access  Private
+ */
+conversationRouter.post(
+  "/:id/attachments",
+  uploadChatAttachment.single("file"),
+  sendAttachment,
+);
+
 
 /**
  * @route   PATCH /api/conversations/:id/read

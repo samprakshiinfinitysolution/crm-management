@@ -7,7 +7,7 @@
     "dev": "tsx watch src/server.ts",
     "build": "prisma generate && tsc && tsc-alias",
     "start": "node dist/server.js",
-    "test": "tsx --test tests/distribution.test.ts tests/metrics.test.ts tests/excelParser.test.ts tests/authAndRbac.test.ts tests/notifications.test.ts tests/keepAlive.test.ts tests/apiSecurity.test.ts tests/authCookieFlow.test.ts"
+    "test": "tsx --test tests/distribution.test.ts tests/metrics.test.ts tests/excelParser.test.ts tests/authAndRbac.test.ts tests/notifications.test.ts tests/keepAlive.test.ts tests/apiSecurity.test.ts tests/authCookieFlow.test.ts tests/cloudinaryAttachment.test.ts"
   },
   "keywords": [
     "crm",

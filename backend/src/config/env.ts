@@ -60,6 +60,14 @@ export const config = {
 
   serverUrl: process.env.RENDER_EXTERNAL_URL || process.env.BACKEND_URL || process.env.SERVER_URL || '',
 
+  cloudinary: {
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME || "",
+    apiKey: process.env.CLOUDINARY_API_KEY || "",
+    apiSecret: process.env.CLOUDINARY_API_SECRET || "",
+    folder: process.env.CLOUDINARY_FOLDER || "crm-chat",
+  },
+
+
   keepAlive: {
     enabled: process.env.ENABLE_KEEP_ALIVE !== 'false',
     intervalMinutes: process.env.KEEP_ALIVE_INTERVAL_MINUTES

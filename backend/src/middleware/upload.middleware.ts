@@ -75,3 +75,67 @@ export const uploadLeadSheet = multer({
   },
   fileFilter,
 });
+
+// ---------------------------------------------------------------------------
+// Chat attachments (images + documents)
+// ---------------------------------------------------------------------------
+
+// Maximum chat attachment size (10 MB). Kept smaller than the Excel import
+// limit because media is proxied to Cloudinary in a single request.
+const CHAT_ATTACHMENT_MAX_BYTES = 10 * 1024 * 1024;
+
+// Allowed image MIME types for chat.
+const allowedImageMimeTypes = new Set<string>([
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+  "image/bmp",
+  "image/svg+xml",
+]);
+
+// Allowed document / file MIME types for chat.
+const allowedFileMimeTypes = new Set<string>([
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "application/vnd.ms-powerpoint",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "text/plain",
+  "text/csv",
+  "application/zip",
+  "application/x-zip-compressed",
+  // Generic binary is tolerated so valid files with mis-reported MIME types
+  // still upload; Cloudinary performs authoritative classification.
+  "application/octet-stream",
+]);
+
+const chatFileFilter: multer.Options["fileFilter"] = (_req, file, cb) => {
+  const mime = (file.mimetype || "").toLowerCase();
+  if (allowedImageMimeTypes.has(mime) || allowedFileMimeTypes.has(mime)) {
+    return cb(null, true);
+  }
+  return cb(
+    new AppError(
+      `Unsupported file type "${mime || "unknown"}". Allowed: images (JPG, PNG, GIF, WEBP) and documents (PDF, DOC, XLS, PPT, TXT, CSV, ZIP).`,
+      400,
+      "INVALID_FILE_TYPE",
+    ),
+  );
+};
+
+/**
+ * Multer instance for chat attachments. Accepts a single file under the
+ * "file" field, stored in memory for direct streaming to Cloudinary.
+ */
+export const uploadChatAttachment = multer({
+  storage,
+  limits: {
+    fileSize: CHAT_ATTACHMENT_MAX_BYTES,
+    files: 1,
+  },
+  fileFilter: chatFileFilter,
+});

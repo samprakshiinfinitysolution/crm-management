@@ -7,9 +7,11 @@ import {
   useGetMessagesQuery,
   useCreateDirectConversationMutation,
   useSendMessageMutation,
+  useSendAttachmentMutation,
   useMarkConversationAsReadMutation,
 } from "@/store/api/userApi";
 import { UserRole, type ConversationMessage } from "@/types/api.types";
+import { toast } from "sonner";
 import { useAppSelector } from "@/store";
 import { useDebounce } from "@/lib/useDebounce";
 import { useSocket } from "@/components/providers/SocketProvider";
@@ -81,6 +83,8 @@ export function FloatingChatWidget() {
 
   const [createDirectConversation] = useCreateDirectConversationMutation();
   const [sendMessageMutation] = useSendMessageMutation();
+  const [sendAttachmentMutation, { isLoading: isUploadingAttachment }] =
+    useSendAttachmentMutation();
   const [markConversationAsRead] = useMarkConversationAsReadMutation();
 
   const handleMarkAsRead = (convId?: string | null) => {
@@ -294,16 +298,44 @@ export function FloatingChatWidget() {
         ? (payload as { messages: ConversationMessage[] }).messages
         : [];
 
-    const serverMessages: ChatMessage[] = messageList.map((m) => ({
-      id: m.id,
-      sender: m.senderId === user?.id ? "user" : "other",
-      text: m.content,
-      timestamp: new Date(m.createdAt).toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      rawCreatedAt: m.createdAt,
-    }));
+    const serverMessages: ChatMessage[] = messageList.map((m) => {
+      const isAttachment = m.type === "IMAGE" || m.type === "FILE";
+      let attachment: ChatMessage["attachment"];
+      let text = m.content;
+      if (isAttachment) {
+        try {
+          const parsed = JSON.parse(m.content);
+          attachment = {
+            url: parsed.url || parsed.secureUrl,
+            secureUrl: parsed.secureUrl,
+            publicId: parsed.publicId,
+            resourceType: parsed.resourceType,
+            format: parsed.format,
+            bytes: parsed.bytes,
+            width: parsed.width,
+            height: parsed.height,
+            fileName: parsed.fileName,
+            mimeType: parsed.mimeType,
+            caption: parsed.caption,
+          };
+          text = parsed.caption || "";
+        } catch {
+          // Fall back to treating content as plain text.
+        }
+      }
+      return {
+        id: m.id,
+        sender: m.senderId === user?.id ? "user" : "other",
+        text,
+        timestamp: new Date(m.createdAt).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        rawCreatedAt: m.createdAt,
+        type: m.type,
+        attachment,
+      };
+    });
 
     return { contactId: selectedContact.id, messages: serverMessages };
   }, [messagesRes?.data, selectedContact?.id, user?.id]);
@@ -340,12 +372,39 @@ export function FloatingChatWidget() {
       conversationId?: string;
       senderId?: string;
       content: string;
+      type?: "TEXT" | "IMAGE" | "FILE" | "SYSTEM";
       createdAt?: string | Date;
       sender?: { id: string; name: string };
     }) => {
       if (!msg || !msg.senderId || msg.senderId === user?.id) return;
 
       const senderId = msg.senderId;
+
+      // Parse attachment payloads (IMAGE/FILE store JSON in content).
+      let text = msg.content;
+      let attachment: ChatMessage["attachment"];
+      const type: ChatMessage["type"] = msg.type;
+      if (msg.type === "IMAGE" || msg.type === "FILE") {
+        try {
+          const parsed = JSON.parse(msg.content);
+          attachment = {
+            url: parsed.url || parsed.secureUrl,
+            secureUrl: parsed.secureUrl,
+            publicId: parsed.publicId,
+            resourceType: parsed.resourceType,
+            format: parsed.format,
+            bytes: parsed.bytes,
+            width: parsed.width,
+            height: parsed.height,
+            fileName: parsed.fileName,
+            mimeType: parsed.mimeType,
+            caption: parsed.caption,
+          };
+          text = parsed.caption || "";
+        } catch {
+          // Fall back to plain text.
+        }
+      }
 
       setConversations((prev) => {
         const contactMsgs = prev[senderId] || [];
@@ -359,7 +418,7 @@ export function FloatingChatWidget() {
             {
               id: msg.id || Date.now().toString(),
               sender: "other",
-              text: msg.content,
+              text,
               timestamp: msg.createdAt
                 ? new Date(msg.createdAt).toLocaleTimeString([], {
                     hour: "2-digit",
@@ -370,6 +429,8 @@ export function FloatingChatWidget() {
                     minute: "2-digit",
                   }),
               rawCreatedAt: msg.createdAt || Date.now(),
+              type,
+              attachment,
             },
           ],
         };
@@ -512,6 +573,99 @@ export function FloatingChatWidget() {
       });
     }
   };
+  // Send an image/file attachment via Cloudinary-backed endpoint.
+  const handleAttach = async (file: File) => {
+    if (!selectedContact) return;
+
+    const contactId = selectedContact.id;
+    const isImage = file.type.startsWith("image/");
+    const tempId = `uploading-${Date.now()}`;
+    const now = new Date();
+
+    // Optimistic "uploading" bubble so the UI feels instant.
+    const optimisticMsg: ChatMessage = {
+      id: tempId,
+      sender: "user",
+      text: "",
+      timestamp: now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      rawCreatedAt: now.getTime(),
+      type: isImage ? "IMAGE" : "FILE",
+      attachment: {
+        url: "",
+        fileName: file.name,
+        mimeType: file.type,
+        bytes: file.size,
+      },
+      isUploading: true,
+    };
+    setConversations((prev) => ({
+      ...prev,
+      [contactId]: [...(prev[contactId] || []), optimisticMsg],
+    }));
+
+    // Ensure a conversation exists before uploading.
+    let targetConv = activeConversationId || selectedContact.conversationId;
+    if (!targetConv) {
+      try {
+        const res = await createDirectConversation({ toUserId: contactId }).unwrap();
+        if (res.data?.id) {
+          targetConv = res.data.id;
+          setActiveConversationId(res.data.id);
+        }
+      } catch (err) {
+        console.error("Failed to initialize conversation before attachment:", err);
+        toast.error("Couldn't start the conversation. Please try again.");
+        setConversations((prev) => ({
+          ...prev,
+          [contactId]: (prev[contactId] || []).filter((m) => m.id !== tempId),
+        }));
+        return;
+      }
+    }
+
+    if (!targetConv) return;
+
+    try {
+      const res = await sendAttachmentMutation({
+        conversationId: targetConv,
+        file,
+        caption: input.trim() || undefined,
+      }).unwrap();
+
+      const sent = res.data;
+      const confirmed: ChatMessage = {
+        id: sent?.id || tempId,
+        sender: "user",
+        text: input.trim(),
+        timestamp: now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        rawCreatedAt: sent?.createdAt || now.getTime(),
+        type: sent?.type || (isImage ? "IMAGE" : "FILE"),
+        attachment: optimisticMsg.attachment,
+      };
+
+      setConversations((prev) => ({
+        ...prev,
+        [contactId]: (prev[contactId] || []).map((m) =>
+          m.id === tempId ? confirmed : m,
+        ),
+      }));
+      setInput("");
+    } catch (err: unknown) {
+      console.error("Failed to upload attachment:", err);
+      // Remove the optimistic bubble on failure.
+      setConversations((prev) => ({
+        ...prev,
+        [contactId]: (prev[contactId] || []).filter((m) => m.id !== tempId),
+      }));
+      const errorObj = err as { data?: { message?: string } };
+      const message =
+        errorObj?.data?.message ||
+        "Failed to send attachment. Please check your connection and try again.";
+      toast.error(message);
+    }
+  };
+
+
 
   // Only render the widget for authenticated workspace users
   if (!user) {
@@ -558,6 +712,8 @@ export function FloatingChatWidget() {
                 contactName={selectedContact.name}
                 onInputChange={setInput}
                 onSubmit={handleSendMessage}
+                onAttach={handleAttach}
+                isUploading={isUploadingAttachment}
               />
             </div>
           )}

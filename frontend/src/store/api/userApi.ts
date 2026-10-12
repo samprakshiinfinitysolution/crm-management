@@ -214,6 +214,27 @@ export const userApi = crmApi.injectEndpoints({
         { type: "Conversations", id: "LIST" },
       ],
     }),
+
+    sendAttachment: builder.mutation<
+      ApiResponse<ConversationMessage>,
+      { conversationId: string; file: File; caption?: string }
+    >({
+      query: ({ conversationId, file, caption }) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        if (caption) formData.append("caption", caption);
+        return {
+          url: `/conversations/${conversationId}/attachments`,
+          method: "POST",
+          body: formData,
+        };
+      },
+      invalidatesTags: (_result, _error, { conversationId }) => [
+        { type: "Conversations", id: conversationId },
+        { type: "Conversations", id: `MESSAGES_${conversationId}` },
+        { type: "Conversations", id: "LIST" },
+      ],
+    }),
     markConversationAsRead: builder.mutation<
       ApiResponse<{ success: boolean }>,
       { conversationId: string }
@@ -249,5 +270,6 @@ export const {
   useLazyGetMessagesQuery,
   useCreateDirectConversationMutation,
   useSendMessageMutation,
+  useSendAttachmentMutation,
   useMarkConversationAsReadMutation,
 } = userApi;

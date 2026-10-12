@@ -82,7 +82,7 @@ export const openApiSpec = {
     {
       name: "Conversations & Messaging",
       description:
-        "Direct workspace chat, real-time messaging, participant read tracking, and notifications",
+        "Direct workspace chat, real-time messaging, image/file attachments (Cloudinary), participant read tracking, and notifications",
     },
   ],
   components: {
@@ -3330,6 +3330,102 @@ export const openApiSpec = {
         },
       },
     },
+    "/conversations/{id}/attachments": {
+      post: {
+        tags: ["Conversations & Messaging"],
+        summary: "🔒 Send Image/File Attachment (Cloudinary)",
+        description:
+          "> 🔒 **PROTECTED ROUTE** — Requires `Authorization: Bearer <jwt_token>` or session cookie.\n\nUploads an image or document (`multipart/form-data`, field name `file`) which is stored on Cloudinary and persisted as an `IMAGE` or `FILE` message. The attachment metadata (URL, file name, size, MIME type) is stored as JSON in the message `content` field.",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            description: "Conversation ID",
+            schema: {
+              type: "string",
+              format: "uuid",
+            },
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "multipart/form-data": {
+              schema: {
+                type: "object",
+                required: ["file"],
+                properties: {
+                  file: {
+                    type: "string",
+                    format: "binary",
+                    description:
+                      "Image (JPG, PNG, GIF, WEBP) or document (PDF, DOC, XLS, PPT, TXT, CSV, ZIP). Max 10 MB.",
+                  },
+                  caption: {
+                    type: "string",
+                    description: "Optional caption sent alongside the attachment.",
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          "201": {
+            description: "Attachment uploaded and message created",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    success: { type: "boolean", example: true },
+                    message: {
+                      type: "string",
+                      example: "Attachment sent successfully",
+                    },
+                    data: { $ref: "#/components/schemas/ChatMessage" },
+                  },
+                },
+              },
+            },
+          },
+          "400": {
+            description: "No file provided or unsupported file type",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/StandardErrorResponse",
+                },
+              },
+            },
+          },
+          "401": { $ref: "#/components/responses/UnauthorizedError" },
+          "403": { $ref: "#/components/responses/ForbiddenError" },
+          "404": {
+            description: "Conversation not found",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/StandardErrorResponse",
+                },
+              },
+            },
+          },
+          "503": {
+            description: "Cloudinary storage not configured on the server",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/StandardErrorResponse",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+
     "/conversations/{id}/read": {
       patch: {
         tags: ["Conversations & Messaging"],
