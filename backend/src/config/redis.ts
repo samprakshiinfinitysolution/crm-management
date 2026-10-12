@@ -14,40 +14,74 @@ let hasLoggedPubSubNotice = false;
 // subscriber mode cannot issue regular commands.
 let pubSubPair: { pub: Redis; sub: Redis } | null = null;
 
+function isLocalhost(value: string): boolean {
+  if (!value) return false;
+  return value.includes('127.0.0.1') || value.includes('localhost') || value.includes('::1');
+}
+
+/**
+ * Checks whether Redis is genuinely configured with an accessible endpoint.
+ * In cloud / production environments (like Render or Vercel), localhost (127.0.0.1)
+ * does not run a Redis server, so we skip Redis and use seamless database fallbacks.
+ */
+function isRedisConfigured(): boolean {
+  const redisUrl = (config.redis.url || process.env.REDIS_URL || '').trim();
+  const redisHost = (config.redis.host || process.env.REDIS_HOST || '').trim();
+
+  // Nothing configured at all
+  if (!redisUrl && !redisHost) {
+    return false;
+  }
+
+  const isCloudOrProd =
+    config.nodeEnv === 'production' ||
+    process.env.NODE_ENV === 'production' ||
+    Boolean(process.env.RENDER || process.env.VERCEL);
+
+  // In cloud/production environments, localhost/127.0.0.1 cannot reach a Redis service
+  if (isCloudOrProd) {
+    if (redisUrl && isLocalhost(redisUrl)) {
+      return false;
+    }
+    if (redisHost && isLocalhost(redisHost)) {
+      return false;
+    }
+  }
+
+  // In test environments, disable Redis unless explicitly requested
+  if (process.env.NODE_ENV === 'test' && !process.env.TEST_REDIS) {
+    return false;
+  }
+
+  return true;
+}
+
 const createRedisClient = (): Redis | null => {
+  if (!isRedisConfigured()) {
+    return null;
+  }
+
   try {
     const redisUrl = (config.redis.url || process.env.REDIS_URL || '').trim();
     const redisHost = (config.redis.host || process.env.REDIS_HOST || '').trim();
 
-    // If no Redis URL and no explicit host is configured, cleanly skip Redis
-    if (!redisUrl && !redisHost) {
-      return null;
-    }
-
-    // In production or test environments, do not connect to localhost 127.0.0.1 unless explicitly forced
-    if (!redisUrl && redisHost === '127.0.0.1') {
-      if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test' || !process.env.REDIS_HOST) {
-        return null;
-      }
-    }
-
     const options: RedisOptions = {
-      maxRetriesPerRequest: 2,
+      enableOfflineQueue: false, // Never accumulate commands while disconnected to avoid MaxRetriesPerRequestError
+      maxRetriesPerRequest: null,
       enableReadyCheck: true,
+      lazyConnect: true,
       retryStrategy: (times: number) => {
         if (times > 3) {
-          return null; // Stop retrying after 3 attempts to preserve resources
+          return null; // Stop retrying after 3 attempts to prevent resource leaks
         }
-        return Math.min(times * 300, 2000);
+        return Math.min(times * 500, 2500);
       },
       reconnectOnError: (err: Error) => {
-        const targetError = 'READONLY';
-        if (err.message.includes(targetError)) {
+        if (err.message.includes('READONLY')) {
           return true;
         }
         return false;
       },
-      lazyConnect: true,
     };
 
     if (redisUrl.length > 0) {
@@ -85,7 +119,7 @@ const createRedisClient = (): Redis | null => {
       });
 
       redisClient.connect().catch(() => {
-        // Handled by event listener
+        // Handled by error listener
       });
     }
 
@@ -114,15 +148,8 @@ export const getRedisClient = (): Redis | null => {
 export const getRedisPubSubPair = (): { pub: Redis; sub: Redis } | null => {
   if (pubSubPair) return pubSubPair;
 
-  const redisUrl = (config.redis.url || process.env.REDIS_URL || '').trim();
-  const redisHost = (config.redis.host || process.env.REDIS_HOST || '').trim();
-
-  // If Redis is not configured, cleanly return null to use in-memory adapter
-  if (!redisUrl && !redisHost) {
-    return null;
-  }
-
-  if (!redisUrl && redisHost === '127.0.0.1' && (process.env.NODE_ENV === 'production' || !process.env.REDIS_HOST)) {
+  // If Redis is not configured for this environment, return null immediately
+  if (!isRedisConfigured()) {
     return null;
   }
 
@@ -130,20 +157,22 @@ export const getRedisPubSubPair = (): { pub: Redis; sub: Redis } | null => {
   if (!base) return null;
 
   try {
+    const redisUrl = (config.redis.url || process.env.REDIS_URL || '').trim();
+    const redisHost = (config.redis.host || process.env.REDIS_HOST || '').trim();
     const baseOptions = base.options;
 
     const makeConnection = (): Redis => {
       const options: RedisOptions = {
         ...baseOptions,
         lazyConnect: false,
-        maxRetriesPerRequest: 1,
+        enableOfflineQueue: false, // Never queue commands while offline to avoid MaxRetriesPerRequestError
+        maxRetriesPerRequest: null,
         retryStrategy: (times: number) => {
           if (times > 3) {
-            return null; // Stop retrying after 3 attempts to prevent log flood
+            return null; // Stop retrying after 3 attempts
           }
-          return Math.min(times * 500, 2000);
+          return Math.min(times * 500, 2500);
         },
-        connectionName: 'crm-socketio-pubsub',
       };
 
       const conn =
@@ -159,7 +188,7 @@ export const getRedisPubSubPair = (): { pub: Redis; sub: Redis } | null => {
       conn.on('error', (err: Error) => {
         if (!hasLoggedPubSubNotice && config.nodeEnv !== 'test') {
           hasLoggedPubSubNotice = true;
-          console.warn(`⚠️ Socket.IO Redis adapter connection error: ${err.message}. Operating in in-memory adapter fallback mode.`);
+          console.warn(`⚠️ Socket.IO Redis adapter connection notice: ${err.message}. Operating with in-memory adapter.`);
         }
       });
 
@@ -179,7 +208,12 @@ export const isRedisAvailable = (): boolean => {
 
 export const closeRedis = async (): Promise<void> => {
   if (pubSubPair) {
-    await Promise.allSettled([pubSubPair.pub.quit(), pubSubPair.sub.quit()]);
+    try {
+      await Promise.allSettled([pubSubPair.pub.quit(), pubSubPair.sub.quit()]);
+    } catch {
+      pubSubPair.pub.disconnect();
+      pubSubPair.sub.disconnect();
+    }
     pubSubPair = null;
   }
   if (redisClient) {
@@ -189,6 +223,7 @@ export const closeRedis = async (): Promise<void> => {
     } catch {
       redisClient.disconnect();
     }
+    redisClient = null;
   }
 };
 
