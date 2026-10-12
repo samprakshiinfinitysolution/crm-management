@@ -7,6 +7,7 @@ let redisClient: Redis | null = null;
 let isRedisConnected = false;
 
 let hasLoggedNotice = false;
+let hasLoggedPubSubNotice = false;
 
 // Dedicated pub/sub connection pair for the Socket.IO Redis adapter. Kept
 // separate from the shared cache client because a Redis connection in
@@ -15,26 +16,29 @@ let pubSubPair: { pub: Redis; sub: Redis } | null = null;
 
 const createRedisClient = (): Redis | null => {
   try {
-    const redisUrl = config.redis.url || process.env.REDIS_URL;
+    const redisUrl = (config.redis.url || process.env.REDIS_URL || '').trim();
+    const redisHost = (config.redis.host || process.env.REDIS_HOST || '').trim();
 
-    // In test environment or when no redis configuration is provided, use seamless DB fallback
-    if (!redisUrl && (!config.redis.host || config.redis.host === '127.0.0.1') && process.env.NODE_ENV === 'test') {
+    // If no Redis URL and no explicit host is configured, cleanly skip Redis
+    if (!redisUrl && !redisHost) {
       return null;
     }
 
-    // Only create client if URL is provided or explicitly configured
-    if (!redisUrl && !process.env.REDIS_URL && !process.env.REDIS_HOST) {
-      return null;
+    // In production or test environments, do not connect to localhost 127.0.0.1 unless explicitly forced
+    if (!redisUrl && redisHost === '127.0.0.1') {
+      if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test' || !process.env.REDIS_HOST) {
+        return null;
+      }
     }
 
     const options: RedisOptions = {
       maxRetriesPerRequest: 2,
       enableReadyCheck: true,
       retryStrategy: (times: number) => {
-        if (times > 4) {
-          return null; // Stop retrying after 4 attempts to preserve resources
+        if (times > 3) {
+          return null; // Stop retrying after 3 attempts to preserve resources
         }
-        return Math.min(times * 300, 3000);
+        return Math.min(times * 300, 2000);
       },
       reconnectOnError: (err: Error) => {
         const targetError = 'READONLY';
@@ -46,11 +50,11 @@ const createRedisClient = (): Redis | null => {
       lazyConnect: true,
     };
 
-    if (redisUrl && redisUrl.trim().length > 0) {
+    if (redisUrl.length > 0) {
       redisClient = new Redis(redisUrl, options);
-    } else if (config.redis.host) {
+    } else if (redisHost.length > 0) {
       redisClient = new Redis({
-        host: config.redis.host,
+        host: redisHost,
         port: config.redis.port,
         password: config.redis.password,
         ...options,
@@ -110,42 +114,52 @@ export const getRedisClient = (): Redis | null => {
 export const getRedisPubSubPair = (): { pub: Redis; sub: Redis } | null => {
   if (pubSubPair) return pubSubPair;
 
+  const redisUrl = (config.redis.url || process.env.REDIS_URL || '').trim();
+  const redisHost = (config.redis.host || process.env.REDIS_HOST || '').trim();
+
+  // If Redis is not configured, cleanly return null to use in-memory adapter
+  if (!redisUrl && !redisHost) {
+    return null;
+  }
+
+  if (!redisUrl && redisHost === '127.0.0.1' && (process.env.NODE_ENV === 'production' || !process.env.REDIS_HOST)) {
+    return null;
+  }
+
   const base = getRedisClient();
   if (!base) return null;
 
   try {
-    const redisUrl = config.redis.url || process.env.REDIS_URL;
     const baseOptions = base.options;
 
     const makeConnection = (): Redis => {
       const options: RedisOptions = {
         ...baseOptions,
-        // Adapter connections connect eagerly and keep retrying: unlike the
-        // cache client (which backs off and falls back to the DB), a dead
-        // pub/sub link silently breaks real-time events across instances.
         lazyConnect: false,
-        maxRetriesPerRequest: null,
-        retryStrategy: (times: number) => Math.min(times * 300, 3000),
+        maxRetriesPerRequest: 1,
+        retryStrategy: (times: number) => {
+          if (times > 3) {
+            return null; // Stop retrying after 3 attempts to prevent log flood
+          }
+          return Math.min(times * 500, 2000);
+        },
         connectionName: 'crm-socketio-pubsub',
       };
 
-      // A URL string and a discrete host/port object map to different ioredis
-      // overloads, so branch explicitly rather than passing a union.
       const conn =
-        redisUrl && redisUrl.trim().length > 0
+        redisUrl.length > 0
           ? new Redis(redisUrl, options)
           : new Redis({
               ...options,
-              host: config.redis.host,
+              host: redisHost,
               port: config.redis.port,
               password: config.redis.password,
             });
 
-      // Never let an adapter connection crash the process on a transient
-      // Redis error; the shared client already surfaces connectivity state.
       conn.on('error', (err: Error) => {
-        if (config.nodeEnv !== 'test') {
-          console.warn(`⚠️ Socket.IO Redis adapter connection error: ${err.message}`);
+        if (!hasLoggedPubSubNotice && config.nodeEnv !== 'test') {
+          hasLoggedPubSubNotice = true;
+          console.warn(`⚠️ Socket.IO Redis adapter connection error: ${err.message}. Operating in in-memory adapter fallback mode.`);
         }
       });
 
