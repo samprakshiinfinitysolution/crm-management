@@ -21,6 +21,7 @@
     "@neon/config": "^1.8.2",
     "@neon/env": "^1.4.7",
     "@prisma/client": "^6.4.1",
+    "cloudinary": "^2.11.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
@@ -44,14 +45,13 @@
     "multer": "^2.4.0",
     "socket.io": "^4.8.4",
     "tsc-alias": "^1.9.5",
+    "tsx": "^4.16.2",
     "typescript": "^5.5.2",
     "prisma": "^6.4.1",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "zod": "^3.23.8"
   },
-  "devDependencies": {
-    "tsx": "^4.16.2"
-  },
+  "devDependencies": {},
   "overrides": {
     "braces": "3.0.3",
     "micromatch": "^4.0.8",
