@@ -24,7 +24,7 @@ export function FullPageLoader({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-50/95 dark:bg-slate-950/95 backdrop-blur-md select-none transition-colors">
       {/* Background ambient gradient glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent dark:from-blue-600/15 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent dark:from-blue-600/15 pointer-events-none" />
 
       <div className="relative flex flex-col items-center max-w-sm w-full mx-4 p-8 rounded-2xl bg-white/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 shadow-2xl shadow-blue-500/5 text-center">
         {/* Animated Brand Emblem / Spinner */}
@@ -40,14 +40,14 @@ export function FullPageLoader({
           {title}
         </h3>
         {subtitle && (
-          <p className="mt-1.5 text-xs text-slate-500 dark:text-slate-400 max-w-[260px] leading-relaxed">
+          <p className="mt-1.5 text-xs text-slate-500 dark:text-slate-400 max-w-65 leading-relaxed">
             {subtitle}
           </p>
         )}
 
         {/* Shimmer loading bar */}
         <div className="w-36 h-1 bg-slate-100 dark:bg-slate-800 rounded-full mt-5 overflow-hidden">
-          <div className="h-full w-1/2 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full animate-pulse" />
+          <div className="h-full w-1/2 bg-linear-to-r from-blue-500 to-indigo-600 rounded-full animate-pulse" />
         </div>
       </div>
     </div>

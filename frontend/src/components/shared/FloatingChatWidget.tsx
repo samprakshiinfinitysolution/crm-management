@@ -96,26 +96,25 @@ export function FloatingChatWidget() {
       });
   };
 
-  const handleSelectContact = async (contact: ChatContact) => {
+  const handleSelectContact = (contact: ChatContact) => {
     setSelectedContact(contact);
-    setUnreadContactIds((prev) => {
-      const filtered = prev.filter((id) => id !== contact.id);
-      if (filtered.length === 0) setHasNewMessage(false);
-      return filtered;
-    });
+    const hasUnread = unreadContactIds.includes(contact.id);
+    if (hasUnread) {
+      setUnreadContactIds((prev) => {
+        const filtered = prev.filter((id) => id !== contact.id);
+        if (filtered.length === 0) setHasNewMessage(false);
+        return filtered;
+      });
+    }
 
     if (contact.conversationId) {
       setActiveConversationId(contact.conversationId);
-      handleMarkAsRead(contact.conversationId);
-    }
-    try {
-      const res = await createDirectConversation({ toUserId: contact.id }).unwrap();
-      if (res.data?.id) {
-        setActiveConversationId(res.data.id);
-        handleMarkAsRead(res.data.id);
+      // Only invoke read API when this conversation actually has unread messages
+      if (hasUnread) {
+        handleMarkAsRead(contact.conversationId);
       }
-    } catch (err) {
-      console.error("Failed to initialize direct conversation:", err);
+    } else {
+      setActiveConversationId(null);
     }
   };
 
@@ -123,14 +122,17 @@ export function FloatingChatWidget() {
     setIsOpen((prev) => {
       const next = !prev;
       if (next && selectedContact) {
-        setUnreadContactIds((prevUnread) => {
-          const filtered = prevUnread.filter((id) => id !== selectedContact.id);
-          if (filtered.length === 0) setHasNewMessage(false);
-          return filtered;
-        });
-        const currentConv = activeConversationId || selectedContact.conversationId;
-        if (currentConv) {
-          handleMarkAsRead(currentConv);
+        const hasUnread = unreadContactIds.includes(selectedContact.id);
+        if (hasUnread) {
+          setUnreadContactIds((prevUnread) => {
+            const filtered = prevUnread.filter((id) => id !== selectedContact.id);
+            if (filtered.length === 0) setHasNewMessage(false);
+            return filtered;
+          });
+          const currentConv = activeConversationId || selectedContact.conversationId;
+          if (currentConv) {
+            handleMarkAsRead(currentConv);
+          }
         }
       }
       return next;
@@ -139,12 +141,15 @@ export function FloatingChatWidget() {
 
   const debounceValue = useDebounce(searchQuery, 500);
 
-  const params = {
-    search: debounceValue || undefined,
-    status: "active",
-    page: 1,
-    limit: 50,
-  };
+  const params = useMemo(
+    () => ({
+      search: debounceValue.trim() || undefined,
+      status: "active",
+      page: 1,
+      limit: 50,
+    }),
+    [debounceValue],
+  );
 
   const { data: searchedUsersRes } = useGetUsersQuery(params, {
     skip: !isOpen,
@@ -279,7 +284,7 @@ export function FloatingChatWidget() {
   const targetConvId = activeConversationId || selectedContact?.conversationId;
   const { data: messagesRes, isLoading: isLoadingMessages } = useGetMessagesQuery(
     { conversationId: targetConvId! },
-    { skip: !targetConvId || !selectedContact },
+    { skip: !isOpen || !selectedContact || !targetConvId },
   );
 
   // Derive the active contact's server messages purely from query data so they
@@ -356,12 +361,6 @@ export function FloatingChatWidget() {
     }));
   }
 
-  // Mark conversation as read when active in view
-  useEffect(() => {
-    if (isOpen && selectedContact && targetConvId) {
-      handleMarkAsRead(targetConvId);
-    }
-  }, [isOpen, selectedContact?.id, targetConvId, messagesRes?.data]);
 
   // Listen for real-time incoming messages via WebSocket
   useEffect(() => {

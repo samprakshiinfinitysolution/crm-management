@@ -188,7 +188,7 @@ export default function ExecutiveWorkloadAudit({
                             ? "bg-rose-50 text-rose-700 dark:bg-rose-950/50 dark:text-rose-300 border border-rose-200/60"
                             : isOptimal
                               ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950/50 dark:text-indigo-300 border border-indigo-200/60"
-                              : "bg-card text-slate-700 dark:text-slate-300 dark:bg-slate-800 dark:text-slate-300"
+                              : "bg-card text-slate-700 dark:bg-slate-800 dark:text-slate-300"
                         }`}
                       >
                         {rep.activeCount}
@@ -215,7 +215,7 @@ export default function ExecutiveWorkloadAudit({
                     </td>
 
                     {/* SLA Progress */}
-                    <td className="py-3.5 px-4 min-w-[140px]">
+                    <td className="py-3.5 px-4 min-w-35">
                       <div className="space-y-1">
                         <div className="flex items-center justify-between text-[11px] font-semibold">
                           <span className="text-slate-700 dark:text-slate-300">

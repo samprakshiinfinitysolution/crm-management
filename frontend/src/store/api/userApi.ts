@@ -58,7 +58,7 @@ export const userApi = crmApi.injectEndpoints({
       } | void
     >({
       query: (params) => ({
-        url: "/users/",
+        url: "/users",
         params: params || {},
       }),
       providesTags: (result) =>
@@ -166,6 +166,7 @@ export const userApi = crmApi.injectEndpoints({
               { type: "Conversations", id: "LIST" },
             ]
           : [{ type: "Conversations", id: "LIST" }],
+      keepUnusedDataFor: 60,
     }),
 
     createDirectConversation: builder.mutation<
@@ -191,6 +192,7 @@ export const userApi = crmApi.injectEndpoints({
       providesTags: (_result, _error, { conversationId }) => [
         { type: "Conversations", id: `MESSAGES_${conversationId}` },
       ],
+      keepUnusedDataFor: 60,
     }),
 
     sendMessage: builder.mutation<
@@ -246,10 +248,7 @@ export const userApi = crmApi.injectEndpoints({
         url: `/conversations/${conversationId}/read`,
         method: "PATCH",
       }),
-      invalidatesTags: (_result, _error, { conversationId }) => [
-        { type: "Conversations", id: conversationId },
-        { type: "Conversations", id: "LIST" },
-      ],
+      // Intentionally omitting invalidatesTags to avoid triggering cascading refetches of /conversations
     }),
   }),
   overrideExisting: false,

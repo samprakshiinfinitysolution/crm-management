@@ -77,7 +77,9 @@ export const getToken = (): string => {
  * Ensures that even if cookies are reset during Vercel builds or server redeployments,
  * the authenticated user session remains intact.
  */
-export const setToken = (_token: string): void => {};
+export const setToken = (_token?: string): void => {
+  void _token;
+};
 
 export const removeToken = (): void => {
   const tokenKey = getTokenKey();
