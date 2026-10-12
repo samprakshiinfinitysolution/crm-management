@@ -43,6 +43,15 @@ server.listen(config.port, '0.0.0.0', async () => {
 const gracefulShutdown = (signal: string) => {
   console.log(`\nReceived ${signal}. Shutting down gracefully...`);
   KeepAliveService.stop();
+
+  // Stop accepting new Socket.IO connections and let in-flight ones finish so
+  // the load balancer can drain this instance cleanly during rolling deploys.
+  try {
+    io.close(() => console.log("WebSocket server closed."));
+  } catch {
+    // io may be undefined in some test contexts; safe to ignore.
+  }
+
   server.close(async () => {
     await prisma.$disconnect();
     await closeRedis();

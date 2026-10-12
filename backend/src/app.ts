@@ -61,11 +61,17 @@ export const createApp = (): Application => {
     }),
   );
 
-  // Render reverse proxy
+  // Reverse proxy / load balancer (e.g. Render edge) terminates TLS and
+ // forwards requests. `trust proxy` must reflect the number of proxy hops so
+ // req.ip / req.protocol resolve to the real client for rate limiting, audit
+ // logs, and secure-cookie handling. Allow override; default to 1 hop.
  const isProduction = process.env.NODE_ENV === "production";
 
  if (isProduction) {
-   app.set("trust proxy", 1);
+   const trustProxyHops = process.env.TRUST_PROXY_HOPS
+     ? parseInt(process.env.TRUST_PROXY_HOPS, 10)
+     : 1;
+   app.set("trust proxy", Number.isFinite(trustProxyHops) && trustProxyHops > 0 ? trustProxyHops : 1);
  } else {
    app.set("trust proxy", false);
  }

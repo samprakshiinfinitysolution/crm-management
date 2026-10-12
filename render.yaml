@@ -61,3 +61,5 @@ projects:
                 sync: false
               - key: PORT
                 sync: false
+              - key: TRUST_PROXY_HOPS
+                value: "1"

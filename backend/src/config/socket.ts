@@ -1,10 +1,12 @@
 import { Server as SocketIOServer, Socket } from "socket.io";
+import { createAdapter } from "@socket.io/redis-adapter";
 import type { Server as HttpServer } from "http";
 import type { Server as HttpsServer } from "https";
 import jwt from "jsonwebtoken";
 
 import { config } from "./env.js";
 import { prisma } from "./db.js";
+import { getRedisPubSubPair } from "./redis.js";
 import { UserRole } from "../types/index.js";
 
 export interface AuthenticatedSocketUser {
@@ -70,6 +72,29 @@ export const initSocketServer = (
 
     pingInterval: 25000,
   });
+
+  // ==================================================
+  // Redis Adapter (horizontal scaling)
+  // ==================================================
+  // With multiple backend instances behind the load balancer, a socket can be
+  // connected to instance A while the emitting code runs on instance B. The
+  // default in-memory adapter would drop those events. The Redis adapter
+  // mirrors rooms/user channels across all instances via pub/sub, so
+  // emitToUser()/sendNotificationToUser() keep working unchanged.
+  //
+  // Falls back to the in-memory adapter when Redis is not configured
+  // (local dev / single instance), preserving current behaviour.
+  const pubSubPair = getRedisPubSubPair();
+  if (pubSubPair) {
+    io.adapter(createAdapter(pubSubPair.pub, pubSubPair.sub));
+    console.log(
+      "🔗 Socket.IO Redis adapter attached (multi-instance ready)",
+    );
+  } else {
+    console.log(
+      "🔗 Socket.IO using in-memory adapter (Redis not configured)",
+    );
+  }
 
   // ==================================================
   // JWT Authentication Middleware

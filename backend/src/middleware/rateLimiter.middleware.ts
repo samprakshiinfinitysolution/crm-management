@@ -32,7 +32,12 @@ export const globalLimiter = rateLimit({
   handler: createRateLimitHandler('Too many requests. Please slow down and try again shortly.'),
   skip: (req) => {
     // Whitelist health check probes and socket.io handshakes from rate limiting
-    return req.path === '/health' || req.path === '/api/health' || req.path.startsWith('/socket.io');
+    return (
+      req.path === '/health' ||
+      req.path === '/api/health' ||
+      req.path === '/api/health/ready' ||
+      req.path.startsWith('/socket.io')
+    );
   },
 });
 

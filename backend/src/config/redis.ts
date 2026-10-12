@@ -8,6 +8,11 @@ let isRedisConnected = false;
 
 let hasLoggedNotice = false;
 
+// Dedicated pub/sub connection pair for the Socket.IO Redis adapter. Kept
+// separate from the shared cache client because a Redis connection in
+// subscriber mode cannot issue regular commands.
+let pubSubPair: { pub: Redis; sub: Redis } | null = null;
+
 const createRedisClient = (): Redis | null => {
   try {
     const redisUrl = config.redis.url || process.env.REDIS_URL;
@@ -93,11 +98,76 @@ export const getRedisClient = (): Redis | null => {
   return redisClient;
 };
 
+/**
+ * Build (once) a dedicated pub/sub connection pair for the Socket.IO Redis
+ * adapter. A Redis connection placed in subscriber mode by the adapter cannot
+ * issue regular commands, so the adapter MUST receive its own pair — never the
+ * shared cache client. Both connections reuse the same URL/host config.
+ *
+ * Returns `null` when Redis is not configured, letting the caller fall back to
+ * the in-memory Socket.IO adapter (single-instance behaviour).
+ */
+export const getRedisPubSubPair = (): { pub: Redis; sub: Redis } | null => {
+  if (pubSubPair) return pubSubPair;
+
+  const base = getRedisClient();
+  if (!base) return null;
+
+  try {
+    const redisUrl = config.redis.url || process.env.REDIS_URL;
+    const baseOptions = base.options;
+
+    const makeConnection = (): Redis => {
+      const options: RedisOptions = {
+        ...baseOptions,
+        // Adapter connections connect eagerly and keep retrying: unlike the
+        // cache client (which backs off and falls back to the DB), a dead
+        // pub/sub link silently breaks real-time events across instances.
+        lazyConnect: false,
+        maxRetriesPerRequest: null,
+        retryStrategy: (times: number) => Math.min(times * 300, 3000),
+        connectionName: 'crm-socketio-pubsub',
+      };
+
+      // A URL string and a discrete host/port object map to different ioredis
+      // overloads, so branch explicitly rather than passing a union.
+      const conn =
+        redisUrl && redisUrl.trim().length > 0
+          ? new Redis(redisUrl, options)
+          : new Redis({
+              ...options,
+              host: config.redis.host,
+              port: config.redis.port,
+              password: config.redis.password,
+            });
+
+      // Never let an adapter connection crash the process on a transient
+      // Redis error; the shared client already surfaces connectivity state.
+      conn.on('error', (err: Error) => {
+        if (config.nodeEnv !== 'test') {
+          console.warn(`⚠️ Socket.IO Redis adapter connection error: ${err.message}`);
+        }
+      });
+
+      return conn;
+    };
+
+    pubSubPair = { pub: makeConnection(), sub: makeConnection() };
+    return pubSubPair;
+  } catch {
+    return null;
+  }
+};
+
 export const isRedisAvailable = (): boolean => {
   return isRedisConnected && redisClient !== null && redisClient.status === 'ready';
 };
 
 export const closeRedis = async (): Promise<void> => {
+  if (pubSubPair) {
+    await Promise.allSettled([pubSubPair.pub.quit(), pubSubPair.sub.quit()]);
+    pubSubPair = null;
+  }
   if (redisClient) {
     try {
       await redisClient.quit();
