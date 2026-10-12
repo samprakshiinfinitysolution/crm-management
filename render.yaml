@@ -1,65 +1,63 @@
 
-# Exported from Render on 2026-10-12T07:09:17Z
 version: "1"
+
 projects:
-- name: My project
-  region: singapore # Change this if you are migrating to a new region
-  plan: free
-  buildCommand: npm install && npm run build
-  startCommand: npm run start
-  healthCheckPath: /api/health
-  autoDeployTrigger: checksPass
-  rootDir: backend/
-  environments:
-  - name: Production
-    services:
-    - type: web
-      name: CRM-management
-      runtime: node
-      repo: https://github.com/samprakshiinfinitysolution/CRM-management
-      plan: free
-      envVars:
-      - key: CLOUDINARY_FOLDER
-        sync: false
-      - key: CLOUDINARY_API_SECRET
-        sync: false
-      - key: CLOUDINARY_API_KEY
-        sync: false
-      - key: CLOUDINARY_CLOUD_NAME
-        sync: false
-      - key: ADMIN_PASSWORD
-        sync: false
-      - key: ADMIN_EMAIL
-        sync: false
-      - key: ALLOWED_ORIGINS
-        sync: false
-      - key: DIRECT_URL
-        sync: false
-      - key: DATABASE_URL
-        sync: false
-      - key: NODE_ENV
-        sync: false
-      - key: CLIENT_URL
-        sync: false
-      - key: SESSION_TTL_SECONDS
-        sync: false
-      - key: REDIS_DEFAULT_TTL
-        sync: false
-      - key: REDIS_PASSWORD
-        sync: false
-      - key: REDIS_PORT
-        sync: false
-      - key: REDIS_HOST
-        sync: false
-      - key: REDIS_URL
-        sync: false
-      - key: TOKEN_KEY
-        sync: false
-      - key: NEXT_PUBLIC_TOKEN_KEY
-        sync: false
-      - key: JWT_EXPIRES_IN
-        sync: false
-      - key: JWT_SECRET
-        sync: false
-      - key: PORT
-        sync: false
+  - name: My project
+    environments:
+      - name: Production
+        services:
+          - type: web
+            name: CRM-management
+            runtime: node
+            repo: https://github.com/samprakshiinfinitysolution/crm-management
+            branch: main
+            region: singapore
+            plan: free
+            rootDir: backend
+            buildCommand: npm install && npm run build
+            startCommand: npm run start
+            envVars:
+              - key: CLOUDINARY_FOLDER
+                sync: false
+              - key: CLOUDINARY_API_SECRET
+                sync: false
+              - key: CLOUDINARY_API_KEY
+                sync: false
+              - key: CLOUDINARY_CLOUD_NAME
+                sync: false
+              - key: ADMIN_PASSWORD
+                sync: false
+              - key: ADMIN_EMAIL
+                sync: false
+              - key: ALLOWED_ORIGINS
+                sync: false
+              - key: DIRECT_URL
+                sync: false
+              - key: DATABASE_URL
+                sync: false
+              - key: NODE_ENV
+                value: production
+              - key: CLIENT_URL
+                sync: false
+              - key: SESSION_TTL_SECONDS
+                sync: false
+              - key: REDIS_DEFAULT_TTL
+                sync: false
+              - key: REDIS_PASSWORD
+                sync: false
+              - key: REDIS_PORT
+                sync: false
+              - key: REDIS_HOST
+                sync: false
+              - key: REDIS_URL
+                sync: false
+              - key: TOKEN_KEY
+                sync: false
+              - key: NEXT_PUBLIC_TOKEN_KEY
+                sync: false
+              - key: JWT_EXPIRES_IN
+                sync: false
+              - key: JWT_SECRET
+                sync: false
+              - key: PORT
+                sync: false
