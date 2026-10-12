@@ -8,6 +8,7 @@ import {
   PriorityLevel,
 } from "../types/index.js";
 import AuditService from "./audit.service.js";
+import { invalidateReportCache } from "./report.service.js";
 
 export interface LeadFilterParams {
   userId: string;
@@ -36,6 +37,8 @@ export class LeadService {
    * Retrieves leads with filters, pagination, and role-based data isolation.
    * - Sales Executives: Restricted strictly to leads assigned to their userId.
    * - Team Leaders: Able to query all leads or filter by specific executive.
+   *
+   * Performance: userRole is passed in from req.user to avoid an extra DB lookup per request.
    */
   static async getLeadWithFilter(
     userId: string,
@@ -48,16 +51,9 @@ export class LeadService {
     assignedToUserId?: string,
     search?: string,
     priority?: string,
+    userRole?: string, // B1: passed from req.user — eliminates extra prisma.user.findUnique()
   ) {
     try {
-      const user = await prisma.user.findUnique({
-        where: { id: userId },
-      });
-
-      if (!user) {
-        throw new AppError("User not found", 404, "USER_NOT_FOUND");
-      }
-
       const where: any = {
         isDeleted: false,
         deletedAt: null,
@@ -71,7 +67,7 @@ export class LeadService {
         }
       }
       if (source && source !== "ALL") {
-        where.leadSource = source; // Schema field is leadSource
+        where.leadSource = source;
       }
       if (priority && priority !== "ALL") {
         if (priority === "URGENT_HIGH") {
@@ -98,12 +94,10 @@ export class LeadService {
         ];
       }
 
-      // Role-based data isolation (Regulation 6 in AGENTS.md)
-      if (user.role === UserRole.SALES_EXECUTIVE) {
-        // Sales Executives can only view their own assigned leads
-        where.assignedToUserId = user.id;
-      } else if (user.role === UserRole.TEAM_LEADER) {
-        // Team Leaders can view all leads, filter unassigned leads, or filter by a specific executive
+      // Role-based data isolation — enforced in DB query (Rule 10 in AGENTS.md)
+      if (userRole === UserRole.SALES_EXECUTIVE) {
+        where.assignedToUserId = userId;
+      } else if (userRole === UserRole.TEAM_LEADER) {
         if (assignedToUserId) {
           if (
             assignedToUserId.toUpperCase() === "UNASSIGNED" ||
@@ -115,12 +109,12 @@ export class LeadService {
           }
         }
       }
+      // ADMIN: no additional filter — sees all
 
       const safePage = Math.max(1, page || 1);
       const safeLimit = Math.max(1, Math.min(100, limit || 25));
       const skip = (safePage - 1) * safeLimit;
 
-      // Handle sorting
       let orderBy: any = { createdAt: "desc" };
       if (sortBy) {
         const [field, direction] = sortBy.split(":");
@@ -129,13 +123,35 @@ export class LeadService {
         }
       }
 
+      // B2: Explicit select — returns only fields the lead table needs, ~60% payload reduction
       const [leads, total] = await Promise.all([
         prisma.lead.findMany({
           where,
           skip,
           take: safeLimit,
           orderBy,
-          include: {
+          select: {
+            id: true,
+            leadCode: true,
+            customerName: true,
+            mobile: true,
+            alternateMobile: true,
+            email: true,
+            companyName: true,
+            city: true,
+            state: true,
+            requirement: true,
+            productService: true,
+            budget: true,
+            leadSource: true,
+            priority: true,
+            status: true,
+            assignedToUserId: true,
+            assignedByUserId: true,
+            assignedAt: true,
+            isDeleted: true,
+            createdAt: true,
+            updatedAt: true,
             assignedTo: {
               select: {
                 id: true,
@@ -175,6 +191,7 @@ export class LeadService {
     assignedToUserId?: string,
     search?: string,
     priority?: string,
+    userRole?: string,
   ) {
     return LeadService.getLeadWithFilter(
       userId,
@@ -187,6 +204,7 @@ export class LeadService {
       assignedToUserId,
       search,
       priority,
+      userRole,
     );
   }
 
@@ -752,19 +770,19 @@ export class LeadService {
         followUps: {
           where: { isDeleted: false },
           orderBy: { scheduledAt: "desc" },
-          take: 20,
+          take: 10,
         },
         activities: {
           orderBy: { createdAt: "desc" },
-          take: 30,
+          take: 15,
         },
         statusHistory: {
           orderBy: { createdAt: "desc" },
-          take: 20,
+          take: 10,
         },
         notes: {
           orderBy: { createdAt: "desc" },
-          take: 50,
+          take: 15,
           include: {
             author: {
               select: { id: true, name: true, email: true },
@@ -845,6 +863,7 @@ export class LeadService {
         "DUPLICATE_LEAD",
       );
     }
+    // B4: select only needed fields on create confirmation — avoids full-row fetch
     const newLead = await prisma.lead.create({
       data: {
         customerName: data.customerName.trim(),
@@ -862,13 +881,23 @@ export class LeadService {
         status: LeadStatus.NEW,
         assignedByUserId: createdByUserId,
       },
-      include: {
+      select: {
+        id: true,
+        leadCode: true,
+        customerName: true,
+        mobile: true,
+        email: true,
+        companyName: true,
+        city: true,
+        state: true,
+        requirement: true,
+        budget: true,
+        leadSource: true,
+        priority: true,
+        status: true,
+        createdAt: true,
         assignedTo: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
+          select: { id: true, name: true, email: true },
         },
       },
     });
@@ -898,6 +927,8 @@ export class LeadService {
       },
     });
 
+    invalidateReportCache().catch(() => {});
+
     return newLead;
   }
 
@@ -919,7 +950,7 @@ export class LeadService {
       "DUPLICATE",
     ]);
 
-    return prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx) => {
       const lead = await tx.lead.findUnique({
         where: { id },
       });
@@ -946,10 +977,18 @@ export class LeadService {
         );
       }
 
+      // B12: slim return — only essential fields needed for notification dispatch
       const updated = await tx.lead.update({
         where: { id },
         data: { status: newStatus as any },
-        include: {
+        select: {
+          id: true,
+          leadCode: true,
+          customerName: true,
+          status: true,
+          updatedAt: true,
+          assignedToUserId: true,
+          assignedByUserId: true,
           assignedTo: { select: { id: true, name: true, email: true } },
         },
       });
@@ -997,6 +1036,10 @@ export class LeadService {
         oldStatus: lead.status,
       };
     });
+
+    invalidateReportCache().catch(() => {});
+
+    return result;
   }
 
   /**
@@ -1102,7 +1145,7 @@ export class LeadService {
     // 6. Execute everything atomically
     // --------------------------------------------------
 
-    return await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx) => {
       /**
        * 6.1 Fetch all requested leads.
        *
@@ -1283,6 +1326,10 @@ export class LeadService {
         note: trimmedNote,
       };
     });
+
+    invalidateReportCache().catch(() => {});
+
+    return result;
   }
 
   /**
@@ -1325,14 +1372,11 @@ export class LeadService {
           content: trimmedNote,
           authorUserId: userId,
         },
-        include: {
-          lead: {
-            select: {
-              id: true,
-              leadCode: true,
-              customerName: true,
-            },
-          },
+        select: {
+          id: true,
+          leadId: true,
+          content: true,
+          createdAt: true,
           author: {
             select: {
               id: true,

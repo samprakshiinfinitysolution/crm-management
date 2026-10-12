@@ -150,6 +150,8 @@ model Lead {
   @@index([status])
   @@index([assignedToUserId])
   @@index([isDeleted])
+  @@index([isDeleted, assignedToUserId, status, createdAt])
+  @@index([isDeleted, status, createdAt])
 }
 
 model LeadAssignment {
@@ -275,6 +277,8 @@ model AuditLog {
 
   @@index([actorUserId])
   @@index([entityType, entityId])
+  @@index([createdAt])
+  @@index([entityType, action, createdAt])
 }
 
 model Notification {
@@ -290,6 +294,7 @@ model Notification {
 
   @@index([recipientUserId])
   @@index([isRead])
+  @@index([recipientUserId, isRead, createdAt])
 }
 
 model Conversation {

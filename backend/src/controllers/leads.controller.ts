@@ -41,6 +41,7 @@ export const getLeadsWithFilter = async (
       typeof assignedToUserId === "string" ? assignedToUserId : undefined,
       typeof search === "string" ? search : undefined,
       typeof priority === "string" && priority !== "ALL" ? priority : undefined,
+      user.role, // B1: pass role from req.user — avoids extra prisma.user.findUnique()
     );
 
     const response: ApiResponse = {

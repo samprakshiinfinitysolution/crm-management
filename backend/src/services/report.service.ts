@@ -1,5 +1,6 @@
 import prisma from '../config/db.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { CacheService } from './cache.service.js';
 import {
   UserRole,
   LeadStatus,
@@ -37,7 +38,7 @@ export function formatCurrencyINR(amount: number): string {
 }
 
 // -------------------------------------------------------------
-// High-Performance In-Memory Cache (TTL: 10s)
+// Distributed Redis Cache with Process-Local Fallback (TTL: 45s)
 // -------------------------------------------------------------
 interface CacheEntry<T> {
   data: T;
@@ -45,7 +46,16 @@ interface CacheEntry<T> {
 }
 const metricsCache = new Map<string, CacheEntry<unknown>>();
 
-function getCached<T>(key: string): T | null {
+async function getCached<T>(key: string): Promise<T | null> {
+  try {
+    const fromRedis = await CacheService.get<T>(`crm:report:${key}`);
+    if (fromRedis !== null && fromRedis !== undefined) {
+      return fromRedis;
+    }
+  } catch {
+    // Redis down or error — fall back to local in-process cache
+  }
+
   const entry = metricsCache.get(key);
   if (entry && Date.now() < entry.expiresAt) {
     return entry.data as T;
@@ -56,8 +66,14 @@ function getCached<T>(key: string): T | null {
   return null;
 }
 
-function setCached<T>(key: string, data: T, ttlMs = 10000): void {
-  // Prune cache if it grows too large
+async function setCached<T>(key: string, data: T, ttlSeconds = 45): Promise<void> {
+  try {
+    await CacheService.set(`crm:report:${key}`, data, ttlSeconds);
+  } catch {
+    // fallback
+  }
+
+  // Also maintain in local process memory for ultra-fast hits within the dyno
   if (metricsCache.size > 200) {
     const now = Date.now();
     for (const [k, v] of metricsCache.entries()) {
@@ -68,8 +84,17 @@ function setCached<T>(key: string, data: T, ttlMs = 10000): void {
   }
   metricsCache.set(key, {
     data,
-    expiresAt: Date.now() + ttlMs,
+    expiresAt: Date.now() + (ttlSeconds * 1000),
   });
+}
+
+export async function invalidateReportCache(): Promise<void> {
+  metricsCache.clear();
+  try {
+    await CacheService.delPattern('crm:report:*');
+  } catch {
+    // ignore
+  }
 }
 
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -227,7 +252,7 @@ export class ReportService {
    */
   static async getTLDashboardMetrics(tlUserId: string): Promise<TLDashboardMetrics> {
     const cacheKey = `tl-dashboard:${tlUserId}`;
-    const cached = getCached<TLDashboardMetrics>(cacheKey);
+    const cached = await getCached<TLDashboardMetrics>(cacheKey);
     if (cached) {
       return cached;
     }
@@ -900,7 +925,7 @@ export class ReportService {
       recentLeads,
     };
 
-    setCached(cacheKey, result, 10000);
+    await setCached(cacheKey, result, 45);
     return result;
   }
 
@@ -909,7 +934,7 @@ export class ReportService {
    */
   static async getSEDashboardMetrics(seUserId: string): Promise<SEDashboardMetrics> {
     const cacheKey = `se-dashboard:${seUserId}`;
-    const cached = getCached<SEDashboardMetrics>(cacheKey);
+    const cached = await getCached<SEDashboardMetrics>(cacheKey);
     if (cached) {
       return cached;
     }
@@ -1073,7 +1098,7 @@ export class ReportService {
       recentLeads,
     };
 
-    setCached(cacheKey, result, 10000);
+    await setCached(cacheKey, result, 45);
     return result;
   }
 
@@ -1666,7 +1691,7 @@ export class ReportService {
    */
   static async getAdminMetrices(adminUserId: string): Promise<AdminDashboardMetrics> {
     const cacheKey = `admin-dashboard:${adminUserId}`;
-    const cached = getCached<AdminDashboardMetrics>(cacheKey);
+    const cached = await getCached<AdminDashboardMetrics>(cacheKey);
     if (cached) {
       return cached;
     }
@@ -2350,7 +2375,7 @@ export class ReportService {
       recentLeads,
     };
 
-    setCached(cacheKey, result, 10000);
+    await setCached(cacheKey, result, 45);
     return result;
   }
 

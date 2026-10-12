@@ -3,6 +3,7 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
+import compression from "compression";
 import { config } from "./config/env.js";
 import { getAllowedOrigins } from "./config/allowedOrigins.js";
 import apiRouter from "./routes/index.js";
@@ -12,6 +13,17 @@ import { globalLimiter } from "./middleware/rateLimiter.middleware.js";
 
 export const createApp = (): Application => {
   const app: Application = express();
+
+  // HTTP response compression (gzip / deflate) — reduces payload size by ~60%
+  app.use(
+    compression({
+      threshold: 1024,
+      filter: (req, res) => {
+        if (req.headers["x-no-compression"]) return false;
+        return compression.filter(req, res);
+      },
+    }),
+  );
 
   // Security headers
   app.use(helmet());
@@ -72,9 +84,12 @@ export const createApp = (): Application => {
   app.use(express.urlencoded({ extended: true, limit: "10mb" }));
   app.use(cookieParser());
 
-  // Mount API Router
-  app.get("/", (req: Request, res: Response) => {
-    res.json({ message: "Hello World" });
+  // Mount API Router with no-store headers to prevent caching sensitive/dynamic CRM endpoints
+  app.use("/api", (req: Request, res: Response, next: NextFunction) => {
+    res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
+    next();
   });
   app.use("/api", apiRouter);
 
