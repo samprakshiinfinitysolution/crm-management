@@ -79,7 +79,7 @@ export function ProtectedRoute({
       void performLogout({ callBackend: true, redirectTo: "/login" });
       return;
     }
-    if (user) dispatch(setCredentials({ user }));
+    if (user) dispatch(setCredentials({ user, token: user.token }));
   }, [dispatch, isError, user, isLoggingOut]);
 
   if (isLoggingOut) {

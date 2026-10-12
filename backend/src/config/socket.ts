@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import { config } from "./env.js";
 import { prisma } from "./db.js";
 import { getRedisPubSubPair } from "./redis.js";
+import { isOriginAllowed } from "./allowedOrigins.js";
 import { UserRole } from "../types/index.js";
 
 export interface AuthenticatedSocketUser {
@@ -45,6 +46,8 @@ export const WS_EVENTS = {
   LEAD_STATUS_CHANGED: "lead:status_changed",
   FOLLOWUP_DUE: "followup:due",
   DASHBOARD_METRICS_UPDATE: "dashboard:metrics_update",
+  MESSAGE: "message",
+  MESSAGE_NEW: "message:new",
 } as const;
 
 let io: SocketIOServer | null = null;
@@ -58,8 +61,15 @@ export const initSocketServer = (
 
   io = new SocketIOServer(server, {
     cors: {
-      // Only allow the configured frontend origin.
-      origin: config.clientUrl,
+      origin: (origin, callback) => {
+        if (!origin) {
+          return callback(null, true);
+        }
+        if (isOriginAllowed(origin)) {
+          return callback(null, origin);
+        }
+        return callback(new Error("CORS origin not allowed"), false);
+      },
 
       credentials: true,
 
@@ -86,10 +96,19 @@ export const initSocketServer = (
   // (local dev / single instance), preserving current behaviour.
   const pubSubPair = getRedisPubSubPair();
   if (pubSubPair) {
-    io.adapter(createAdapter(pubSubPair.pub, pubSubPair.sub));
-    console.log(
-      "🔗 Socket.IO Redis adapter attached (multi-instance ready)",
-    );
+    try {
+      io.adapter(createAdapter(pubSubPair.pub, pubSubPair.sub));
+      console.log(
+        "🔗 Socket.IO Redis adapter attached (multi-instance ready)",
+      );
+    } catch (adapterError) {
+      // A failure to attach the adapter must never crash startup; fall back to
+      // the in-memory adapter so the port stays bound and HTTP keeps serving.
+      console.warn(
+        "⚠️ Failed to attach Socket.IO Redis adapter; using in-memory adapter:",
+        adapterError,
+      );
+    }
   } else {
     console.log(
       "🔗 Socket.IO using in-memory adapter (Redis not configured)",
@@ -137,7 +156,12 @@ export const initSocketServer = (
         for (const cookie of cookies) {
           const [key, ...valueParts] = cookie.trim().split("=");
 
-          if (key === config.tokenKey || key === "token") {
+          if (
+            key === config.tokenKey ||
+            key === "token" ||
+            key === "CRM_Management" ||
+            key === "crm_auth_token"
+          ) {
             token = valueParts.join("=").trim();
             break;
           }
@@ -405,6 +429,28 @@ export const initSocketServer = (
     // Lead assigned listener
     // ==================================================
 
+    // ==================================================
+    // Conversation room join / leave
+    // ==================================================
+
+    socket.on(
+      "conversation:join",
+      (data: { conversationId?: string }) => {
+        if (data?.conversationId) {
+          socket.join(`conversation:${data.conversationId}`);
+        }
+      },
+    );
+
+    socket.on(
+      "conversation:leave",
+      (data: { conversationId?: string }) => {
+        if (data?.conversationId) {
+          socket.leave(`conversation:${data.conversationId}`);
+        }
+      },
+    );
+
     socket.on(WS_EVENTS.LEAD_ASSIGNED, (data: unknown) => {
       console.log(
         `📋 Lead assigned event received from socket ${socket.id}:`,
@@ -526,4 +572,14 @@ export const emitToAll = (event: string, payload: unknown): void => {
   if (!io) return;
 
   io.emit(event, payload);
+};
+
+export const emitToConversation = (
+  conversationId: string,
+  event: string,
+  payload: unknown,
+): void => {
+  if (!io) return;
+
+  io.to(`conversation:${conversationId}`).emit(event, payload);
 };

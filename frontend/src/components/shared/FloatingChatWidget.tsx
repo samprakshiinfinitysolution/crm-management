@@ -12,9 +12,10 @@ import {
 } from "@/store/api/userApi";
 import { UserRole, type ConversationMessage } from "@/types/api.types";
 import { toast } from "sonner";
-import { useAppSelector } from "@/store";
+import { useAppSelector, useAppDispatch } from "@/store";
 import { useDebounce } from "@/lib/useDebounce";
 import { useSocket } from "@/components/providers/SocketProvider";
+import { crmApi } from "@/store/api/baseApi";
 import { usePathname } from "next/navigation";
 import {
   ChatHeader,
@@ -31,6 +32,7 @@ import {
 export function FloatingChatWidget() {
   const pathname = usePathname();
   const { user } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
   const { socket } = useSocket();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -87,14 +89,17 @@ export function FloatingChatWidget() {
     useSendAttachmentMutation();
   const [markConversationAsRead] = useMarkConversationAsReadMutation();
 
-  const handleMarkAsRead = (convId?: string | null) => {
-    if (!convId) return;
-    markConversationAsRead({ conversationId: convId })
-      .unwrap()
-      .catch((err) => {
-        console.debug("Failed to mark conversation as read:", err);
-      });
-  };
+  const handleMarkAsRead = React.useCallback(
+    (convId?: string | null) => {
+      if (!convId) return;
+      markConversationAsRead({ conversationId: convId })
+        .unwrap()
+        .catch((err) => {
+          console.debug("Failed to mark conversation as read:", err);
+        });
+    },
+    [markConversationAsRead],
+  );
 
   const handleSelectContact = (contact: ChatContact) => {
     setSelectedContact(contact);
@@ -343,7 +348,7 @@ export function FloatingChatWidget() {
     });
 
     return { contactId: selectedContact.id, messages: serverMessages };
-  }, [messagesRes?.data, selectedContact?.id, user?.id]);
+  }, [messagesRes?.data, selectedContact, user?.id]);
 
   // Merge freshly-loaded server messages into local state during render, guarded
   // by a stored previous key so it only runs when the loaded payload changes.
@@ -441,12 +446,31 @@ export function FloatingChatWidget() {
         setUnreadContactIds((prev) =>
           prev.includes(senderId) ? prev : [...prev, senderId],
         );
+        const senderName = msg.sender?.name || "Colleague";
+        const preview =
+          type === "IMAGE"
+            ? "📷 Sent an image"
+            : type === "FILE"
+            ? "📎 Sent an attachment"
+            : text.slice(0, 60);
+        toast.info(`Message from ${senderName}`, {
+          description: preview,
+        });
       } else {
         // Chat is open with this contact: mark conversation as read on the backend
         const activeId = msg.conversationId || targetConvId;
         if (activeId) {
           handleMarkAsRead(activeId);
         }
+      }
+
+      if (msg.conversationId) {
+        dispatch(
+          crmApi.util.invalidateTags([
+            { type: "Conversations", id: `MESSAGES_${msg.conversationId}` },
+            { type: "Conversations", id: "LIST" },
+          ]),
+        );
       }
     };
 
@@ -457,46 +481,66 @@ export function FloatingChatWidget() {
       socket.off("message", handleIncomingMessage);
       socket.off("message:new", handleIncomingMessage);
     };
-  }, [socket, user?.id, isOpen, selectedContact, targetConvId]);
+  }, [
+    socket,
+    user?.id,
+    isOpen,
+    selectedContact,
+    targetConvId,
+    dispatch,
+    handleMarkAsRead,
+  ]);
+
+  // Join and leave active conversation rooms for directed broadcasts
+  useEffect(() => {
+    if (!socket || !targetConvId) return;
+    socket.emit("conversation:join", { conversationId: targetConvId });
+    return () => {
+      socket.emit("conversation:leave", { conversationId: targetConvId });
+    };
+  }, [socket, targetConvId]);
 
   // Helper to extract the latest message for any contact
-  const getContactLatestMessage = (contact: ChatContact): LatestMessageInfo => {
-    // 1. Check local state (messages sent or received in this session)
-    const localMsgs = conversations[contact.id];
-    let localLatest: LatestMessageInfo | null = null;
-    if (localMsgs && localMsgs.length > 0) {
-      const last = localMsgs[localMsgs.length - 1];
-      localLatest = {
-        text: last.text,
-        timestamp: last.timestamp,
-        timeMs: last.rawCreatedAt ? new Date(last.rawCreatedAt).getTime() : 0,
-      };
-    }
-
-    // 2. Check conversation history from server
-    let serverLatest: LatestMessageInfo | null = null;
-    if (conversationsRes?.data) {
-      const conv = conversationsRes.data.find(
-        (c) =>
-          c.id === contact.conversationId ||
-          c.participants?.some((p) => p.userId === contact.id),
-      );
-      if (conv && conv.messages && conv.messages.length > 0) {
-        const msg = conv.messages[0];
-        const date = new Date(msg.createdAt);
-        serverLatest = {
-          text: msg.content,
-          timestamp: date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-          timeMs: date.getTime(),
+  const getContactLatestMessage = React.useCallback(
+    (contact: ChatContact): LatestMessageInfo => {
+      // 1. Check local state (messages sent or received in this session)
+      const localMsgs = conversations[contact.id];
+      let localLatest: LatestMessageInfo | null = null;
+      if (localMsgs && localMsgs.length > 0) {
+        const last = localMsgs[localMsgs.length - 1];
+        localLatest = {
+          text: last.text,
+          timestamp: last.timestamp,
+          timeMs: last.rawCreatedAt ? new Date(last.rawCreatedAt).getTime() : 0,
         };
       }
-    }
 
-    if (localLatest && serverLatest) {
-      return localLatest.timeMs >= serverLatest.timeMs ? localLatest : serverLatest;
-    }
-    return localLatest || serverLatest || { text: "", timestamp: "", timeMs: 0 };
-  };
+      // 2. Check conversation history from server
+      let serverLatest: LatestMessageInfo | null = null;
+      if (conversationsRes?.data) {
+        const conv = conversationsRes.data.find(
+          (c) =>
+            c.id === contact.conversationId ||
+            c.participants?.some((p) => p.userId === contact.id),
+        );
+        if (conv && conv.messages && conv.messages.length > 0) {
+          const msg = conv.messages[0];
+          const date = new Date(msg.createdAt);
+          serverLatest = {
+            text: msg.content,
+            timestamp: date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            timeMs: date.getTime(),
+          };
+        }
+      }
+
+      if (localLatest && serverLatest) {
+        return localLatest.timeMs >= serverLatest.timeMs ? localLatest : serverLatest;
+      }
+      return localLatest || serverLatest || { text: "", timestamp: "", timeMs: 0 };
+    },
+    [conversations, conversationsRes],
+  );
 
   // Sort contacts by latest message timestamp descending
   const sortedContacts = useMemo(() => {
@@ -513,7 +557,7 @@ export function FloatingChatWidget() {
       }
       return a.name.localeCompare(b.name);
     });
-  }, [filteredContacts, conversations, conversationsRes]);
+  }, [filteredContacts, getContactLatestMessage]);
 
   const currentMessages = useMemo(() => {
     if (!selectedContact) return [];

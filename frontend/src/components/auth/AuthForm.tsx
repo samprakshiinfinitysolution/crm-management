@@ -124,6 +124,7 @@ export default function AuthForm() {
       dispatch(
         setCredentials({
           user: res.data.user,
+          token: res.data.token || res.data.user.token,
         }),
       );
 

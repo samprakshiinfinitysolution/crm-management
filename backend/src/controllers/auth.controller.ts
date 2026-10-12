@@ -27,6 +27,7 @@ const register = async (req: Request, res: Response, next: NextFunction): Promis
       message: 'User registered successfully',
       data: {
         user,
+        token,
       },
     };
 
@@ -56,6 +57,7 @@ const login = async (req: Request, res: Response, next: NextFunction): Promise<v
       message: 'User logged in successfully',
       data: {
         user,
+        token,
       },
     };
 
@@ -165,7 +167,7 @@ const refresh_token = async (req: AuthRequest, res: Response, next: NextFunction
     res.status(200).json({
       success: true,
       message: 'Token refreshed successfully',
-      data: { user },
+      data: { user, token },
     });
   } catch (error) {
     next(error);
@@ -208,7 +210,21 @@ const me = async (req: AuthRequest, res: Response, next: NextFunction): Promise<
       return;
     }
     const user = await AuthService.getAuthenticatedUser(req.user.id);
-    res.status(200).json({ success: true, message: 'Authenticated user retrieved', data: user });
+    let token: string | undefined;
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.split(' ')[1];
+    } else if (req.cookies) {
+      token =
+        req.cookies[config.tokenKey] ||
+        req.cookies['CRM_Management'] ||
+        req.cookies['token'];
+    }
+    res.status(200).json({
+      success: true,
+      message: 'Authenticated user retrieved',
+      data: { ...user, ...(token ? { token } : {}) },
+    });
   } catch (error) {
     next(error);
   }

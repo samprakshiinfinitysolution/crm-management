@@ -29,10 +29,19 @@ export const authSlice = createSlice({
   reducers: {
     setCredentials: (
       state,
-      action: PayloadAction<{ user: AuthUser }>,
+      action: PayloadAction<{ user: AuthUser; token?: string | null }>,
     ) => {
       state.user = action.payload.user;
-      state.token = null;
+      const incomingToken =
+        action.payload.token ?? action.payload.user.token ?? state.token ?? null;
+      state.token = incomingToken;
+      if (incomingToken && typeof window !== "undefined") {
+        try {
+          localStorage.setItem("crm_auth_token", incomingToken);
+        } catch {
+          // Ignore storage access errors in private browsing modes
+        }
+      }
       state.isAuthenticated = true;
       state.isLoading = false;
       state.isInitialized = true;
@@ -41,6 +50,13 @@ export const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
       state.token = null;
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.removeItem("crm_auth_token");
+        } catch {
+          // Ignore storage access errors in private browsing modes
+        }
+      }
       state.isAuthenticated = false;
       state.isLoading = false;
       state.isInitialized = true;

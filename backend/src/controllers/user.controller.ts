@@ -2,8 +2,8 @@ import { Response, NextFunction } from "express";
 import { UserService } from "../services/user.service.js";
 import { ApiResponse, AuthRequest, type UserRole } from "../types/index.js";
 import { z } from "zod";
-import AuditService from "@/services/audit.service.js";
-import { registerSchema } from "@/services/auth.service.js";
+import AuditService from "../services/audit.service.js";
+import { registerSchema } from "../services/auth.service.js";
 
 const toggleStatusSchema = z.object({
   isActive: z.boolean(),

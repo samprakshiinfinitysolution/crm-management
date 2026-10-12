@@ -41,6 +41,13 @@ export const getAllowedOrigins = (): Set<string> => {
   ]);
 };
 
-/** True when the provided origin exactly matches an allowed origin. */
-export const isOriginAllowed = (origin: string): boolean =>
-  getAllowedOrigins().has(origin.replace(/\/+$/, ""));
+/** True when the provided origin matches an allowed origin (or trusted deployment domain). */
+export const isOriginAllowed = (origin: string): boolean => {
+  const normalized = origin.replace(/\/+$/, "");
+  if (getAllowedOrigins().has(normalized)) return true;
+  // Allow Vercel deployment preview and production domains
+  if (/^https:\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)*\.vercel\.app$/i.test(normalized)) {
+    return true;
+  }
+  return false;
+};

@@ -1,7 +1,7 @@
 import { ConversationType, MessageType } from "@prisma/client";
 import { prisma } from "../config/db.js";
 import { z } from "zod";
-import { emitToUser } from "../config/socket.js";
+import { emitToUser, emitToConversation } from "../config/socket.js";
 import { CloudinaryService } from "./cloudinary.service.js";
 
 export const sendSchema = z.object({
@@ -135,8 +135,10 @@ export class ConversationService {
         data: { updatedAt: new Date() },
       });
 
-      // Safely emit to conversation participants
+      // Safely emit to conversation room and participants
       try {
+        emitToConversation(conversationId, "message", message);
+        emitToConversation(conversationId, "message:new", message);
         for (const participant of conversation.participants) {
           if (participant.userId !== senderId) {
             emitToUser(participant.userId, "message", message);
@@ -225,8 +227,10 @@ export class ConversationService {
         data: { updatedAt: new Date() },
       });
 
-      // Safely emit to conversation participants
+      // Safely emit to conversation room and participants
       try {
+        emitToConversation(conversationId, "message", message);
+        emitToConversation(conversationId, "message:new", message);
         for (const participant of conversation.participants) {
           if (participant.userId !== senderId) {
             emitToUser(participant.userId, "message", message);

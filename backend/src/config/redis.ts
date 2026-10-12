@@ -165,7 +165,11 @@ export const getRedisPubSubPair = (): { pub: Redis; sub: Redis } | null => {
       const options: RedisOptions = {
         ...baseOptions,
         lazyConnect: false,
-        enableOfflineQueue: false, // Never queue commands while offline to avoid MaxRetriesPerRequestError
+        // The adapter issues subscribe()/publish() as soon as it attaches. Keep
+        // the offline queue ENABLED for these dedicated connections so those
+        // commands wait for the connection instead of rejecting immediately
+        // (an early rejection here can crash startup before the port binds).
+        enableOfflineQueue: true,
         maxRetriesPerRequest: null,
         retryStrategy: (times: number) => {
           if (times > 3) {

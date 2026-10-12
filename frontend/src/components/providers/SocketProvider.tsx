@@ -24,7 +24,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [isConnected, setIsConnected] = useState(false);
 
-  const { user } = useAppSelector((state) => state.auth);
+  const { user, token } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
       return;
     }
 
-    const socket = getSocket();
+    const socket = getSocket(token);
 
     const onConnect = () => {
       setIsConnected(true);
@@ -53,8 +53,27 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
       dispatch(crmApi.util.invalidateTags(["Notifications"]));
     };
 
+    const onNotificationCount = () => {
+      dispatch(crmApi.util.invalidateTags(["Notifications"]));
+    };
+
     const onLeadAssigned = (data: { count?: number; message?: string }) => {
-      toast.success(data.message || `${data.count || 1} new lead(s) assigned to you!`);
+      toast.success(
+        data.message || `${data.count || 1} new lead(s) assigned to you!`,
+      );
+      dispatch(
+        crmApi.util.invalidateTags([
+          "Leads",
+          "Lead",
+          "Distribution",
+          "Workload",
+          "Notifications",
+        ]),
+      );
+    };
+
+    const onLeadReassigned = (data: { count?: number; message?: string }) => {
+      toast.info(data.message || "Lead reassigned");
       dispatch(
         crmApi.util.invalidateTags([
           "Leads",
@@ -97,26 +116,46 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
       );
     };
 
+    const onIncomingChatMessage = (msg: {
+      id?: string;
+      conversationId?: string;
+      senderId?: string;
+      content?: string;
+      sender?: { id: string; name: string };
+    }) => {
+      if (!msg || msg.senderId === user?.id) return;
+      // Invalidate Conversations to update unread badges & latest message summaries in real-time
+      dispatch(crmApi.util.invalidateTags(["Conversations"]));
+    };
+
     socket.on(WS_EVENTS.CONNECT, onConnect);
     socket.on(WS_EVENTS.DISCONNECT, onDisconnect);
     socket.on(WS_EVENTS.NOTIFICATION_NEW, onNewNotification);
+    socket.on(WS_EVENTS.NOTIFICATION_COUNT, onNotificationCount);
     socket.on(WS_EVENTS.LEAD_ASSIGNED, onLeadAssigned);
+    socket.on(WS_EVENTS.LEAD_REASSIGNED, onLeadReassigned);
     socket.on(WS_EVENTS.LEAD_STATUS_CHANGED, onLeadStatusChanged);
     socket.on(WS_EVENTS.FOLLOWUP_DUE, onFollowUpDue);
     socket.on(WS_EVENTS.DASHBOARD_METRICS_UPDATE, onDashboardUpdate);
+    socket.on(WS_EVENTS.MESSAGE, onIncomingChatMessage);
+    socket.on(WS_EVENTS.MESSAGE_NEW, onIncomingChatMessage);
 
     return () => {
       socket.off(WS_EVENTS.CONNECT, onConnect);
       socket.off(WS_EVENTS.DISCONNECT, onDisconnect);
       socket.off(WS_EVENTS.NOTIFICATION_NEW, onNewNotification);
+      socket.off(WS_EVENTS.NOTIFICATION_COUNT, onNotificationCount);
       socket.off(WS_EVENTS.LEAD_ASSIGNED, onLeadAssigned);
+      socket.off(WS_EVENTS.LEAD_REASSIGNED, onLeadReassigned);
       socket.off(WS_EVENTS.LEAD_STATUS_CHANGED, onLeadStatusChanged);
       socket.off(WS_EVENTS.FOLLOWUP_DUE, onFollowUpDue);
       socket.off(WS_EVENTS.DASHBOARD_METRICS_UPDATE, onDashboardUpdate);
+      socket.off(WS_EVENTS.MESSAGE, onIncomingChatMessage);
+      socket.off(WS_EVENTS.MESSAGE_NEW, onIncomingChatMessage);
     };
-  }, [user, dispatch]);
+  }, [user, token, dispatch]);
 
-  const socketInstance = user ? getSocket() : null;
+  const socketInstance = user ? getSocket(token) : null;
 
   return (
     <SocketContext.Provider value={{ socket: socketInstance, isConnected }}>

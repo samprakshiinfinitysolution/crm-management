@@ -78,12 +78,14 @@ export interface AuthUser {
   email: string;
   role: UserRole;
   isActive: boolean;
+  token?: string;
   createdAt?: string;
   updatedAt?: string;
 }
 
 export interface AuthResponseData {
   user: AuthUser;
+  token?: string;
 }
 
 export type AuthResponse = ApiResponse<AuthResponseData>;
