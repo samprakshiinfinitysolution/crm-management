@@ -50,8 +50,9 @@ const baseQueryWithSessionManagement: BaseQueryFn<
 export const crmApi = createApi({
   reducerPath: "crmApi",
   baseQuery: baseQueryWithSessionManagement,
-  refetchOnFocus: true,
+  refetchOnFocus: false, // Prevents thundering herd reload when switching browser tabs
   refetchOnReconnect: true,
+  keepUnusedDataFor: 60, // 60s default cache duration for inactive queries
   tagTypes: [
     "Auth",
     "Leads",

@@ -34,6 +34,7 @@ export const userApi = crmApi.injectEndpoints({
               { type: "Executives", id: "LIST" },
             ]
           : [{ type: "Executives", id: "LIST" }],
+      keepUnusedDataFor: 120,
     }),
 
     getSalesExecutiveById: builder.query<
@@ -42,6 +43,7 @@ export const userApi = crmApi.injectEndpoints({
     >({
       query: (id) => `/users/sales-executives/${id}`,
       providesTags: (_result, _error, id) => [{ type: "ExecutiveDetail", id }],
+      keepUnusedDataFor: 120,
     }),
 
     getUsers: builder.query<
@@ -69,6 +71,7 @@ export const userApi = crmApi.injectEndpoints({
               { type: "Users", id: "LIST" },
             ]
           : [{ type: "Users", id: "LIST" }],
+      keepUnusedDataFor: 120,
     }),
 
     getUserById: builder.query<ApiResponse<SalesExecutiveDetail>, string>({

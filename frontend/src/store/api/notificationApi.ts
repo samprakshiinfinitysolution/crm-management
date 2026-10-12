@@ -18,6 +18,7 @@ export const notificationApi = crmApi.injectEndpoints({
     getNotifications: builder.query<ApiResponse<NotificationItem[]>, void>({
       query: () => '/notifications',
       providesTags: ['Notifications'],
+      keepUnusedDataFor: 30,
     }),
     markNotificationRead: builder.mutation<ApiResponse<NotificationItem>, string>({
       query: (id) => ({

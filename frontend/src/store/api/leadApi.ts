@@ -34,11 +34,13 @@ export const leadApi = crmApi.injectEndpoints({
               { type: "Leads", id: "LIST" },
             ]
           : [{ type: "Leads", id: "LIST" }],
+      keepUnusedDataFor: 60,
     }),
 
     getLeadById: builder.query<ApiResponse<LeadItem>, string>({
       query: (id) => `/leads/${id}`,
       providesTags: (_result, _error, id) => [{ type: "Lead", id }],
+      keepUnusedDataFor: 60,
     }),
 
     createLead: builder.mutation<ApiResponse<LeadItem>, Partial<LeadItem>>({

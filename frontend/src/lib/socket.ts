@@ -28,11 +28,13 @@ export const getSocketUrl = (): string => {
     return apiUrl.replace(/\/api\/?$/, "");
   }
 
-  // 3. If API URL is relative (e.g. "/api"), resolve to backend port 5000 on the current browser host
+  // 3. If API URL is relative (e.g. "/api"), the app is served same-origin and
+  //    Next.js rewrites both /api and /socket.io to the backend. Connecting to
+  //    the current origin lets the /socket.io rewrite proxy the WebSocket to the
+  //    backend. Hard-coding :5000 here bypasses that proxy and fails whenever the
+  //    backend is not exposed on port 5000 of the frontend host (e.g. production).
   if (typeof window !== "undefined") {
-    const protocol = window.location.protocol;
-    const hostname = window.location.hostname;
-    return `${protocol}//${hostname}:5000`;
+    return window.location.origin;
   }
 
   return "http://localhost:5000";
