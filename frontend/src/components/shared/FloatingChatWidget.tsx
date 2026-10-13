@@ -43,6 +43,8 @@ export function FloatingChatWidget() {
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [input, setInput] = useState("");
+  const [conversations, setConversations] = useState<Record<string, ChatMessage[]>>({});
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Automatically close the message box when the route changes.
   // Adjusting state during render (guarded by a stored previous value) is the
@@ -103,21 +105,15 @@ export function FloatingChatWidget() {
 
   const handleSelectContact = (contact: ChatContact) => {
     setSelectedContact(contact);
-    const hasUnread = unreadContactIds.includes(contact.id);
-    if (hasUnread) {
-      setUnreadContactIds((prev) => {
-        const filtered = prev.filter((id) => id !== contact.id);
-        if (filtered.length === 0) setHasNewMessage(false);
-        return filtered;
-      });
-    }
+    setUnreadContactIds((prev) => {
+      const filtered = prev.filter((id) => id !== contact.id);
+      if (filtered.length === 0) setHasNewMessage(false);
+      return filtered;
+    });
 
     if (contact.conversationId) {
       setActiveConversationId(contact.conversationId);
-      // Only invoke read API when this conversation actually has unread messages
-      if (hasUnread) {
-        handleMarkAsRead(contact.conversationId);
-      }
+      handleMarkAsRead(contact.conversationId);
     } else {
       setActiveConversationId(null);
     }
@@ -161,7 +157,8 @@ export function FloatingChatWidget() {
   });
 
   const { data: conversationsRes } = useGetConversationsQuery(undefined, {
-    skip: !isOpen,
+    skip: !user,
+    pollingInterval: 20000,
   });
 
   // Derive chat contacts from conversations and directory search
@@ -204,7 +201,7 @@ export function FloatingChatWidget() {
     }
 
     return Array.from(contactMap.values());
-  }, [conversationsRes, searchedUsersRes, user?.id]);
+  }, [conversationsRes, searchedUsersRes, user]);
 
   // Filter employees and admin/TL separately
   const employeesList = useMemo(() => {
@@ -238,53 +235,6 @@ export function FloatingChatWidget() {
         c.role.toLowerCase().includes(q),
     );
   }, [activeContactList, searchQuery]);
-
-  // Server-derived unread contacts (messages newer than my lastReadAt, from
-  // someone other than me, excluding the currently open conversation). Computed
-  // purely from server data so it can be memoized instead of synced in an effect.
-  const serverUnreadIds = useMemo(() => {
-    if (!conversationsRes?.data || !user?.id) return [];
-
-    const unreadIds: string[] = [];
-    for (const conv of conversationsRes.data) {
-      const myParticipant = conv.participants?.find((p) => p.userId === user.id);
-      const otherParticipant =
-        conv.participants?.find((p) => p.userId !== user.id) ?? conv.participants?.[0];
-      const otherUserId = otherParticipant?.user?.id || otherParticipant?.userId;
-      if (!otherUserId || otherUserId === user.id) continue;
-
-      const latestMsg = conv.messages?.[0];
-      if (latestMsg && latestMsg.senderId !== user.id) {
-        const lastRead = myParticipant?.lastReadAt
-          ? new Date(myParticipant.lastReadAt).getTime()
-          : 0;
-        const msgTime = new Date(latestMsg.createdAt).getTime();
-        if (msgTime > lastRead && selectedContact?.id !== otherUserId) {
-          unreadIds.push(otherUserId);
-        }
-      }
-    }
-    return unreadIds;
-  }, [conversationsRes?.data, user?.id, selectedContact?.id]);
-
-  // Merge newly-detected server unread contacts into local state during render
-  // (guarded by a stored previous value) rather than inside an effect, which the
-  // React compiler flags as a source of cascading renders.
-  const serverUnreadKey = serverUnreadIds.join(",");
-  const [prevServerUnreadKey, setPrevServerUnreadKey] = useState("");
-  if (prevServerUnreadKey !== serverUnreadKey) {
-    setPrevServerUnreadKey(serverUnreadKey);
-    if (serverUnreadIds.length > 0) {
-      setUnreadContactIds((prev) =>
-        Array.from(new Set([...prev, ...serverUnreadIds])),
-      );
-      setHasNewMessage(true);
-    }
-  }
-
-  // Messages state grouped by contact ID
-  const [conversations, setConversations] = useState<Record<string, ChatMessage[]>>({});
-  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const targetConvId = activeConversationId || selectedContact?.conversationId;
   const { data: messagesRes, isLoading: isLoadingMessages } = useGetMessagesQuery(
@@ -710,6 +660,33 @@ export function FloatingChatWidget() {
 
 
 
+  const mergedUnreadContactIds = useMemo(() => {
+    const ids = new Set(unreadContactIds);
+    if (conversationsRes?.data && user?.id) {
+      for (const conv of conversationsRes.data) {
+        const myParticipant = conv.participants?.find((p) => p.userId === user.id);
+        const otherParticipant =
+          conv.participants?.find((p) => p.userId !== user.id) ?? conv.participants?.[0];
+        const otherUserId = otherParticipant?.user?.id || otherParticipant?.userId;
+        if (!otherUserId || otherUserId === user.id) continue;
+
+        const latestMsg = conv.messages?.[0];
+        if (latestMsg && latestMsg.senderId !== user.id) {
+          const lastRead = myParticipant?.lastReadAt
+            ? new Date(myParticipant.lastReadAt).getTime()
+            : 0;
+          const msgTime = new Date(latestMsg.createdAt).getTime();
+          if (msgTime > lastRead && selectedContact?.id !== otherUserId) {
+            ids.add(otherUserId);
+          }
+        }
+      }
+    }
+    return Array.from(ids);
+  }, [unreadContactIds, conversationsRes, user, selectedContact]);
+  const totalUnreadCount = mergedUnreadContactIds.length;
+  const shouldShowPulse = hasNewMessage || totalUnreadCount > 0;
+
   // Only render the widget for authenticated workspace users
   if (!user) {
     return null;
@@ -738,7 +715,7 @@ export function FloatingChatWidget() {
               employeesCount={employeesList.length}
               adminTlCount={adminTlList.length}
               contacts={sortedContacts}
-              unreadContactIds={unreadContactIds}
+              unreadContactIds={mergedUnreadContactIds}
               getContactLatestMessage={getContactLatestMessage}
               onSelectContact={handleSelectContact}
             />
@@ -766,7 +743,8 @@ export function FloatingChatWidget() {
       {/* Floating Action Trigger Icon */}
       <ChatTriggerButton
         isOpen={isOpen}
-        hasNewMessage={hasNewMessage}
+        hasNewMessage={shouldShowPulse}
+        unreadCount={totalUnreadCount}
         onToggle={handleToggleOpen}
       />
     </div>

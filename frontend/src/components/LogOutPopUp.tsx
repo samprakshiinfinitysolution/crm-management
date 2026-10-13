@@ -18,6 +18,7 @@ interface LogOutPopUpProps {
   onClose?: () => void;
   onLogout: () => void;
   isPending: boolean;
+  isText?: boolean;
 }
 
 const LogOutPopUp: React.FC<LogOutPopUpProps> = ({
@@ -26,6 +27,7 @@ const LogOutPopUp: React.FC<LogOutPopUpProps> = ({
   onClose,
   onLogout,
   isPending,
+  isText = true,
 }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -43,9 +45,9 @@ const LogOutPopUp: React.FC<LogOutPopUpProps> = ({
             ) : (
               <LogOut className="w-3.5 h-3.5" />
             )}
-            <span className="inline">
-              {isPending ? "Signing out..." : "Sign Out"}
-            </span>
+               {isText && <span className="inline">
+           {(isPending ? "Signing out..." : "Sign Out")}
+            </span>}
           </button>
         }
       />

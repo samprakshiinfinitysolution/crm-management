@@ -248,7 +248,27 @@ export const userApi = crmApi.injectEndpoints({
         url: `/conversations/${conversationId}/read`,
         method: "PATCH",
       }),
-      // Intentionally omitting invalidatesTags to avoid triggering cascading refetches of /conversations
+      async onQueryStarted({ conversationId }, { dispatch, queryFulfilled, getState }) {
+        const state = getState() as { auth?: { user?: { id?: string } } };
+        const currentUserId = state?.auth?.user?.id;
+        const patchResult = dispatch(
+          userApi.util.updateQueryData("getConversations", undefined, (draft) => {
+            if (!draft?.data) return;
+            const conv = draft.data.find((c) => c.id === conversationId);
+            if (conv && currentUserId) {
+              const participant = conv.participants?.find((p) => p.userId === currentUserId);
+              if (participant) {
+                participant.lastReadAt = new Date().toISOString();
+              }
+            }
+          }),
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
   }),
   overrideExisting: false,

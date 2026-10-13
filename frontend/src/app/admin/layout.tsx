@@ -10,7 +10,6 @@ import {
   GitFork,
   BarChart3,
   ExternalLink,
-  LogOut,
   Menu,
   X,
   LayoutDashboard,
@@ -24,6 +23,8 @@ import { useAppSelector } from '@/store';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { FloatingChatWidget } from '@/components/shared/FloatingChatWidget';
+import LogOutPopUp from '@/components/LogOutPopUp';
+import { performLogout } from '@/lib/authService';
 
 interface AdminNavItem {
   label: string;
@@ -79,7 +80,20 @@ export default function AdminLayout({
   const pathname = usePathname();
   const { user } = useAppSelector((state) => state.auth);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [, setIsLogoutModalOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleSignOut = async () => {
+    try {
+      setIsLoggingOut(true);
+      await performLogout({ callBackend: true, redirectTo: "/login" });
+    } catch {
+      await performLogout({ callBackend: false, redirectTo: "/login" });
+    } finally {
+      setIsLoggingOut(false);
+      setIsLogoutModalOpen(false);
+    }
+  };
 
   // Close mobile sidebar on route change
   const [prevPathname, setPrevPathname] = useState(pathname);
@@ -259,7 +273,7 @@ export default function AdminLayout({
 
               <div className="flex items-center gap-1 shrink-0">
                 <ThemeToggle size="sm" variant="button" />
-                <button
+                {/*<button
                   type="button"
                   onClick={() => setIsLogoutModalOpen(true)}
                   className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 dark:hover:text-rose-400 transition-colors"
@@ -267,7 +281,15 @@ export default function AdminLayout({
                   aria-label="Sign out"
                 >
                   <LogOut className="w-4 h-4" />
-                </button>
+                </button>*/}
+                <LogOutPopUp
+                  isText={false}
+                  open={isLogoutModalOpen}
+                  setOpen={setIsLogoutModalOpen}
+                  onLogout={handleSignOut}
+                  onClose={() => setIsLogoutModalOpen(false)}
+                  isPending={isLoggingOut}
+                />
               </div>
             </div>
           </div>

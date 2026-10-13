@@ -6,14 +6,18 @@ import { MessageSquare, X } from "lucide-react";
 interface ChatTriggerButtonProps {
   isOpen: boolean;
   hasNewMessage: boolean;
+  unreadCount?: number;
   onToggle: () => void;
 }
 
 export function ChatTriggerButton({
   isOpen,
   hasNewMessage,
+  unreadCount = 0,
   onToggle,
 }: ChatTriggerButtonProps) {
+  const showBadge = !isOpen && (hasNewMessage || unreadCount > 0);
+
   return (
     <button
       type="button"
@@ -35,10 +39,16 @@ export function ChatTriggerButton({
       />
 
       {/* Pulse Indicator badge */}
-      {!isOpen && hasNewMessage && (
-        <span className="absolute top-0 right-0 flex h-3 w-3 -mt-0.5 -mr-0.5">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75" />
-          <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500 border-2 border-white dark:border-slate-900" />
+      {showBadge && (
+        <span className="absolute -top-1 -right-1 flex items-center justify-center pointer-events-none">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
+          {unreadCount > 0 ? (
+            <span className="relative inline-flex items-center justify-center min-w-5 h-5 px-1 rounded-full text-[10px] font-extrabold bg-rose-500 text-white border-2 border-white dark:border-slate-900 shadow-md">
+              {unreadCount > 9 ? "9+" : unreadCount}
+            </span>
+          ) : (
+            <span className="relative inline-flex h-3.5 w-3.5 rounded-full bg-rose-500 border-2 border-white dark:border-slate-900 shadow-md" />
+          )}
         </span>
       )}
     </button>
