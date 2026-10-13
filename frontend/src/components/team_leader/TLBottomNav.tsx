@@ -64,7 +64,7 @@ export default function TLBottomNav({
       id: "sales_pipeline",
       label: "Sales Team",
       description: "Executives directory & quotas",
-      link: "/team_leader/sales_executives",
+      link: "/team_leader/users",
       icon: Users,
     },
     {

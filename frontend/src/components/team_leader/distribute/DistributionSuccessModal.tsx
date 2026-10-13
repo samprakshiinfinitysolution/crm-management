@@ -94,7 +94,7 @@ export const DistributionSuccessModal: React.FC<
           <Button
             onClick={() => {
               onClose();
-              router.push("/team_leader/sales_executives");
+              router.push("/dashboard/users");
             }}
             className="w-full sm:w-auto text-xs font-bold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center gap-1.5 shadow-md shadow-indigo-600/20"
           >
