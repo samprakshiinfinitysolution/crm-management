@@ -28,14 +28,19 @@ export function ThemeToggle({
 
   // Simple direct toggle button (quick 1-click toggle)
   if (variant === "button") {
+    const buttonLabel = mounted
+      ? `Switch to ${resolvedTheme === "dark" ? "light" : "dark"} mode`
+      : "Toggle theme";
+
     return (
       <button
         type="button"
         onClick={toggleTheme}
-        aria-label={`Switch to ${resolvedTheme === "dark" ? "light" : "dark"} mode`}
-        title={`Switch to ${resolvedTheme === "dark" ? "light" : "dark"} mode`}
+        aria-label="Toggle color theme"
+        title={buttonLabel}
+        suppressHydrationWarning
         className={cn(
-          "relative inline-flex items-center justify-center rounded-lg border transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500",
+          "relative inline-flex items-center justify-center rounded-lg border transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
           size === "sm" && "w-8 h-8 text-xs",
           size === "default" && "w-9 h-9 text-sm",
           size === "lg" && "w-10 h-10 text-base",
@@ -47,7 +52,7 @@ export function ThemeToggle({
         {!mounted ? (
           <span className="w-4 h-4 opacity-0" />
         ) : resolvedTheme === "dark" ? (
-          <Moon className="w-4 h-4 transition-transform duration-200 text-indigo-400 rotate-0 scale-100" />
+          <Moon className="w-4 h-4 transition-transform duration-200 text-blue-400 rotate-0 scale-100" />
         ) : (
           <Sun className="w-4 h-4 transition-transform duration-200 text-amber-500 rotate-0 scale-100" />
         )}
@@ -89,7 +94,7 @@ export function ThemeToggle({
               className={cn(
                 "flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer",
                 isSelected
-                  ? "bg-white text-indigo-600 shadow-xs dark:bg-slate-800 dark:text-indigo-400 font-bold"
+                  ? "bg-white text-blue-600 shadow-xs dark:bg-slate-800 dark:text-blue-400 font-semibold"
                   : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200",
               )}
             >
@@ -109,8 +114,9 @@ export function ThemeToggle({
         type="button"
         aria-label="Select theme"
         title="Theme settings"
+        suppressHydrationWarning
         className={cn(
-          "relative inline-flex items-center justify-center rounded-lg border transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 select-none",
+          "relative inline-flex items-center justify-center rounded-lg border transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 select-none",
           size === "sm" && "w-8 h-8 text-xs",
           size === "default" && "w-9 h-9 text-sm",
           size === "lg" && "w-10 h-10 text-base",
@@ -122,7 +128,7 @@ export function ThemeToggle({
         {!mounted ? (
           <span className="w-4 h-4 opacity-0" />
         ) : resolvedTheme === "dark" ? (
-          <Moon className="w-4 h-4 text-indigo-400 transition-transform duration-200 hover:rotate-12" />
+          <Moon className="w-4 h-4 text-blue-400 transition-transform duration-200 hover:rotate-12" />
         ) : (
           <Sun className="w-4 h-4 text-amber-500 transition-transform duration-200 hover:rotate-45" />
         )}
@@ -140,7 +146,7 @@ export function ThemeToggle({
             "hover:bg-slate-100 dark:hover:bg-slate-800",
             mounted &&
               theme === "light" &&
-              "text-indigo-600 dark:text-indigo-400 font-semibold",
+              "text-blue-600 dark:text-blue-400 font-semibold",
           )}
         >
           <div className="flex items-center gap-2">
@@ -157,11 +163,11 @@ export function ThemeToggle({
             "hover:bg-slate-100 dark:hover:bg-slate-800",
             mounted &&
               theme === "dark" &&
-              "text-indigo-600 dark:text-indigo-400 font-semibold",
+              "text-blue-600 dark:text-blue-400 font-semibold",
           )}
         >
           <div className="flex items-center gap-2">
-            <Moon className="w-3.5 h-3.5 text-indigo-400" />
+            <Moon className="w-3.5 h-3.5 text-blue-400" />
             <span>Dark</span>
           </div>
           {mounted && theme === "dark" && <Check className="w-3.5 h-3.5" />}
@@ -174,7 +180,7 @@ export function ThemeToggle({
             "hover:bg-slate-100 dark:hover:bg-slate-800",
             mounted &&
               theme === "system" &&
-              "text-indigo-600 dark:text-indigo-400 font-semibold",
+              "text-blue-600 dark:text-blue-400 font-semibold",
           )}
         >
           <div className="flex items-center gap-2">

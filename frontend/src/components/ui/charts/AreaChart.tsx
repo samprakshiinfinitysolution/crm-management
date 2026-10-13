@@ -31,7 +31,7 @@ export const AreaChart: React.FC<AreaChartProps> = ({
   height = 220,
   primaryLabel = "Primary Metric",
   secondaryLabel = "Secondary Metric",
-  primaryColor = "#6366f1", // Indigo 500
+  primaryColor = "#2563eb", // Blue 600
   secondaryColor = "#f59e0b", // Amber 500
   showGridLines = true,
   showLegend = true,
@@ -54,7 +54,7 @@ export const AreaChart: React.FC<AreaChartProps> = ({
         )}
       >
         <div className="flex h-full w-full items-center justify-center rounded-xl bg-slate-100/70 dark:bg-slate-800/40">
-          <div className="h-8 w-8 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin opacity-40" />
+          <div className="h-8 w-8 rounded-full border-2 border-blue-600 border-t-transparent animate-spin opacity-40" />
         </div>
       </div>
     );
@@ -159,7 +159,7 @@ export const AreaChart: React.FC<AreaChartProps> = ({
           </div>
 
           {hoverPoint && (
-            <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold animate-in fade-in duration-200">
+            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold animate-in fade-in duration-200">
               <span>{hoverPoint.dataPoint.label}:</span>
               <span>
                 {hoverPoint.dataPoint.formattedValue ||

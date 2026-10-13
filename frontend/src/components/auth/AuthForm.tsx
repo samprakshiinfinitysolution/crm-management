@@ -155,6 +155,11 @@ export default function AuthForm() {
         <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
           {authMode === "register" ? "Create Account" : "Sign In"}
         </h2>
+        <p className="text-slate-400 dark:text-slate-500 text-sm mt-1">
+          {authMode === "register"
+            ? "Get started quickly. Create your account to join the platform."  
+            : "Welcome back. Enter your workspace credentials to continue."}
+        </p>
       </div>
 
       {/* ------------------------------------------------------------- */}
@@ -168,7 +173,7 @@ export default function AuthForm() {
         {/* Name Field (Register Mode) */}
         {authMode === "register" && (
           <div className="relative flex items-center">
-            <User className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none" />
+            <User className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 pointer-events-none" />
             <input
               id="name-input"
               type="text"
@@ -176,14 +181,14 @@ export default function AuthForm() {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               placeholder="Name"
-              className="w-full h-11 pl-10 pr-3.5 rounded-lg bg-card border border-slate-300 dark:border-slate-500 text-slate-800 dark:text-slate-200 placeholder:text-slate-400 text-sm focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors"
+              className="w-full h-11 pl-10 pr-3.5 rounded-lg bg-slate-50/90 dark:bg-slate-800/80 border border-black/10 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 text-sm focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all"
             />
           </div>
         )}
 
         {/* Email Field */}
         <div className="relative flex items-center">
-          <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none" />
+          <Mail className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 pointer-events-none" />
           <input
             id="email-input"
             type="email"
@@ -191,28 +196,28 @@ export default function AuthForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
-            className="w-full h-11 pl-10 pr-3.5 rounded-lg bg-card border border-slate-300 dark:border-slate-500 text-slate-800 dark:text-slate-200 placeholder:text-slate-400 text-sm focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors"
+            className="w-full h-11 pl-10 pr-3.5 rounded-lg bg-slate-50/90 dark:bg-slate-800/80 border border-black/10 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 text-sm focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all"
           />
         </div>
 
         {/* Inline Two Columns: Phone Number + Role Dropdown (Register Mode) */}
         {authMode === "register" && (
           <div className="relative flex items-center">
-            <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none" />
+            <Phone className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 pointer-events-none" />
             <input
               id="phone-input"
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="Phone Number"
-              className="w-full h-11 pl-10 pr-3.5 rounded-lg bg-card border border-slate-300 dark:border-slate-500 text-slate-800 dark:text-slate-200 placeholder:text-slate-400 text-sm focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors"
+              className="w-full h-11 pl-10 pr-3.5 rounded-lg bg-slate-50/90 dark:bg-slate-800/80 border border-black/10 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 text-sm focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all"
             />
           </div>
         )}
 
         {/* Password Field */}
         <div className="relative flex items-center">
-          <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none" />
+          <Lock className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 pointer-events-none" />
           <input
             id="password-input"
             type={showPassword ? "text" : "password"}
@@ -220,12 +225,12 @@ export default function AuthForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
-            className="w-full h-11 pl-10 pr-10 rounded-lg bg-card border border-slate-300 dark:border-slate-500 text-slate-800 dark:text-slate-200 placeholder:text-slate-400 text-sm focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors"
+            className="w-full h-11 pl-10 pr-10 rounded-lg bg-slate-50/90 dark:bg-slate-800/80 border border-black/10 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 text-sm focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all"
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 text-slate-400 hover:text-slate-600 p-1 cursor-pointer transition-colors"
+            className="absolute right-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-1 cursor-pointer transition-colors"
             title={showPassword ? "Hide password" : "Show password"}
           >
             {showPassword ? (
@@ -239,7 +244,7 @@ export default function AuthForm() {
         {/* Confirm Password Field (Register Mode) */}
         {authMode === "register" && (
           <div className="relative flex items-center">
-            <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none" />
+            <Lock className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 pointer-events-none" />
             <input
               id="confirm-password-input"
               type={showPassword ? "text" : "password"}
@@ -247,7 +252,7 @@ export default function AuthForm() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirm Password"
-              className="w-full h-11 pl-10 pr-10 rounded-lg bg-card border border-slate-300 dark:border-slate-500 text-slate-800 dark:text-slate-200 placeholder:text-slate-400 text-sm focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors"
+              className="w-full h-11 pl-10 pr-10 rounded-lg bg-slate-50/90 dark:bg-slate-800/80 border border-black/10 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 text-sm focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all"
             />
           </div>
         )}
@@ -262,7 +267,7 @@ export default function AuthForm() {
                   "Please contact your CRM administrator to reset your password.",
                 )
               }
-              className="text-xs text-indigo-600 hover:text-indigo-700 hover:underline cursor-pointer"
+              className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 hover:underline cursor-pointer font-medium"
             >
               Forgot password?
             </button>
@@ -276,7 +281,7 @@ export default function AuthForm() {
           type="button"
           onClick={handleAuthSubmit}
           disabled={isLoading || isRedirecting}
-          className="w-full h-11 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold transition-colors flex items-center justify-center gap-2 mt-2 cursor-pointer disabled:opacity-75"
+          className="w-full h-11 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-lg text-sm font-semibold shadow-xs transition-all flex items-center justify-center gap-2 mt-2 cursor-pointer disabled:opacity-75"
         >
           {isLoading || isRedirecting ? (
             <div className="flex items-center gap-2">
@@ -302,7 +307,7 @@ export default function AuthForm() {
             <button
               type="button"
               onClick={() => dispatch(setAuthMode("login"))}
-              className="text-xs text-indigo-600 hover:text-indigo-700 font-medium hover:underline cursor-pointer"
+              className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-semibold hover:underline cursor-pointer transition-colors"
             >
               Already have an account?
             </button>
@@ -310,7 +315,7 @@ export default function AuthForm() {
             <button
               type="button"
               onClick={() => dispatch(setAuthMode("register"))}
-              className="text-xs text-indigo-600 hover:text-indigo-700 font-medium hover:underline cursor-pointer"
+              className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-semibold hover:underline cursor-pointer transition-colors"
             >
               Don&apos;t have an account? Create one
             </button>
@@ -319,9 +324,9 @@ export default function AuthForm() {
 
         <Link
           href={"/"}
-          className="w-fit mx-auto text-sm flex items-center justify-center gap-2 hover:text-brand-primary/70 hover:active-95 transition-colors text-slate-500 dark:text-slate-400 "
+          className="w-fit mx-auto text-xs flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 font-medium hover:underline transition-colors mt-1"
         >
-          <ArrowLeft className="size-5" />
+          <ArrowLeft className="w-4 h-4" />
           Back to Home
         </Link>
       </form>

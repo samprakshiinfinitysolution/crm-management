@@ -28,40 +28,40 @@ export default function FollowUpStatsCards({
       key: "today" as const,
       label: "Due Today",
       count: summary?.dueToday ?? 0,
-      icon: <Clock className="w-4 h-4 text-blue-600" />,
-      iconBox: "bg-blue-50 border border-blue-100",
+      icon: <Clock className="w-4 h-4 text-blue-600 dark:text-blue-400" />,
+      iconBox: "bg-blue-50 dark:bg-blue-950/60 border border-blue-100 dark:border-blue-900/50",
       badge: "High Priority",
-      badgeStyle: "bg-blue-50 text-blue-700 border border-blue-200",
+      badgeStyle: "bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800",
     },
     {
       key: "overdue" as const,
       label: "Overdue",
       count: summary?.overdue ?? 0,
-      icon: <AlertTriangle className="w-4 h-4 text-rose-600" />,
-      iconBox: "bg-rose-50 border border-rose-100",
+      icon: <AlertTriangle className="w-4 h-4 text-blue-600 dark:text-blue-400" />,
+      iconBox: "bg-blue-50 dark:bg-blue-950/60 border border-blue-100 dark:border-blue-900/50",
       badge: (summary?.overdue ?? 0) > 0 ? "Action Required" : "Clean",
       badgeStyle:
         (summary?.overdue ?? 0) > 0
-          ? "bg-rose-50 text-rose-700 border border-rose-200 font-bold"
-          : "bg-crm-muted text-crm-secondary border border-crm-subtle",
+          ? "bg-rose-50 text-rose-700 border border-rose-200 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-900 font-bold"
+          : "bg-slate-100 text-slate-600 border border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700",
     },
     {
       key: "upcoming" as const,
       label: "Upcoming",
       count: summary?.upcoming ?? 0,
-      icon: <CalendarCheck className="w-4 h-4 text-indigo-600" />,
-      iconBox: "bg-indigo-50 border border-indigo-100",
+      icon: <CalendarCheck className="w-4 h-4 text-blue-600 dark:text-blue-400" />,
+      iconBox: "bg-blue-50 dark:bg-blue-950/60 border border-blue-100 dark:border-blue-900/50",
       badge: "Scheduled",
-      badgeStyle: "bg-indigo-50 text-indigo-700 border border-indigo-200",
+      badgeStyle: "bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800",
     },
     {
       key: "completed" as const,
       label: "Completed (Month)",
       count: summary?.completedThisMonth ?? 0,
-      icon: <CheckCircle2 className="w-4 h-4 text-emerald-600" />,
-      iconBox: "bg-emerald-50 border border-emerald-100",
+      icon: <CheckCircle2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />,
+      iconBox: "bg-blue-50 dark:bg-blue-950/60 border border-blue-100 dark:border-blue-900/50",
       badge: "Delivered",
-      badgeStyle: "bg-emerald-50 text-emerald-700 border border-emerald-200",
+      badgeStyle: "bg-slate-100 text-slate-700 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700",
     },
   ];
 
@@ -74,10 +74,10 @@ export default function FollowUpStatsCards({
             key={card.key}
             type="button"
             onClick={() => onScopeSelect?.(card.key)}
-            className={`text-left p-4 rounded-lg bg-crm-card border transition-all duration-150 flex flex-col justify-between shadow-xs cursor-pointer ${
+            className={`text-left p-4 rounded-xl bg-white dark:bg-slate-900 border transition-all duration-150 flex flex-col justify-between shadow-xs cursor-pointer ${
               isActive
-                ? "border-indigo-600 ring-2 ring-indigo-500/20 bg-indigo-50/20 dark:bg-card/70"
-                : "border-crm-subtle hover:border-slate-300"
+                ? "border-blue-600 ring-2 ring-blue-500/20 bg-blue-50/20 dark:bg-slate-800/80"
+                : "border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
             }`}
           >
             <div className="flex items-center justify-between mb-3">
@@ -93,14 +93,14 @@ export default function FollowUpStatsCards({
               </span>
             </div>
             <div>
-              <div className="text-2xl font-bold tracking-tight text-crm-primary mb-0.5">
+              <div className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 mb-0.5">
                 {isLoading ? (
-                  <div className="h-7 w-12 bg-crm-muted rounded animate-pulse" />
+                  <div className="h-7 w-12 bg-slate-100 dark:bg-slate-800 rounded animate-pulse" />
                 ) : (
                   card.count
                 )}
               </div>
-              <div className="text-[11px] font-bold uppercase tracking-wider text-crm-muted">
+              <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                 {card.label}
               </div>
             </div>

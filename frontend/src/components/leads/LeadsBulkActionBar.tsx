@@ -27,7 +27,7 @@ export function LeadsBulkActionBar({
   return (
     <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-card text-accent-foreground px-5 py-3 rounded-lg shadow-2xl flex items-center gap-4 border border-brand-primary animate-in slide-in-from-bottom-5 duration-200">
       <div className="flex items-center gap-2">
-        <span className="w-6 h-6 rounded-full bg-indigo-500 text-white flex items-center justify-center text-xs font-bold">
+        <span className="w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-bold">
           {selectedCount}
         </span>
         <span className="text-xs font-semibold text-muted-foreground">
@@ -41,7 +41,7 @@ export function LeadsBulkActionBar({
         <button
           type="button"
           onClick={onExport}
-          className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[12px] font-semibold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
+          className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-[12px] font-semibold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
         >
           <Download className="w-3.5 h-3.5" />
           <span>Export Selected ({selectedCount})</span>

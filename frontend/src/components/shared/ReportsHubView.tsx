@@ -70,7 +70,7 @@ export const ReportsHubView: React.FC<ReportsHubViewProps> = ({
       <PageHeader
         title={title}
         description={description}
-        icon={<TrendingUp className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />}
+        icon={<TrendingUp className="w-6 h-6 text-blue-600 dark:text-blue-400" />}
         breadcrumbs={breadcrumbs}
         actions={
           <button
@@ -91,16 +91,16 @@ export const ReportsHubView: React.FC<ReportsHubViewProps> = ({
           {leadReportHref && (
             <Link
               href={leadReportHref}
-              className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-indigo-500/50 hover:shadow-md transition-all group flex items-center justify-between"
+              className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-500/50 hover:shadow-md transition-all group flex items-center justify-between"
             >
               <div className="flex items-center gap-3.5">
-                <div className="p-2.5 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
+                <div className="p-2.5 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
                   <PieChart className="w-5 h-5" />
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
                     Detailed Leads Report
-                    <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" />
+                    <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                     Lead statuses, sources, conversions & distributions
@@ -113,7 +113,7 @@ export const ReportsHubView: React.FC<ReportsHubViewProps> = ({
           {performanceReportHref && (
             <Link
               href={performanceReportHref}
-              className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-indigo-500/50 hover:shadow-md transition-all group flex items-center justify-between"
+              className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-500/50 hover:shadow-md transition-all group flex items-center justify-between"
             >
               <div className="flex items-center gap-3.5">
                 <div className="p-2.5 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">

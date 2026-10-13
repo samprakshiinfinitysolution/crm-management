@@ -101,7 +101,7 @@ export default function PerformanceReportPage() {
           <div className="bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-col justify-between">
             <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
               <span className="text-xs font-semibold">Active Staff</span>
-              <Users className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+              <Users className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             </div>
             <div className="text-xl font-bold text-slate-900 dark:text-slate-100">
               {summary ? summary.totalExecutives : "—"}

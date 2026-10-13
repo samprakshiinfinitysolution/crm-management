@@ -112,7 +112,7 @@ export const DistributionStepSummary: React.FC<
       <div className="bg-card dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+            <ShieldCheck className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">
               Review & Confirm Distribution
             </h2>
@@ -124,7 +124,7 @@ export const DistributionStepSummary: React.FC<
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+          <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
             Strategy: {formatModeLabel(mode)}
           </span>
           <span className="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
@@ -140,7 +140,7 @@ export const DistributionStepSummary: React.FC<
           <div>
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                <Users className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                   Step 1 Summary: Selected Team
                 </h3>
@@ -157,7 +157,7 @@ export const DistributionStepSummary: React.FC<
                   className="py-3 flex items-center justify-between text-xs"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-bold text-xs flex items-center justify-center shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-bold text-xs flex items-center justify-center shrink-0">
                       {getInitials(exec.name)}
                     </div>
                     <div>
@@ -194,7 +194,7 @@ export const DistributionStepSummary: React.FC<
           <div>
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-2">
-                <Layers className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                <Layers className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                   Step 2 Summary: Allocation Details
                 </h3>
@@ -240,7 +240,7 @@ export const DistributionStepSummary: React.FC<
                   <span className="font-semibold text-slate-800 dark:text-slate-200">
                     {exec.name}
                   </span>
-                  <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-2.5 py-0.5 rounded">
+                  <span className="font-mono font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2.5 py-0.5 rounded">
                     +{exec.allocatedCount} leads
                   </span>
                 </div>
@@ -261,7 +261,7 @@ export const DistributionStepSummary: React.FC<
       {mode === "MANUAL_PICK" && selectedLeadsPreview.length > 0 && (
         <div className="bg-card dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs">
           <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
-            <FileText className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+            <FileText className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
               Selected Leads Roster ({selectedLeadsPreview.length} leads)
             </h3>
@@ -274,7 +274,7 @@ export const DistributionStepSummary: React.FC<
                 className="p-2.5 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50/50 dark:bg-slate-800/50 text-xs flex items-center justify-between"
               >
                 <div>
-                  <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">
+                  <span className="font-mono font-bold text-blue-600 dark:text-blue-400">
                     {lead.leadCode}
                   </span>
                   <p className="text-slate-700 dark:text-slate-200 font-semibold truncate">
@@ -315,7 +315,7 @@ export const DistributionStepSummary: React.FC<
             type="button"
             onClick={onConfirm}
             disabled={isSubmitting || totalLeadsToDistribute <= 0}
-            className="inline-flex items-center gap-1.5 px-5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 dark:disabled:bg-slate-800 disabled:text-slate-400 text-white text-xs sm:text-sm font-semibold shadow-xs transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 dark:disabled:bg-slate-800 disabled:text-slate-400 text-white text-xs sm:text-sm font-semibold shadow-xs transition-colors cursor-pointer"
           >
             {isSubmitting ? (
               <>

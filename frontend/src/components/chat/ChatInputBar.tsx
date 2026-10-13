@@ -50,7 +50,7 @@ export function ChatInputBar({
             type="button"
             onClick={() => imageInputRef.current?.click()}
             disabled={isUploading}
-            className="p-2 rounded-xl text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 disabled:opacity-40 transition-colors cursor-pointer"
+            className="p-2 rounded-xl text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/50 disabled:opacity-40 transition-colors cursor-pointer"
             aria-label="Attach image"
             title="Send image"
           >
@@ -60,7 +60,7 @@ export function ChatInputBar({
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
-            className="p-2 rounded-xl text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 disabled:opacity-40 transition-colors cursor-pointer"
+            className="p-2 rounded-xl text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/50 disabled:opacity-40 transition-colors cursor-pointer"
             aria-label="Attach file"
             title="Send file"
           >
@@ -88,13 +88,13 @@ export function ChatInputBar({
         value={input}
         onChange={(e) => onInputChange(e.target.value)}
         placeholder={`Message ${shortName}...`}
-        className="flex-1 px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none transition-all"
+        className="flex-1 px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-blue-500 dark:focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none transition-all"
         autoFocus
       />
       <button
         type="submit"
         disabled={!canSend || isUploading}
-        className="p-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-40 disabled:hover:bg-indigo-600 transition-colors shadow-xs cursor-pointer"
+        className="p-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-40 disabled:hover:bg-blue-600 transition-colors shadow-xs cursor-pointer"
         aria-label="Send Message"
       >
         <Send className="w-4 h-4" />

@@ -181,7 +181,7 @@ export const StatusChangeModal: React.FC<StatusChangeModalProps> = ({
         {/* Header */}
         <div className="flex items-start justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 border border-indigo-100 dark:border-indigo-900/50">
+            <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 border border-blue-100 dark:border-blue-900/50">
               <Tag className="w-5 h-5" />
             </div>
             <div>
@@ -217,7 +217,7 @@ export const StatusChangeModal: React.FC<StatusChangeModalProps> = ({
                 leadCodes.slice(0, 3).map((code) => (
                   <span
                     key={code}
-                    className="font-mono text-xs font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/50 px-2 py-0.5 rounded-md border border-indigo-200 dark:border-indigo-800"
+                    className="font-mono text-xs font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/50 px-2 py-0.5 rounded-md border border-blue-200 dark:border-blue-800"
                   >
                     {code}
                   </span>
@@ -255,7 +255,7 @@ export const StatusChangeModal: React.FC<StatusChangeModalProps> = ({
               value={selectedStatus}
               onValueChange={(val) => setSelectedStatus(val || "")}
             >
-              <SelectTrigger className="w-full h-10 px-3 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-600 transition-all">
+              <SelectTrigger className="w-full h-10 px-3 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all">
                 <SelectValue placeholder="Select target status..." />
               </SelectTrigger>
               <SelectContent className="border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl max-h-64">
@@ -291,7 +291,7 @@ export const StatusChangeModal: React.FC<StatusChangeModalProps> = ({
               value={note}
               onChange={(e) => setNote(e.target.value)}
               placeholder="Log reason for status update, meeting outcome, or next steps..."
-              className="w-full p-3 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-600 transition-all resize-none"
+              className="w-full p-3 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all resize-none"
               disabled={isLoading}
             />
           </div>
@@ -309,7 +309,7 @@ export const StatusChangeModal: React.FC<StatusChangeModalProps> = ({
             <button
               type="submit"
               disabled={isLoading || !selectedStatus}
-              className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {isLoading ? (
                 <>

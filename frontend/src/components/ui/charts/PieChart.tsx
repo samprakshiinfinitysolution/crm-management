@@ -139,13 +139,13 @@ export const PieChart: React.FC<PieChartProps> = ({
                 <span className="text-xl font-bold text-slate-900 dark:text-white block">
                   {activeSegment.percentage}%
                 </span>
-                <span className="text-[10px] font-semibold text-indigo-600 dark:text-indigo-400 truncate max-w-[90px] block">
+                <span className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 truncate max-w-[90px] block">
                   {activeSegment.label}
                 </span>
               </div>
             ) : (
               <div>
-                <span className="text-xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight block">
+                <span className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight block">
                   {totalCount}
                 </span>
                 <span className="text-[9px] font-bold tracking-wider text-slate-400 dark:text-slate-500 block uppercase">

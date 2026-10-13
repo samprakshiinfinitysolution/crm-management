@@ -89,7 +89,7 @@ export default function UsersManagementPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-              <Users className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+              <Users className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               <span>Team Leaders & Sales Staff Directory</span>
             </h1>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
@@ -106,13 +106,13 @@ export default function UsersManagementPage() {
               title="Refresh"
             >
               <RefreshCw
-                className={`w-4 h-4 ${isFetching ? "animate-spin text-indigo-600 dark:text-indigo-400" : ""}`}
+                className={`w-4 h-4 ${isFetching ? "animate-spin text-blue-600 dark:text-blue-400" : ""}`}
               />
             </button>
 
             <Link
               href="/dashboard/users/create"
-              className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all"
+              className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all"
             >
               <UserPlus className="w-4 h-4" />
               <span>Add Staff Member</span>
@@ -134,7 +134,7 @@ export default function UsersManagementPage() {
                 setPage(1);
               }}
               placeholder="Search staff by name or email..."
-              className="h-9 px-3 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 max-w-sm w-full"
+              className="h-9 px-3 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-600 max-w-sm w-full"
             />
 
             <div className="flex items-center gap-2">
@@ -211,7 +211,7 @@ export default function UsersManagementPage() {
                       <td className="py-3.5 px-4">
                         <div className="flex items-center gap-3">
                           <div className="relative shrink-0">
-                            <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 flex items-center justify-center font-bold text-xs">
+                            <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 flex items-center justify-center font-bold text-xs">
                               {exec.name[0]}
                             </div>
                             <span
@@ -278,7 +278,7 @@ export default function UsersManagementPage() {
                             e.stopPropagation();
                             router.push(`/dashboard/users/${exec.id}`);
                           }}
-                          className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all cursor-pointer"
+                          className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 transition-all cursor-pointer"
                         >
                           <Eye className="w-4 h-4" />
                         </button>

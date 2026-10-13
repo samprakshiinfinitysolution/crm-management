@@ -71,7 +71,7 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({
                   "h-full rounded-full transition-all duration-500 shadow-2xs group-hover:brightness-110",
                   isFinal
                     ? "bg-gradient-to-r from-emerald-500 to-teal-400"
-                    : "bg-gradient-to-r from-indigo-600 via-indigo-500 to-sky-400"
+                    : "bg-gradient-to-r from-blue-600 via-blue-500 to-sky-400"
                 )}
                 style={{ width: `${relativeWidthPercentage}%` }}
               />

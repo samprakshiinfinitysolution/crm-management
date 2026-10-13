@@ -36,7 +36,7 @@ export default function SupervisorBanner({
         {/* Supervisor Profile Summary */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3.5 min-w-0">
-            <div className="w-12 h-12 rounded-lg bg-indigo-600 text-white font-bold text-base flex items-center justify-center shrink-0 shadow-xs">
+            <div className="w-12 h-12 rounded-lg bg-blue-600 text-white font-bold text-base flex items-center justify-center shrink-0 shadow-xs">
               {name
                 .split(" ")
                 .map((n) => n[0])
@@ -49,7 +49,7 @@ export default function SupervisorBanner({
                 <span className="text-base font-bold text-slate-900 dark:text-slate-100 truncate">
                   {name}
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-[11px] font-semibold">
+                <span className="px-2 py-0.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-[11px] font-semibold">
                   Team Leader
                 </span>
               </div>
@@ -73,7 +73,7 @@ export default function SupervisorBanner({
               onDistributeClick ||
               (() => router.push("/dashboard/distributions"))
             }
-            className="flex items-center justify-between p-3 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white active:scale-[0.99] transition-all shadow-xs cursor-pointer"
+            className="flex items-center justify-between p-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white active:scale-[0.99] transition-all shadow-xs cursor-pointer"
           >
             <div className="flex items-center gap-2.5">
               <GitFork className="w-4 h-4 text-white" />
@@ -81,7 +81,7 @@ export default function SupervisorBanner({
                 <span className="text-xs font-semibold block leading-tight">
                   Distribute Leads
                 </span>
-                <span className="text-[11px] text-indigo-100">
+                <span className="text-[11px] text-blue-100">
                   {unassignedCount} waiting
                 </span>
               </div>
@@ -97,7 +97,7 @@ export default function SupervisorBanner({
             className="flex items-center justify-between p-3 rounded-lg bg-slate-50 hover:bg-card border border-slate-200 text-slate-700 dark:text-slate-300 active:scale-[0.99] transition-all cursor-pointer"
           >
             <div className="flex items-center gap-2.5">
-              <UploadCloud className="w-4 h-4 text-indigo-600" />
+              <UploadCloud className="w-4 h-4 text-blue-600" />
               <div className="text-left">
                 <span className="text-xs font-semibold block leading-tight">
                   Import Leads

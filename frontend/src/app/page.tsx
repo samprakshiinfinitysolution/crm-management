@@ -34,6 +34,12 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { useAppSelector } from "@/store";
 import { useGetMeQuery } from "@/store/api/authApi";
 import { UserRole } from "@/types/api.types";
+import { Inter } from "next/font/google";
+// 1. Initialize the font and define a CSS variable
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
 
 // =========================================================================
 // Client Auth Synchronization
@@ -90,7 +96,9 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans selection:bg-indigo-600 selection:text-white flex flex-col antialiased transition-colors">
+    <div
+      className={`${inter.variable} min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans selection:bg-blue-600 selection:text-white flex flex-col antialiased transition-colors`}
+    >
       {/* ========================================================================= */}
       {/* 1. TOP NAVBAR (Sticky Frosted Glass) */}
       {/* ========================================================================= */}
@@ -98,13 +106,13 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 sm:h-20 flex items-center justify-between">
           {/* Logo & Brand Identity */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl bg-indigo-600 group-hover:bg-indigo-700 flex items-center justify-center text-white font-extrabold text-sm shadow-xs transition-colors ring-2 ring-indigo-50 dark:ring-indigo-950">
+            <div className="w-9 h-9 rounded-xl bg-blue-600 group-hover:bg-blue-700 flex items-center justify-center text-white font-extrabold text-sm shadow-xs transition-colors ring-2 ring-blue-50 dark:ring-blue-950">
               LF
             </div>
             <div className="flex flex-col">
               <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
                 LeadFlow{" "}
-                <span className="text-indigo-600 dark:text-indigo-400">
+                <span className="text-blue-600 dark:text-blue-400">
                   CRM
                 </span>
               </span>
@@ -119,42 +127,42 @@ export default function HomePage() {
             <a
               href="#features"
               onClick={(e) => handleNavClick(e, "features")}
-              className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+              className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               Capabilities
             </a>
             <a
               href="#workflow"
               onClick={(e) => handleNavClick(e, "workflow")}
-              className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+              className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               Lifecycle Pipeline
             </a>
             <a
               href="#distribution"
               onClick={(e) => handleNavClick(e, "distribution")}
-              className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+              className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               Distribution Modes
             </a>
             <a
               href="#followups"
               onClick={(e) => handleNavClick(e, "followups")}
-              className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+              className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               Follow-up SLA
             </a>
             <a
               href="#reports"
               onClick={(e) => handleNavClick(e, "reports")}
-              className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+              className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               Reports
             </a>
             <a
               href="#security"
               onClick={(e) => handleNavClick(e, "security")}
-              className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+              className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               RBAC Security
             </a>
@@ -166,7 +174,7 @@ export default function HomePage() {
             {effectiveUser ? (
               <Link
                 href={targetRoute}
-                className="inline-flex items-center gap-2 px-4.5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs hover:shadow-md transition-all active:scale-[0.98]"
+                className="inline-flex items-center gap-2 px-4.5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs hover:shadow-md transition-all active:scale-[0.98]"
               >
                 <LayoutDashboard className="w-3.5 h-3.5" />
                 <span>{targetLabel}</span>
@@ -182,7 +190,7 @@ export default function HomePage() {
                 </Link>
                 <Link
                   href="/login?mode=register"
-                  className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-xs hover:shadow transition-all active:scale-[0.98]"
+                  className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs hover:shadow transition-all active:scale-[0.98]"
                 >
                   <span>Start Workspace</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -263,7 +271,7 @@ export default function HomePage() {
               {effectiveUser ? (
                 <Link
                   href={targetRoute}
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 text-white font-semibold text-xs shadow-xs"
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 text-white font-semibold text-xs shadow-xs"
                 >
                   <LayoutDashboard className="w-4 h-4" />
                   <span>{targetLabel}</span>
@@ -278,7 +286,7 @@ export default function HomePage() {
                   </Link>
                   <Link
                     href="/login?mode=register"
-                    className="w-full inline-flex items-center justify-center px-4 py-2 rounded-xl bg-indigo-600 text-white font-semibold text-xs hover:bg-indigo-700"
+                    className="w-full inline-flex items-center justify-center px-4 py-2 rounded-xl bg-blue-600 text-white font-semibold text-xs hover:bg-blue-700"
                   >
                     Start Workspace
                   </Link>
@@ -294,13 +302,13 @@ export default function HomePage() {
       {/* ========================================================================= */}
       <section className="relative pt-12 pb-20 lg:pt-16 lg:pb-28 overflow-hidden bg-white dark:bg-slate-950 border-b border-slate-200/80 dark:border-slate-800">
         {/* Subtle Ambient Radial Lighting */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-linear-to-b from-indigo-50/60 dark:from-indigo-950/20 via-slate-50/20 dark:via-transparent to-transparent pointer-events-none -z-10" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-linear-to-b from-blue-50/60 dark:from-blue-950/20 via-slate-50/20 dark:via-transparent to-transparent pointer-events-none -z-10" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
           {/* Hero Headline */}
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 dark:text-white tracking-tight max-w-4xl leading-[1.12]">
             Everything Your Sales Team Needs to Run the{" "}
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-600 to-blue-600 dark:from-indigo-400 dark:to-blue-400">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-sky-600 dark:from-blue-400 dark:to-sky-400">
               Lead Lifecycle
             </span>
           </h1>
@@ -316,7 +324,7 @@ export default function HomePage() {
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
             <Link
               href={effectiveUser ? targetRoute : "/login?mode=register"}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
             >
               <UserPlus className="w-4 h-4" />
               <span>
@@ -381,7 +389,7 @@ export default function HomePage() {
 
             {/* Bottom-Right Floating Badge Chip */}
             <div className="hidden md:flex absolute -bottom-5 -right-5 z-20 items-center gap-2.5 px-3.5 py-2 rounded-xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200/90 dark:border-slate-800 shadow-md text-left">
-              <div className="w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 flex items-center justify-center">
+              <div className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 flex items-center justify-center">
                 <ShieldCheck className="w-4 h-4" />
               </div>
               <div>
@@ -395,8 +403,8 @@ export default function HomePage() {
             </div>
 
             {/* Console Preview Container */}
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 sm:p-3 shadow-xl overflow-hidden transition-all hover:shadow-2xl">
-              <div className="relative w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-950">
+            <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 sm:p-3 shadow-xl overflow-hidden transition-all hover:shadow-2xl">
+              <div className="relative w-full overflow-hidden rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-950">
                 <Image
                   src={CLOUDINARY_IMAGES.heroImage}
                   alt="LeadFlow CRM Console Dashboard Preview"
@@ -419,7 +427,7 @@ export default function HomePage() {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
             {/* 1. Lead Intake */}
             <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200/70 dark:border-slate-800 shadow-2xs flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
                 <Cloud className="w-4 h-4" />
               </div>
               <div className="min-w-0">
@@ -449,7 +457,7 @@ export default function HomePage() {
 
             {/* 3. Deduplication */}
             <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200/70 dark:border-slate-800 shadow-2xs flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
                 <ShieldCheck className="w-4 h-4" />
               </div>
               <div className="min-w-0">
@@ -494,7 +502,7 @@ export default function HomePage() {
 
             {/* 6. Activity Timeline */}
             <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200/70 dark:border-slate-800 shadow-2xs flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
                 <FileText className="w-4 h-4" />
               </div>
               <div className="min-w-0">
@@ -524,7 +532,7 @@ export default function HomePage() {
 
             {/* 8. Conversion Reports */}
             <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200/70 dark:border-slate-800 shadow-2xs flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
                 <BarChart3 className="w-4 h-4" />
               </div>
               <div className="min-w-0">
@@ -554,7 +562,7 @@ export default function HomePage() {
 
             {/* 10. Role Isolation */}
             <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200/70 dark:border-slate-800 shadow-2xs flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
                 <Lock className="w-4 h-4" />
               </div>
               <div className="min-w-0">
@@ -580,7 +588,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           {/* Section Header */}
           <div className="max-w-3xl mx-auto text-center space-y-3">
-            <span className="text-xs font-bold tracking-wider text-indigo-600 dark:text-indigo-400 uppercase">
+            <span className="text-xs font-bold tracking-wider text-blue-600 dark:text-blue-400 uppercase">
               OPERATIONAL REALITY
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-950 dark:text-white tracking-tight">
@@ -596,9 +604,9 @@ export default function HomePage() {
           {/* 4 Bento Architecture Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {/* Bento 1: Unstructured Data */}
-            <div className="p-5 rounded-2xl bg-slate-50/70 dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between">
+            <div className="p-5 rounded-xl bg-slate-50/70 dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold">
+                <div className="w-10 h-10 rounded-lg bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold">
                   <FileSpreadsheet className="w-5 h-5" />
                 </div>
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white">
@@ -616,9 +624,9 @@ export default function HomePage() {
             </div>
 
             {/* Bento 2: Manual Distribution */}
-            <div className="p-5 rounded-2xl bg-slate-50/70 dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between">
+            <div className="p-5 rounded-xl bg-slate-50/70 dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold">
+                <div className="w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold">
                   <Users className="w-5 h-5" />
                 </div>
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white">
@@ -636,9 +644,9 @@ export default function HomePage() {
             </div>
 
             {/* Bento 3: Lost Follow-ups */}
-            <div className="p-5 rounded-2xl bg-slate-50/70 dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between">
+            <div className="p-5 rounded-xl bg-slate-50/70 dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold">
+                <div className="w-10 h-10 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold">
                   <Calendar className="w-5 h-5" />
                 </div>
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white">
@@ -656,9 +664,9 @@ export default function HomePage() {
             </div>
 
             {/* Bento 4: Zero Governance */}
-            <div className="p-5 rounded-2xl bg-slate-50/70 dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between">
+            <div className="p-5 rounded-xl bg-slate-50/70 dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold">
+                <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
                   <Lock className="w-5 h-5" />
                 </div>
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white">
@@ -687,7 +695,7 @@ export default function HomePage() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="max-w-3xl mx-auto text-center space-y-3">
-            <span className="text-xs font-bold tracking-wider text-indigo-600 dark:text-indigo-400 uppercase">
+            <span className="text-xs font-bold tracking-wider text-blue-600 dark:text-blue-400 uppercase">
               THE WORKFLOW ENGINE
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-950 dark:text-white tracking-tight">
@@ -700,11 +708,11 @@ export default function HomePage() {
           </div>
 
           {/* Stepper Grid Container */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-xs">
+          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-xs">
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4 text-center">
               {/* 1. Intake */}
               <div className="flex flex-col items-center">
-                <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-2 shadow-2xs border border-indigo-100 dark:border-indigo-900">
+                <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-2 shadow-2xs border border-blue-100 dark:border-blue-900">
                   <Cloud className="w-5 h-5" />
                 </div>
                 <span className="text-xs font-bold text-slate-900 dark:text-slate-100">
@@ -717,7 +725,7 @@ export default function HomePage() {
 
               {/* 2. Validation */}
               <div className="flex flex-col items-center">
-                <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-2 shadow-2xs border border-indigo-100 dark:border-indigo-900">
+                <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-2 shadow-2xs border border-blue-100 dark:border-blue-900">
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <span className="text-xs font-bold text-slate-900 dark:text-slate-100">
@@ -795,7 +803,7 @@ export default function HomePage() {
 
               {/* 8. Reporting */}
               <div className="flex flex-col items-center">
-                <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-2 shadow-2xs border border-indigo-100 dark:border-indigo-900">
+                <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-2 shadow-2xs border border-blue-100 dark:border-blue-900">
                   <BarChart3 className="w-5 h-5" />
                 </div>
                 <span className="text-xs font-bold text-slate-900 dark:text-slate-100">
@@ -808,8 +816,8 @@ export default function HomePage() {
             </div>
 
             {/* Pipeline Mockup Showcase */}
-            <div className="mt-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 sm:p-3 shadow-md overflow-hidden">
-              <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-800 bg-slate-950">
+            <div className="mt-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 sm:p-3 shadow-md overflow-hidden">
+              <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-lg overflow-hidden border border-slate-100 dark:border-slate-800 bg-slate-950">
                 <Image
                   src={CLOUDINARY_IMAGES.pipelineFlowMockup}
                   alt="End-to-End Lead Pipeline Flow Architecture"
@@ -832,7 +840,7 @@ export default function HomePage() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="max-w-3xl mx-auto text-center space-y-3">
-            <span className="text-xs font-bold tracking-wider text-indigo-600 dark:text-indigo-400 uppercase">
+            <span className="text-xs font-bold tracking-wider text-blue-600 dark:text-blue-400 uppercase">
               DISTRIBUTION MODES
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-950 dark:text-white tracking-tight">
@@ -850,7 +858,7 @@ export default function HomePage() {
                 onClick={() => setActiveDistributionTab("EQUAL")}
                 className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                   activeDistributionTab === "EQUAL"
-                    ? "bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-xs"
+                    ? "bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs"
                     : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
                 }`}
               >
@@ -861,7 +869,7 @@ export default function HomePage() {
                 onClick={() => setActiveDistributionTab("CUSTOM")}
                 className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                   activeDistributionTab === "CUSTOM"
-                    ? "bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-xs"
+                    ? "bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs"
                     : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
                 }`}
               >
@@ -872,7 +880,7 @@ export default function HomePage() {
                 onClick={() => setActiveDistributionTab("MANUAL")}
                 className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                   activeDistributionTab === "MANUAL"
-                    ? "bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-xs"
+                    ? "bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs"
                     : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
                 }`}
               >
@@ -882,11 +890,11 @@ export default function HomePage() {
           </div>
 
           {/* Interactive Showcase Card */}
-          <div className="max-w-4xl mx-auto bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xs">
+          <div className="max-w-4xl mx-auto bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 sm:p-8 shadow-xs">
             {activeDistributionTab === "EQUAL" && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
                 <div className="space-y-4">
-                  <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-bold">
+                  <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 text-xs font-bold">
                     Mode 01 · Mathematical Division
                   </div>
                   <h3 className="text-xl font-bold text-slate-900 dark:text-white">
@@ -918,21 +926,27 @@ export default function HomePage() {
                 <div className="bg-slate-50 dark:bg-slate-800/60 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xs space-y-3 font-mono text-xs">
                   <div className="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-700 font-sans font-bold text-slate-900 dark:text-slate-100">
                     <span>Distribution Preview</span>
-                    <span className="text-indigo-600 dark:text-indigo-400 text-xs">
+                    <span className="text-blue-600 dark:text-blue-400 text-xs">
                       30 Leads ÷ 3 Reps
                     </span>
                   </div>
                   <div className="flex justify-between py-1.5 px-2.5 rounded bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border border-slate-100 dark:border-slate-800">
                     <span>Rahul Sharma</span>
-                    <span className="font-bold text-indigo-600 dark:text-indigo-400">+10 leads</span>
+                    <span className="font-bold text-blue-600 dark:text-blue-400">
+                      +10 leads
+                    </span>
                   </div>
                   <div className="flex justify-between py-1.5 px-2.5 rounded bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border border-slate-100 dark:border-slate-800">
                     <span>Priya Mehta</span>
-                    <span className="font-bold text-indigo-600 dark:text-indigo-400">+10 leads</span>
+                    <span className="font-bold text-blue-600 dark:text-blue-400">
+                      +10 leads
+                    </span>
                   </div>
                   <div className="flex justify-between py-1.5 px-2.5 rounded bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border border-slate-100 dark:border-slate-800">
                     <span>Arjun Verma</span>
-                    <span className="font-bold text-indigo-600 dark:text-indigo-400">+10 leads</span>
+                    <span className="font-bold text-blue-600 dark:text-blue-400">
+                      +10 leads
+                    </span>
                   </div>
                   <div className="pt-2 text-[11px] font-sans text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-1.5">
                     <CheckCircle2 className="w-3.5 h-3.5" />
@@ -945,7 +959,7 @@ export default function HomePage() {
             {activeDistributionTab === "CUSTOM" && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
                 <div className="space-y-4">
-                  <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-bold">
+                  <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 text-xs font-bold">
                     Mode 02 · Quota Steppers
                   </div>
                   <h3 className="text-xl font-bold text-slate-900 dark:text-white">
@@ -982,19 +996,25 @@ export default function HomePage() {
                   </div>
                   <div className="flex justify-between py-1.5 px-2.5 rounded bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border border-slate-100 dark:border-slate-800">
                     <span>Rahul (Senior)</span>
-                    <span className="font-bold text-indigo-600 dark:text-indigo-400">15 leads</span>
+                    <span className="font-bold text-blue-600 dark:text-blue-400">
+                      15 leads
+                    </span>
                   </div>
                   <div className="flex justify-between py-1.5 px-2.5 rounded bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border border-slate-100 dark:border-slate-800">
                     <span>Priya (Mid-Level)</span>
-                    <span className="font-bold text-indigo-600 dark:text-indigo-400">10 leads</span>
+                    <span className="font-bold text-blue-600 dark:text-blue-400">
+                      10 leads
+                    </span>
                   </div>
                   <div className="flex justify-between py-1.5 px-2.5 rounded bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border border-slate-100 dark:border-slate-800">
                     <span>Arjun (Junior)</span>
-                    <span className="font-bold text-indigo-600 dark:text-indigo-400">5 leads</span>
+                    <span className="font-bold text-blue-600 dark:text-blue-400">
+                      5 leads
+                    </span>
                   </div>
                   <div className="pt-2 text-[11px] font-sans text-slate-500 dark:text-slate-400 flex items-center justify-between">
                     <span>Remaining in pool: 1,210</span>
-                    <span className="text-indigo-600 dark:text-indigo-400 font-semibold">
+                    <span className="text-blue-600 dark:text-blue-400 font-semibold">
                       Total: 30 leads
                     </span>
                   </div>
@@ -1005,7 +1025,7 @@ export default function HomePage() {
             {activeDistributionTab === "MANUAL" && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
                 <div className="space-y-4">
-                  <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-bold">
+                  <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 text-xs font-bold">
                     Mode 03 · Direct Lead Mapping
                   </div>
                   <h3 className="text-xl font-bold text-slate-900 dark:text-white">
@@ -1034,46 +1054,46 @@ export default function HomePage() {
                 <div className="bg-slate-50 dark:bg-slate-800/60 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xs space-y-2 text-xs">
                   <div className="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-700 font-bold text-slate-900 dark:text-slate-100">
                     <span>Assigned Account Mappings</span>
-                    <span className="text-xs text-indigo-600 dark:text-indigo-400 font-mono">
+                    <span className="text-xs text-blue-600 dark:text-blue-400 font-mono">
                       3 Selected
                     </span>
                   </div>
                   <div className="p-2 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex justify-between items-center">
                     <div>
-                      <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">
+                      <span className="font-mono font-bold text-blue-600 dark:text-blue-400">
                         CRM-001842
                       </span>
                       <p className="text-slate-800 dark:text-slate-200 font-medium text-[11px]">
                         Rahul Enterprises
                       </p>
                     </div>
-                    <span className="px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-semibold text-[10px]">
+                    <span className="px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-semibold text-[10px]">
                       → Rahul S.
                     </span>
                   </div>
                   <div className="p-2 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex justify-between items-center">
                     <div>
-                      <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">
+                      <span className="font-mono font-bold text-blue-600 dark:text-blue-400">
                         CRM-001843
                       </span>
                       <p className="text-slate-800 dark:text-slate-200 font-medium text-[11px]">
                         Apex Logistics Ltd
                       </p>
                     </div>
-                    <span className="px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-semibold text-[10px]">
+                    <span className="px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-semibold text-[10px]">
                       → Priya M.
                     </span>
                   </div>
                   <div className="p-2 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex justify-between items-center">
                     <div>
-                      <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">
+                      <span className="font-mono font-bold text-blue-600 dark:text-blue-400">
                         CRM-001844
                       </span>
                       <p className="text-slate-800 dark:text-slate-200 font-medium text-[11px]">
                         Zenith Retailers
                       </p>
                     </div>
-                    <span className="px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-semibold text-[10px]">
+                    <span className="px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-semibold text-[10px]">
                       → Arjun V.
                     </span>
                   </div>
@@ -1093,7 +1113,7 @@ export default function HomePage() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="max-w-3xl mx-auto text-center space-y-3">
-            <span className="text-xs font-bold tracking-wider text-indigo-600 dark:text-indigo-400 uppercase">
+            <span className="text-xs font-bold tracking-wider text-blue-600 dark:text-blue-400 uppercase">
               EXECUTIVE EXECUTION
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-950 dark:text-white tracking-tight">
@@ -1107,7 +1127,7 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* TODAY */}
-            <div className="p-5 rounded-2xl border bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
+            <div className="p-5 rounded-xl border bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
@@ -1120,9 +1140,9 @@ export default function HomePage() {
                 </span>
               </div>
               <div className="space-y-2.5 text-xs">
-                <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-100 dark:border-slate-700">
+                <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-100 dark:border-slate-700">
                   <div className="flex justify-between items-center">
-                    <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">
+                    <span className="font-mono font-bold text-blue-600 dark:text-blue-400">
                       09:30 AM
                     </span>
                     <span className="text-[10px] px-1.5 py-0.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-slate-600 dark:text-slate-300">
@@ -1136,9 +1156,9 @@ export default function HomePage() {
                     Pricing walk-through & proposal review
                   </span>
                 </div>
-                <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-100 dark:border-slate-700">
+                <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-100 dark:border-slate-700">
                   <div className="flex justify-between items-center">
-                    <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">
+                    <span className="font-mono font-bold text-blue-600 dark:text-blue-400">
                       11:00 AM
                     </span>
                     <span className="text-[10px] px-1.5 py-0.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-slate-600 dark:text-slate-300">
@@ -1156,20 +1176,20 @@ export default function HomePage() {
             </div>
 
             {/* UPCOMING */}
-            <div className="p-5 rounded-2xl border bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
+            <div className="p-5 rounded-xl border bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
                 <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
                   <span className="text-xs font-bold text-slate-900 dark:text-white uppercase">
                     Upcoming Queue
                   </span>
                 </div>
-                <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
                   Scheduled
                 </span>
               </div>
               <div className="space-y-2.5 text-xs">
-                <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-100 dark:border-slate-700">
+                <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-100 dark:border-slate-700">
                   <div className="flex justify-between items-center">
                     <span className="font-mono font-bold text-slate-700 dark:text-slate-300">
                       Tomorrow · 10:00 AM
@@ -1185,7 +1205,7 @@ export default function HomePage() {
                     Introductory requirements discovery
                   </span>
                 </div>
-                <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-100 dark:border-slate-700">
+                <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-100 dark:border-slate-700">
                   <div className="flex justify-between items-center">
                     <span className="font-mono font-bold text-slate-700 dark:text-slate-300">
                       Oct 10 · 02:00 PM
@@ -1205,7 +1225,7 @@ export default function HomePage() {
             </div>
 
             {/* OVERDUE */}
-            <div className="p-5 rounded-2xl border bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
+            <div className="p-5 rounded-xl border bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
@@ -1218,7 +1238,7 @@ export default function HomePage() {
                 </span>
               </div>
               <div className="space-y-2.5 text-xs">
-                <div className="p-3 bg-rose-50/50 dark:bg-rose-950/30 rounded-xl border border-rose-200 dark:border-rose-900">
+                <div className="p-3 bg-rose-50/50 dark:bg-rose-950/30 rounded-lg border border-rose-200 dark:border-rose-900">
                   <div className="flex justify-between items-center">
                     <span className="font-mono font-bold text-rose-700 dark:text-rose-400">
                       Past SLA
@@ -1253,7 +1273,7 @@ export default function HomePage() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="max-w-3xl mx-auto text-center space-y-3">
-            <span className="text-xs font-bold tracking-wider text-indigo-600 dark:text-indigo-400 uppercase">
+            <span className="text-xs font-bold tracking-wider text-blue-600 dark:text-blue-400 uppercase">
               OPERATIONAL REPORTING
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-950 dark:text-white tracking-tight">
@@ -1265,7 +1285,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="max-w-4xl mx-auto bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+          <div className="max-w-4xl mx-auto bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
               <div>
                 <span className="text-xs font-bold text-slate-900 dark:text-white block">
@@ -1281,7 +1301,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="overflow-x-auto border border-slate-200 dark:border-slate-800 rounded-xl">
+            <div className="overflow-x-auto border border-slate-200 dark:border-slate-800 rounded-lg">
               <table className="w-full text-left text-xs">
                 <thead className="bg-slate-50 dark:bg-slate-800/80 text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase border-b border-slate-200 dark:border-slate-800">
                   <tr>
@@ -1297,8 +1317,12 @@ export default function HomePage() {
                     <td className="py-2.5 px-3 font-semibold text-slate-900 dark:text-slate-100">
                       David Miller
                     </td>
-                    <td className="py-2.5 px-3 text-slate-700 dark:text-slate-300">420</td>
-                    <td className="py-2.5 px-3 text-slate-700 dark:text-slate-300">382</td>
+                    <td className="py-2.5 px-3 text-slate-700 dark:text-slate-300">
+                      420
+                    </td>
+                    <td className="py-2.5 px-3 text-slate-700 dark:text-slate-300">
+                      382
+                    </td>
                     <td className="py-2.5 px-3 font-semibold text-emerald-600 dark:text-emerald-400">
                       38
                     </td>
@@ -1310,8 +1334,12 @@ export default function HomePage() {
                     <td className="py-2.5 px-3 font-semibold text-slate-900 dark:text-slate-100">
                       Sarah Jenkins
                     </td>
-                    <td className="py-2.5 px-3 text-slate-700 dark:text-slate-300">395</td>
-                    <td className="py-2.5 px-3 text-slate-700 dark:text-slate-300">361</td>
+                    <td className="py-2.5 px-3 text-slate-700 dark:text-slate-300">
+                      395
+                    </td>
+                    <td className="py-2.5 px-3 text-slate-700 dark:text-slate-300">
+                      361
+                    </td>
                     <td className="py-2.5 px-3 font-semibold text-emerald-600 dark:text-emerald-400">
                       42
                     </td>
@@ -1323,8 +1351,12 @@ export default function HomePage() {
                     <td className="py-2.5 px-3 font-semibold text-slate-900 dark:text-slate-100">
                       Rahul Sharma
                     </td>
-                    <td className="py-2.5 px-3 text-slate-700 dark:text-slate-300">378</td>
-                    <td className="py-2.5 px-3 text-slate-700 dark:text-slate-300">342</td>
+                    <td className="py-2.5 px-3 text-slate-700 dark:text-slate-300">
+                      378
+                    </td>
+                    <td className="py-2.5 px-3 text-slate-700 dark:text-slate-300">
+                      342
+                    </td>
                     <td className="py-2.5 px-3 font-semibold text-emerald-600 dark:text-emerald-400">
                       35
                     </td>
@@ -1348,7 +1380,7 @@ export default function HomePage() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="max-w-3xl mx-auto text-center space-y-3">
-            <span className="text-xs font-bold tracking-wider text-indigo-600 dark:text-indigo-400 uppercase">
+            <span className="text-xs font-bold tracking-wider text-blue-600 dark:text-blue-400 uppercase">
               GOVERNANCE & PERMISSIONS
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-950 dark:text-white tracking-tight">
@@ -1363,37 +1395,37 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
             {/* Team Leader Box */}
-            <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
+            <div className="p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
               <div className="flex items-center gap-2.5 pb-2 border-b border-slate-100 dark:border-slate-800">
-                <Sliders className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                <Sliders className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 <h3 className="text-base font-bold text-slate-900 dark:text-white">
                   Team Leader Authority
                 </h3>
               </div>
               <ul className="space-y-2.5 text-xs text-slate-700 dark:text-slate-300 font-medium">
                 <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
                   <span>
                     Inspect unassigned intake pool and manage company-wide
                     pipeline
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
                   <span>
                     Execute Equal, Custom, and Manual lead distribution
                     transactions
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
                   <span>
                     Reassign leads between representatives or recall to
                     unassigned pool
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
                   <span>
                     Perform Excel bulk intake with pre-commit validation
                     reporting
@@ -1402,7 +1434,7 @@ export default function HomePage() {
               </ul>
 
               <div className="pt-2">
-                <div className="relative w-full h-44 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-2xs group bg-slate-950">
+                <div className="relative w-full h-44 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 shadow-2xs group bg-slate-950">
                   <Image
                     src={CLOUDINARY_IMAGES.teamLeaderWorkspace}
                     alt="Team Leader Operations Console"
@@ -1420,7 +1452,7 @@ export default function HomePage() {
             </div>
 
             {/* Sales Executive Box */}
-            <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
+            <div className="p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
               <div className="flex items-center gap-2.5 pb-2 border-b border-slate-100 dark:border-slate-800">
                 <Users className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                 <h3 className="text-base font-bold text-slate-900 dark:text-white">
@@ -1456,7 +1488,7 @@ export default function HomePage() {
               </ul>
 
               <div className="pt-2">
-                <div className="relative w-full h-44 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-2xs group bg-slate-950">
+                <div className="relative w-full h-44 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 shadow-2xs group bg-slate-950">
                   <Image
                     src={CLOUDINARY_IMAGES.salesExecutiveWorkspace}
                     alt="Sales Executive Lead Workspace"
@@ -1481,7 +1513,7 @@ export default function HomePage() {
       {/* ========================================================================= */}
       <section className="py-20 bg-white dark:bg-slate-950 border-b border-slate-200/80 dark:border-slate-800 text-center">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 text-xs font-semibold border border-indigo-200 dark:border-indigo-800">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 text-xs font-semibold border border-blue-200 dark:border-blue-800">
             <span>Ready for Production Deployment</span>
           </div>
 
@@ -1497,7 +1529,7 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
             <Link
               href={effectiveUser ? targetRoute : "/login?mode=register"}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
             >
               <UserPlus className="w-4 h-4" />
               <span>
@@ -1533,7 +1565,7 @@ export default function HomePage() {
       <footer className="bg-slate-50 dark:bg-slate-900 py-12 mt-auto border-t border-slate-200 dark:border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-xs">
+            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-xs">
               LF
             </div>
             <div>
@@ -1550,53 +1582,59 @@ export default function HomePage() {
             <a
               href="#features"
               onClick={(e) => handleNavClick(e, "features")}
-              className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+              className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               Capabilities
             </a>
             <a
               href="#workflow"
               onClick={(e) => handleNavClick(e, "workflow")}
-              className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+              className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               Pipeline
             </a>
             <a
               href="#distribution"
               onClick={(e) => handleNavClick(e, "distribution")}
-              className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+              className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               Distribution
             </a>
             <a
               href="#followups"
               onClick={(e) => handleNavClick(e, "followups")}
-              className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+              className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               Follow-ups
             </a>
             <a
               href="#reports"
               onClick={(e) => handleNavClick(e, "reports")}
-              className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+              className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               Reports
             </a>
             <a
               href="#security"
               onClick={(e) => handleNavClick(e, "security")}
-              className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+              className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               Security
             </a>
           </div>
 
           <div className="flex items-center gap-4 text-xs font-semibold text-slate-600 dark:text-slate-300">
-            <Link href="/login?mode=login" className="hover:text-indigo-600 dark:hover:text-indigo-400">
+            <Link
+              href="/login?mode=login"
+              className="hover:text-blue-600 dark:hover:text-blue-400"
+            >
               Sign In
             </Link>
             <span className="text-slate-300 dark:text-slate-700">•</span>
-            <Link href="/login?mode=register" className="hover:text-indigo-600 dark:hover:text-indigo-400">
+            <Link
+              href="/login?mode=register"
+              className="hover:text-blue-600 dark:hover:text-blue-400"
+            >
               Create Account
             </Link>
           </div>

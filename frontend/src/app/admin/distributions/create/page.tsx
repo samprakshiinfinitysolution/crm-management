@@ -151,7 +151,7 @@ export default function AdminCreateDistributionPage() {
         <span>/</span>
         <Link href="/admin/distributions" className="hover:underline">Distributions</Link>
         <span>/</span>
-        <span className="text-indigo-600 dark:text-indigo-400 font-semibold">Wizard</span>
+        <span className="text-blue-600 dark:text-blue-400 font-semibold">Wizard</span>
       </div>
 
       {/* Three-Step Stepper Header */}

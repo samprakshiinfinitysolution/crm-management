@@ -77,7 +77,7 @@ export default function ImportUploadPage() {
             </Link>
             <div>
               <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                <UploadCloud className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                <UploadCloud className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 <span>Upload & Stage Leads Spreadsheet</span>
               </h1>
               <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -92,7 +92,7 @@ export default function ImportUploadPage() {
             onClick={handleDownloadSample}
             className="px-3.5 py-2 rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
           >
-            <Download className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+            <Download className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             <span>Download Sample Template</span>
           </button>
         </div>

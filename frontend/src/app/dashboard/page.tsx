@@ -17,7 +17,6 @@ import {
   PieChart as PieChartIcon,
   BarChart3,
   Layers,
-  Sparkles,
 } from "lucide-react";
 import {
   ChartCard,
@@ -123,7 +122,7 @@ export default function DashboardOverviewPage() {
       label: cat.label,
       count: cat.count,
       percentage: cat.percentage,
-      color: cat.color || "#4f46e5",
+      color: cat.color || "#2563eb",
       dotColor: cat.dotColor,
     }));
   }, [categoryData]);
@@ -147,7 +146,7 @@ export default function DashboardOverviewPage() {
         name: d.name,
         category: d.category,
         amount: d.amount,
-        dotColor: d.dotColor || "bg-indigo-500",
+        dotColor: d.dotColor || "bg-blue-500",
         href: `/dashboard/leads/${d.id}`,
       }));
     }
@@ -155,22 +154,21 @@ export default function DashboardOverviewPage() {
   }, [isAdmin, isTL, adminData, tlData, seMetrics, recentLeads]);
 
   return (
-    <div className="flex flex-col gap-6 pb-10 font-sans select-none text-slate-800 dark:text-slate-200">
+    <div className="flex flex-col gap-4 pb-10 select-none text-slate-800 dark:text-slate-200 ">
       {/* ========================================================================= */}
       {/* 1. TOP HEADER BAR */}
       {/* ========================================================================= */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight flex items-center gap-2.5">
-            <span>Dashboard</span>
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200/60 dark:border-indigo-800/60">
-              <Sparkles className="w-3 h-3" />
+            <span className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Dashboard</span>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/60">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               Live
             </span>
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Welcome back, {user?.name || "User"} &bull; Real-time pipeline
-            operations
+            Welcome back, {user?.name || "User"} &bull; Real-time pipeline operations
           </p>
         </div>
 
@@ -178,7 +176,7 @@ export default function DashboardOverviewPage() {
         <div className="flex items-center gap-3">
           <Link
             href="/dashboard/reports"
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100 text-xs font-semibold shadow-2xs transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100 text-xs font-semibold shadow-2xs transition-colors"
           >
             <Download className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
             <span>Export</span>
@@ -186,7 +184,7 @@ export default function DashboardOverviewPage() {
 
           <Link
             href={isAdmin || isTL ? "/dashboard/leads/create" : "/dashboard/my-leads"}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-xs transition-all hover:shadow-indigo-500/25 cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>{isAdmin || isTL ? "Create leads" : "My Leads"}</span>
@@ -199,9 +197,9 @@ export default function DashboardOverviewPage() {
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         {/* Card 1: Total Leads */}
-        <div className="group relative bg-white/90 dark:bg-slate-900/90 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-2xs backdrop-blur-md flex flex-col justify-between hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-300">
+        <div className="group relative bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs flex flex-col justify-between hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               {isAdmin ? "Total System Leads" : isTL ? "Total Leads" : "Total Assigned Leads"}
             </span>
             <button
@@ -217,7 +215,7 @@ export default function DashboardOverviewPage() {
               <div className="h-8 w-24 bg-slate-100 dark:bg-slate-800 rounded-md animate-pulse" />
             ) : (
               <>
-                <span className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
+                <span className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
                   {isAdmin
                     ? (adminData?.pipelineHealth?.totalPool?.formattedValue ??
                        (adminData?.overview?.totalLeads !== undefined
@@ -245,9 +243,9 @@ export default function DashboardOverviewPage() {
         </div>
 
         {/* Card 2: Active Leads */}
-        <div className="group relative bg-white/90 dark:bg-slate-900/90 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-2xs backdrop-blur-md flex flex-col justify-between hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-300">
+        <div className="group relative bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs flex flex-col justify-between hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Active In-Flight Leads
             </span>
             <button
@@ -263,7 +261,7 @@ export default function DashboardOverviewPage() {
               <div className="h-8 w-20 bg-slate-100 dark:bg-slate-800 rounded-md animate-pulse" />
             ) : (
               <>
-                <span className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
+                <span className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
                   {isAdmin
                     ? (adminData?.pipelineHealth?.activeInFlight?.value ??
                        adminData?.overview?.activeLeads ??
@@ -286,9 +284,9 @@ export default function DashboardOverviewPage() {
         </div>
 
         {/* Card 3: Closed Won Deals */}
-        <div className="group relative bg-white/90 dark:bg-slate-900/90 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-2xs backdrop-blur-md flex flex-col justify-between hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-300">
+        <div className="group relative bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs flex flex-col justify-between hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Closed Won Deals
             </span>
             <button
@@ -304,7 +302,7 @@ export default function DashboardOverviewPage() {
               <div className="h-8 w-20 bg-slate-100 dark:bg-slate-800 rounded-md animate-pulse" />
             ) : (
               <>
-                <span className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
+                <span className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
                   {isAdmin
                     ? (adminData?.pipelineHealth?.wonARR?.wonCount ??
                        adminData?.overview?.wonLeads ??
@@ -329,9 +327,9 @@ export default function DashboardOverviewPage() {
         </div>
 
         {/* Card 4: Conversion Rate */}
-        <div className="group relative bg-white/90 dark:bg-slate-900/90 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-2xs backdrop-blur-md flex flex-col justify-between hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-300">
+        <div className="group relative bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs flex flex-col justify-between hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Conversion Rate
             </span>
             <button
@@ -347,14 +345,14 @@ export default function DashboardOverviewPage() {
               <div className="h-8 w-20 bg-slate-100 dark:bg-slate-800 rounded-md animate-pulse" />
             ) : (
               <>
-                <span className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
+                <span className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
                   {isAdmin
                     ? `${adminData?.pipelineHealth?.wonARR?.conversionRate ?? adminData?.overview?.conversionRate ?? 0}%`
                     : isTL
                     ? `${tlData?.pipelineHealth.wonARR.conversionRate ?? 0}%`
                     : `${seMetrics?.conversionRate ?? 0}%`}
                 </span>
-                <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-400 text-[11px] font-semibold border border-indigo-200/50 dark:border-indigo-800/50">
+                <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400 text-[11px] font-semibold border border-blue-200/50 dark:border-blue-800/50">
                   {isAdmin
                     ? (adminData?.pipelineHealth?.slaAdherence?.formattedValue ??
                        `${adminData?.followUps?.slaComplianceRate ?? 95}%`)
@@ -372,7 +370,7 @@ export default function DashboardOverviewPage() {
       {/* ========================================================================= */}
       {/* 3. MIDDLE ROW: REUSABLE AREA CHART (LEFT) + REUSABLE PIE/DONUT CHART (RIGHT) */}
       {/* ========================================================================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
         {/* Left: Reusable Spline Area Chart */}
         <div className="lg:col-span-7">
           <ChartCard
@@ -386,7 +384,7 @@ export default function DashboardOverviewPage() {
               height={220}
               primaryLabel="Gross Pipeline"
               secondaryLabel="Net Closed"
-              primaryColor="#6366f1"
+              primaryColor="#2563eb"
               secondaryColor="#f59e0b"
               isLoading={isLoading}
             />
@@ -427,7 +425,7 @@ export default function DashboardOverviewPage() {
             <BarChart
               data={barChartData}
               height={180}
-              barColor="#4f46e5"
+              barColor="#2563eb"
               showValuesOnTop
               isLoading={isLoading}
             />
@@ -443,7 +441,7 @@ export default function DashboardOverviewPage() {
             action={
               <Link
                 href="/dashboard/leads"
-                className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors"
+                className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
               >
                 View all &rarr;
               </Link>
@@ -485,7 +483,7 @@ export default function DashboardOverviewPage() {
                         className={`w-2.5 h-2.5 rounded-full ${deal.dotColor} shrink-0`}
                       />
                       <div className="flex flex-col">
-                        <span className="text-xs font-bold text-slate-900 dark:text-slate-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                        <span className="text-xs font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                           {deal.name}
                         </span>
                         <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">

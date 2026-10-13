@@ -89,7 +89,7 @@ export default function AdminCreateLeadPage() {
               <span>/</span>
               <Link href="/admin/leads" className="hover:underline">Leads</Link>
               <span>/</span>
-              <span className="text-indigo-600 dark:text-indigo-400 font-semibold">Create</span>
+              <span className="text-blue-600 dark:text-blue-400 font-semibold">Create</span>
             </div>
             <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
               Create New Lead
@@ -115,7 +115,7 @@ export default function AdminCreateLeadPage() {
                 value={formData.customerName}
                 onChange={handleChange}
                 placeholder="Full customer name"
-                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
             <div>
@@ -129,7 +129,7 @@ export default function AdminCreateLeadPage() {
                 value={formData.mobile}
                 onChange={handleChange}
                 placeholder="e.g. 9876543210"
-                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
             <div>
@@ -142,7 +142,7 @@ export default function AdminCreateLeadPage() {
                 value={formData.alternateMobile}
                 onChange={handleChange}
                 placeholder="Secondary phone"
-                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
             <div>
@@ -155,7 +155,7 @@ export default function AdminCreateLeadPage() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="customer@email.com"
-                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
           </div>
@@ -176,7 +176,7 @@ export default function AdminCreateLeadPage() {
                 value={formData.companyName}
                 onChange={handleChange}
                 placeholder="Company / Business Name"
-                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
             <div>
@@ -189,7 +189,7 @@ export default function AdminCreateLeadPage() {
                 value={formData.budget}
                 onChange={handleChange}
                 placeholder="Estimated deal size"
-                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
             <div>
@@ -202,7 +202,7 @@ export default function AdminCreateLeadPage() {
                 value={formData.city}
                 onChange={handleChange}
                 placeholder="e.g. Mumbai"
-                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
             <div>
@@ -215,7 +215,7 @@ export default function AdminCreateLeadPage() {
                 value={formData.state}
                 onChange={handleChange}
                 placeholder="e.g. Maharashtra"
-                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
             <div className="md:col-span-2">
@@ -228,7 +228,7 @@ export default function AdminCreateLeadPage() {
                 value={formData.requirement}
                 onChange={handleChange}
                 placeholder="Describe client requirements..."
-                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
           </div>
@@ -244,7 +244,7 @@ export default function AdminCreateLeadPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="inline-flex items-center gap-1.5 px-5 py-2 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition-colors disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-5 py-2 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white shadow-xs transition-colors disabled:opacity-50"
           >
             {isLoading ? (
               <>

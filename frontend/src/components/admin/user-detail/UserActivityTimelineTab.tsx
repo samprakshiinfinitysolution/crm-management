@@ -10,7 +10,7 @@ import {
   Tag,
   ExternalLink,
   Clock,
-  Sparkles,
+  Activity,
   ArrowRightLeft,
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
@@ -57,8 +57,8 @@ export const UserActivityTimelineTab: React.FC<
       case "STATUS_UPDATE":
         return {
           icon: <Tag className="w-3.5 h-3.5" />,
-          color: "bg-indigo-100 text-indigo-700 dark:bg-indigo-950/80 dark:text-indigo-300",
-          border: "border-indigo-200 dark:border-indigo-800",
+          color: "bg-blue-100 text-blue-700 dark:bg-blue-950/80 dark:text-blue-300",
+          border: "border-blue-200 dark:border-blue-800",
           label: "Status Changed",
         };
       case "LEAD_ASSIGNED":
@@ -71,7 +71,7 @@ export const UserActivityTimelineTab: React.FC<
         };
       default:
         return {
-          icon: <Sparkles className="w-3.5 h-3.5" />,
+          icon: <Activity className="w-3.5 h-3.5" />,
           color: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
           border: "border-slate-200 dark:border-slate-700",
           label: actionType?.replace(/_/g, " ") || "Activity",

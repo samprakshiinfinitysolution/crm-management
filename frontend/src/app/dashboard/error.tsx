@@ -50,7 +50,7 @@ export default function DashboardError({
           <button
             type="button"
             onClick={() => reset()}
-            className="w-full sm:w-1/2 py-2.5 px-4 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full sm:w-1/2 py-2.5 px-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             Reload Module

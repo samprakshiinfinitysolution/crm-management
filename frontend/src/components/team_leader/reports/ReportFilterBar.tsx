@@ -51,7 +51,7 @@ export const ReportFilterBar: React.FC<ReportFilterBarProps> = ({
             onClick={() => setTimeRange(preset.value)}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               timeRange === preset.value
-                ? "bg-indigo-600 text-white shadow-xs"
+                ? "bg-blue-600 text-white shadow-xs"
                 : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-card dark:hover:bg-slate-700"
             }`}
           >
@@ -132,9 +132,9 @@ export const ReportFilterBar: React.FC<ReportFilterBarProps> = ({
             title="Export filtered data"
           >
             {isExporting ? (
-              <RefreshCw className="w-3.5 h-3.5 text-indigo-600 animate-spin" />
+              <RefreshCw className="w-3.5 h-3.5 text-blue-600 animate-spin" />
             ) : (
-              <Download className="w-3.5 h-3.5 text-indigo-600" />
+              <Download className="w-3.5 h-3.5 text-blue-600" />
             )}
             <span>{isExporting ? "Exporting..." : "Export Report"}</span>
           </button>

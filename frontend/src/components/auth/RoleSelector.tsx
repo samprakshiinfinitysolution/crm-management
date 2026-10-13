@@ -20,13 +20,13 @@ export default function RoleSelector() {
           onClick={() => dispatch(setSelectedRole("tl"))}
           className={`p-3 rounded-lg border text-left transition-all cursor-pointer ${
             selectedRole === "tl"
-              ? "border-indigo-600 ring-2 ring-indigo-500/20 bg-indigo-50/40 shadow-xs"
-              : "border-slate-200 bg-card hover:border-slate-300 text-slate-700"
+              ? "border-blue-600 ring-2 ring-blue-500/20 bg-blue-50/40 dark:bg-blue-950/40 shadow-xs"
+              : "border-slate-200 dark:border-slate-800 bg-card hover:border-slate-300 dark:hover:border-slate-700 text-slate-700 dark:text-slate-300"
           }`}
         >
           <div className="flex items-center justify-between mb-1">
             <span className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
-              <Shield className="w-3.5 h-3.5 text-indigo-600" />
+              <Shield className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
               Team Leader
             </span>
           </div>
@@ -40,13 +40,13 @@ export default function RoleSelector() {
           onClick={() => dispatch(setSelectedRole("exec"))}
           className={`p-3 rounded-lg border text-left transition-all cursor-pointer ${
             selectedRole === "exec"
-              ? "border-indigo-600 ring-2 ring-indigo-500/20 bg-indigo-50/40 shadow-xs"
-              : "border-slate-200 bg-card hover:border-slate-300 text-slate-700"
+              ? "border-blue-600 ring-2 ring-blue-500/20 bg-blue-50/40 dark:bg-blue-950/40 shadow-xs"
+              : "border-slate-200 dark:border-slate-800 bg-card hover:border-slate-300 dark:hover:border-slate-700 text-slate-700 dark:text-slate-300"
           }`}
         >
           <div className="flex items-center justify-between mb-1">
             <span className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
-              <UserCheck className="w-3.5 h-3.5 text-indigo-600" />
+              <UserCheck className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
               Sales Executive
             </span>
           </div>

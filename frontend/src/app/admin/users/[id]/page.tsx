@@ -86,7 +86,7 @@ export default function UserDetailPage() {
 
     return (
       <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 p-6 flex items-center justify-center">
-        <div className="max-w-md w-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 text-center shadow-lg">
+        <div className="max-w-md w-full bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-8 text-center shadow-lg">
           <div className="w-12 h-12 rounded-full bg-rose-100 dark:bg-rose-950/70 text-rose-600 dark:text-rose-400 flex items-center justify-center mx-auto mb-4">
             <AlertCircle className="w-6 h-6" />
           </div>

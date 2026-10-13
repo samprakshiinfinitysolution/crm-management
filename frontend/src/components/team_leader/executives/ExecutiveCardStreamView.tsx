@@ -78,7 +78,7 @@ export const ExecutiveCardStreamView: React.FC<
           label: "ACTIVE",
           badge:
             "bg-card text-slate-700 dark:text-slate-300 dark:bg-slate-800 dark:text-slate-300 border-slate-200 dark:border-slate-700",
-          bar: "bg-indigo-500",
+          bar: "bg-blue-500",
         };
     }
   };
@@ -178,13 +178,13 @@ export const ExecutiveCardStreamView: React.FC<
             <div
               key={exec.id}
               onClick={() => dispatch(setSelectedExecutiveId(exec.id))}
-              className="flex flex-col lg:flex-row lg:items-center justify-between p-4 rounded-lg border border-slate-200/90 dark:border-slate-800 bg-card dark:bg-slate-900 hover:border-indigo-400 dark:hover:border-indigo-700 hover:shadow-xs transition-all cursor-pointer group gap-4"
+              className="flex flex-col lg:flex-row lg:items-center justify-between p-4 rounded-lg border border-slate-200/90 dark:border-slate-800 bg-card dark:bg-slate-900 hover:border-blue-400 dark:hover:border-blue-700 hover:shadow-xs transition-all cursor-pointer group gap-4"
             >
               {/* Executive Details & Avatar */}
               <div className="flex items-start sm:items-center gap-3.5 min-w-0">
                 {/* Avatar with Status Ring */}
                 <div className="relative shrink-0">
-                  <div className="w-11 h-11 rounded-full bg-card dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold flex items-center justify-center text-xs border border-slate-200/60 dark:border-slate-700 shadow-2xs group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                  <div className="w-11 h-11 rounded-full bg-card dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold flex items-center justify-center text-xs border border-slate-200/60 dark:border-slate-700 shadow-2xs group-hover:bg-blue-600 group-hover:text-white transition-colors">
                     {initials}
                   </div>
                   <span
@@ -200,11 +200,11 @@ export const ExecutiveCardStreamView: React.FC<
                 {/* Name, Status Badges & Contact */}
                 <div className="space-y-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                    <span className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                       {exec.name}
                     </span>
                     <span
-                      className={`text-[10px] font-black px-2 py-0.2 rounded-full border ${statusInfo.badge}`}
+                      className={`text-[10px] font-bold px-2 py-0.2 rounded-full border ${statusInfo.badge}`}
                     >
                       {statusInfo.label}
                     </span>
@@ -215,7 +215,7 @@ export const ExecutiveCardStreamView: React.FC<
 
                   <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 truncate">
                     <span className="flex items-center gap-1">
-                      <Mail className="w-3 h-3" />
+                      <Mail className="w-3.5 h-3.5" />
                       <span>{exec.email}</span>
                     </span>
                   </div>
@@ -223,17 +223,17 @@ export const ExecutiveCardStreamView: React.FC<
                   {/* Workload Progress & Win Rate Badges */}
                   <div className="flex items-center gap-3 pt-0.5 text-[11px] text-slate-400 flex-wrap">
                     <span className="flex items-center gap-1 font-medium text-slate-700 dark:text-slate-300">
-                      <Briefcase className="w-3 h-3 text-slate-400" />
+                      <Briefcase className="w-3.5 h-3.5 text-slate-400" />
                       Load: {currentLeads}/{maxCapacity} ({capacityPercent}%)
                     </span>
                     <span className="flex items-center gap-1 font-semibold text-emerald-600 dark:text-emerald-400">
-                      <TrendingUp className="w-3 h-3" />
+                      <TrendingUp className="w-3.5 h-3.5" />
                       Win Rate: {exec.conversionRate}% ({exec.convertedLeads}{" "}
                       Won)
                     </span>
                     {exec.followUpsOverdue > 0 ? (
                       <span className="flex items-center gap-1 font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/50 px-2 py-0.2 rounded-md border border-amber-200 dark:border-amber-800">
-                        <AlertCircle className="w-3 h-3" />
+                        <AlertCircle className="w-3.5 h-3.5" />
                         {exec.followUpsOverdue} Overdue SLAs
                       </span>
                     ) : (
@@ -252,7 +252,7 @@ export const ExecutiveCardStreamView: React.FC<
               >
                 {/* Financial Value Pill */}
                 <div className="text-left sm:text-right">
-                  <div className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
+                  <div className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
                     ₹{((exec.totalPipelineValue ?? 0) / 100000).toFixed(1)}L
                   </div>
                   <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">
@@ -284,7 +284,7 @@ export const ExecutiveCardStreamView: React.FC<
                 <button
                   type="button"
                   onClick={() => dispatch(setSelectedExecutiveId(exec.id))}
-                  className="px-3.5 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-600 hover:text-white dark:hover:bg-indigo-600 dark:hover:text-white text-xs font-bold inline-flex items-center gap-1 transition-all"
+                  className="px-3.5 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:text-white text-xs font-bold inline-flex items-center gap-1 transition-all"
                 >
                   <span>Dossier</span>
                   <ChevronRight className="w-3.5 h-3.5" />

@@ -28,14 +28,11 @@ export const ChartCard: React.FC<ChartCardProps> = ({
   return (
     <div
       className={cn(
-        "group relative flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white/90 p-5 sm:p-6 shadow-xs backdrop-blur-md transition-all duration-300 hover:border-slate-300 hover:shadow-md",
-        "dark:border-slate-800/80 dark:bg-slate-900/90 dark:hover:border-slate-700/80 dark:hover:shadow-indigo-950/20",
+        "group relative flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-xs transition-all duration-200 hover:border-slate-300",
+        "dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700",
         className
       )}
     >
-      {/* Background soft glow gradient for antigravity feel */}
-      <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-indigo-500/5 blur-2xl transition-opacity duration-500 group-hover:opacity-100 dark:bg-indigo-400/10" />
-
       {/* Card Header */}
       <div
         className={cn(
@@ -45,12 +42,12 @@ export const ChartCard: React.FC<ChartCardProps> = ({
       >
         <div className="flex items-center gap-2.5">
           {icon && (
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100/80 dark:bg-indigo-950/60 dark:text-indigo-400 dark:border-indigo-900/60">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 border border-blue-100/80 dark:bg-blue-950/60 dark:text-blue-400 dark:border-blue-900/60">
               {icon}
             </div>
           )}
           <div>
-            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+            <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100 tracking-tight">
               {title}
             </h3>
             {subtitle && (

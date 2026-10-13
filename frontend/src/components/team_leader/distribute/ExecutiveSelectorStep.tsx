@@ -71,7 +71,7 @@ export const ExecutiveSelectorStep: React.FC<ExecutiveSelectorStepProps> = ({
             <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">
               Select Sales Representatives
             </h2>
-            <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+            <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
               {selectedExecutiveIds.length} of {executives.length} Selected
             </span>
           </div>
@@ -95,7 +95,7 @@ export const ExecutiveSelectorStep: React.FC<ExecutiveSelectorStepProps> = ({
               </>
             ) : (
               <>
-                <CheckSquare className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                <CheckSquare className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                 <span>Select All ({executives.length})</span>
               </>
             )}
@@ -105,7 +105,7 @@ export const ExecutiveSelectorStep: React.FC<ExecutiveSelectorStepProps> = ({
             type="button"
             disabled={selectedExecutiveIds.length === 0}
             onClick={onAdvanceToStep2}
-            className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs flex items-center gap-1.5 shadow-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs flex items-center gap-1.5 shadow-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             <span>Continue to Step 2</span>
             <ArrowRight className="w-4 h-4" />
@@ -123,7 +123,7 @@ export const ExecutiveSelectorStep: React.FC<ExecutiveSelectorStepProps> = ({
             value={searchTerm}
             onChange={(e) => onSearchChange?.(e.target.value)}
             placeholder="Search by name or email..."
-            className="w-full pl-8 pr-7 py-1.5 text-xs rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 transition-all"
+            className="w-full pl-8 pr-7 py-1.5 text-xs rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
           />
           {searchTerm && (
             <button
@@ -194,11 +194,11 @@ export const ExecutiveSelectorStep: React.FC<ExecutiveSelectorStepProps> = ({
                 <button
                   type="button"
                   onClick={isAllSelected ? onDeselectAll : onSelectAll}
-                  className="text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer"
+                  className="text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
                   title={isAllSelected ? "Deselect all" : "Select all"}
                 >
                   {isAllSelected ? (
-                    <CheckSquare className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                    <CheckSquare className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                   ) : (
                     <Square className="w-4 h-4" />
                   )}
@@ -260,7 +260,7 @@ export const ExecutiveSelectorStep: React.FC<ExecutiveSelectorStepProps> = ({
                     onClick={() => onToggleExecutive(exec.id)}
                     className={`transition-colors cursor-pointer ${
                       isSelected
-                        ? "bg-indigo-50/50 dark:bg-indigo-950/30 hover:bg-indigo-50/70 dark:hover:bg-indigo-950/50"
+                        ? "bg-blue-50/50 dark:bg-blue-950/30 hover:bg-blue-50/70 dark:hover:bg-blue-950/50"
                         : "hover:bg-slate-50 dark:hover:bg-slate-800/60"
                     }`}
                   >
@@ -275,10 +275,10 @@ export const ExecutiveSelectorStep: React.FC<ExecutiveSelectorStepProps> = ({
                       <button
                         type="button"
                         onClick={() => onToggleExecutive(exec.id)}
-                        className="text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer"
+                        className="text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
                       >
                         {isSelected ? (
-                          <CheckSquare className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                          <CheckSquare className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                         ) : (
                           <Square className="w-4 h-4" />
                         )}
@@ -291,7 +291,7 @@ export const ExecutiveSelectorStep: React.FC<ExecutiveSelectorStepProps> = ({
                         <div
                           className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 transition-colors ${
                             isSelected
-                              ? "bg-indigo-600 text-white"
+                              ? "bg-blue-600 text-white"
                               : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200"
                           }`}
                         >
@@ -355,7 +355,7 @@ export const ExecutiveSelectorStep: React.FC<ExecutiveSelectorStepProps> = ({
                       <span
                         className={`inline-block text-[10px] font-semibold px-2 py-0.5 rounded-md ${
                           isSelected
-                            ? "text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800"
+                            ? "text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800"
                             : "text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800"
                         }`}
                       >
@@ -383,7 +383,7 @@ export const ExecutiveSelectorStep: React.FC<ExecutiveSelectorStepProps> = ({
           type="button"
           disabled={selectedExecutiveIds.length === 0}
           onClick={onAdvanceToStep2}
-          className="px-5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs flex items-center gap-1.5 shadow-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+          className="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs flex items-center gap-1.5 shadow-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
           <span>Continue to Step 2 (Allocate Leads)</span>
           <ArrowRight className="w-4 h-4" />

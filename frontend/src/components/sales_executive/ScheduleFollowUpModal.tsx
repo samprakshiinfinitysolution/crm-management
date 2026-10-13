@@ -135,7 +135,7 @@ export default function ScheduleFollowUpModal({
                   onClick={() => setType(t.value)}
                   className={`flex items-center gap-2 px-3 py-2.5 rounded-lg border text-xs font-medium transition-all cursor-pointer ${
                     type === t.value
-                      ? "bg-indigo-50 border-indigo-300 text-indigo-700 shadow-2xs font-semibold"
+                      ? "bg-blue-50 border-blue-300 text-blue-700 shadow-2xs font-semibold"
                       : "bg-card border-crm-subtle text-crm-secondary hover:bg-crm-subtle"
                   }`}
                 >

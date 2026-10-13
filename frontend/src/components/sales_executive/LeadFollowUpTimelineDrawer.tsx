@@ -52,7 +52,7 @@ export default function LeadFollowUpTimelineDrawer({
       case "Meeting":
         return <Users className="w-3.5 h-3.5 text-blue-600" />;
       case "Email":
-        return <Mail className="w-3.5 h-3.5 text-indigo-600" />;
+        return <Mail className="w-3.5 h-3.5 text-blue-600" />;
       case "WhatsApp":
         return <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />;
       default:
@@ -166,7 +166,7 @@ export default function LeadFollowUpTimelineDrawer({
                           ? "bg-emerald-500 border-white ring-2 ring-emerald-200"
                           : isOverdue
                             ? "bg-rose-500 border-white ring-2 ring-rose-200"
-                            : "bg-indigo-600 border-white ring-2 ring-indigo-200"
+                            : "bg-blue-600 border-white ring-2 ring-blue-200"
                       }`}
                     />
 

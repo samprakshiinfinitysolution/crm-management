@@ -62,7 +62,7 @@ export default function PipelineMetricsGrid({
       change: data?.totalPool?.change,
       subtext: data?.totalPool?.subtext || "all leads in system",
       isPositive: data?.totalPool?.isPositive ?? true,
-      icon: <Layers className="w-4 h-4 text-slate-400 dark:text-slate-500" />,
+      icon: <Layers className="w-4 h-4 text-blue-600 dark:text-blue-400" />,
     },
     {
       label: "ACTIVE IN-FLIGHT",
@@ -72,9 +72,7 @@ export default function PipelineMetricsGrid({
       subtext:
         data?.activeInFlight?.subtext ||
         `${data?.activeInFlight?.callsToday ?? 0} calls today`,
-      icon: (
-        <Forward className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-      ),
+      icon: <Forward className="w-4 h-4 text-blue-600 dark:text-blue-400" />,
     },
     {
       label: "WON / ARR",
@@ -82,10 +80,7 @@ export default function PipelineMetricsGrid({
       subtext:
         data?.wonARR?.subtext ||
         `${data?.wonARR?.wonCount ?? 0} Closed • ${data?.wonARR?.conversionRate ?? 0}% rate`,
-      highlightValueColor: "text-emerald-600 dark:text-emerald-400",
-      icon: (
-        <Award className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-      ),
+      icon: <Award className="w-4 h-4 text-blue-600 dark:text-blue-400" />,
     },
     {
       label: "SLA ADHERENCE",
@@ -97,7 +92,7 @@ export default function PipelineMetricsGrid({
         data?.slaAdherence?.overdueCount === 0
           ? "All follow-ups on time"
           : undefined,
-      icon: <Flag className="w-4 h-4 text-amber-600 dark:text-amber-400" />,
+      icon: <Flag className="w-4 h-4 text-blue-600 dark:text-blue-400" />,
     },
   ];
 
@@ -121,21 +116,17 @@ export default function PipelineMetricsGrid({
           >
             {/* Top row: Label & Icon */}
             <div className="flex items-center justify-between gap-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                 {item.label}
               </span>
-              <div className="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-100 dark:border-slate-700/60">
+              <div className="p-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 border border-blue-100 dark:border-blue-900/40">
                 {item.icon}
               </div>
             </div>
 
             {/* Middle: Primary Metric */}
             <div className="my-2.5">
-              <div
-                className={`text-2xl sm:text-3xl font-bold tracking-tight ${
-                  item.highlightValueColor || "text-slate-900 dark:text-white"
-                }`}
-              >
+              <div className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
                 {item.value}
               </div>
             </div>

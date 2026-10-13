@@ -101,7 +101,7 @@ export default function CreateUserPage() {
           </Link>
           <div>
             <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-              <UserPlus className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              <UserPlus className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               <span>Add Staff Member</span>
             </h1>
             <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -131,7 +131,7 @@ export default function CreateUserPage() {
                   "w-full h-10 px-3.5 rounded-lg bg-slate-50 dark:bg-slate-800/80 border text-xs text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 transition-all",
                   errors.name
                     ? "border-rose-300 focus:ring-rose-500 bg-rose-50/20"
-                    : "border-slate-200 dark:border-slate-700 focus:ring-indigo-600",
+                    : "border-slate-200 dark:border-slate-700 focus:ring-blue-600",
                 )}
               />
               {errors.name && (
@@ -156,7 +156,7 @@ export default function CreateUserPage() {
                   "w-full h-10 px-3.5 rounded-lg bg-slate-50 dark:bg-slate-800/80 border text-xs text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 transition-all",
                   errors.email
                     ? "border-rose-300 focus:ring-rose-500 bg-rose-50/20"
-                    : "border-slate-200 dark:border-slate-700 focus:ring-indigo-600",
+                    : "border-slate-200 dark:border-slate-700 focus:ring-blue-600",
                 )}
               />
               {errors.email && (
@@ -180,7 +180,7 @@ export default function CreateUserPage() {
                   "w-full h-10 px-3.5 rounded-lg bg-slate-50 dark:bg-slate-800/80 border text-xs text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 transition-all",
                   errors.password
                     ? "border-rose-300 focus:ring-rose-500 bg-rose-50/20"
-                    : "border-slate-200 dark:border-slate-700 focus:ring-indigo-600",
+                    : "border-slate-200 dark:border-slate-700 focus:ring-blue-600",
                 )}
               />
               {errors.password ? (
@@ -212,7 +212,7 @@ export default function CreateUserPage() {
                     "w-full h-10 px-3.5 rounded-lg bg-slate-50 dark:bg-slate-800/80 text-xs text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:ring-2",
                     errors.role
                       ? "border-rose-300 focus:ring-rose-500 bg-rose-50/20"
-                      : "border-slate-200 dark:border-slate-700 focus:ring-indigo-600",
+                      : "border-slate-200 dark:border-slate-700 focus:ring-blue-600",
                   )}
                 >
                   <SelectValue placeholder="Select assigned role" />
@@ -245,7 +245,7 @@ export default function CreateUserPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold flex items-center gap-2 shadow-xs transition-all disabled:opacity-50 cursor-pointer"
+              className="px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-2 shadow-xs transition-all disabled:opacity-50 cursor-pointer"
             >
               {isLoading ? (
                 <>

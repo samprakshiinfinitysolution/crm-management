@@ -27,7 +27,7 @@ export default function RegisterFields({
             value={fullName}
             onChange={(e) => onFullNameChange(e.target.value)}
             placeholder="e.g. Rachel Sterling"
-            className="w-full h-10 pl-9 pr-3 rounded-lg bg-crm-subtle border border-crm-subtle text-crm-primary placeholder:text-crm-muted text-sm focus:bg-card focus:outline-none focus:border-(--crm-brand-primary) focus:ring-2 focus:ring-indigo-500/15 transition-all shadow-2xs"
+            className="w-full h-10 pl-9 pr-3 rounded-lg bg-crm-subtle border border-crm-subtle text-crm-primary placeholder:text-crm-muted text-sm focus:bg-card focus:outline-none focus:border-(--crm-brand-primary) focus:ring-2 focus:ring-blue-500/15 transition-all shadow-2xs"
           />
         </div>
       </div>

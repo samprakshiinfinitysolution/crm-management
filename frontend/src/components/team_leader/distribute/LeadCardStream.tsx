@@ -63,7 +63,7 @@ export const LeadCardStream: React.FC<LeadCardStreamProps> = ({
       {/* Selection Control Bar */}
       <div className="flex items-center justify-between px-1 text-xs">
         <div className="flex items-center gap-2">
-          <span className="font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
+          <span className="font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
             Selected: {selectedCount} Leads
           </span>
           {totalSelectedEstValue && (
@@ -72,25 +72,25 @@ export const LeadCardStream: React.FC<LeadCardStreamProps> = ({
             </span>
           )}
         </div>
-        <div className="flex items-center gap-3 text-xs font-bold text-indigo-600 dark:text-indigo-400">
+        <div className="flex items-center gap-3 text-xs font-semibold text-blue-600 dark:text-blue-400">
           <button
             type="button"
             onClick={onSelectTop30}
-            className="hover:underline"
+            className="hover:underline cursor-pointer"
           >
             Top 30
           </button>
           <button
             type="button"
             onClick={onSelectAll}
-            className="hover:underline"
+            className="hover:underline cursor-pointer"
           >
             Select All ({leads.length})
           </button>
           <button
             type="button"
             onClick={onClearSelection}
-            className="text-slate-400 hover:text-slate-600"
+            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 cursor-pointer"
           >
             Clear
           </button>
@@ -101,28 +101,28 @@ export const LeadCardStream: React.FC<LeadCardStreamProps> = ({
       {onAdvanceToStep2 && (
         <div
           onClick={onAdvanceToStep2}
-          className="flex items-center justify-between p-3.5 rounded-lg bg-indigo-50/80 dark:bg-indigo-950/40 border border-indigo-200/80 dark:border-indigo-900/60 cursor-pointer hover:bg-indigo-100/60 transition-all group shadow-xs"
+          className="flex items-center justify-between p-3.5 rounded-lg bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200/80 dark:border-blue-900/60 cursor-pointer hover:bg-blue-100/60 transition-all group shadow-xs"
         >
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center shadow-xs">
+            <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center shadow-xs">
               <Users className="w-4 h-4" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-black uppercase tracking-wider text-indigo-950 dark:text-indigo-200">
+                <span className="text-xs font-bold uppercase tracking-wider text-blue-950 dark:text-blue-200">
                   Next: Step 2 Setup
                 </span>
-                <span className="text-[10px] font-bold px-2 py-0.2 rounded-full bg-indigo-200/80 dark:bg-indigo-900 text-indigo-900 dark:text-indigo-200">
+                <span className="text-[10px] font-bold px-2 py-0.2 rounded-full bg-blue-200/80 dark:bg-blue-900 text-blue-900 dark:text-blue-200">
                   {activeRepsCount} Active Reps
                 </span>
               </div>
-              <p className="text-xs text-indigo-700 dark:text-indigo-300">
+              <p className="text-xs text-blue-700 dark:text-blue-300">
                 Assign via Equally leads distribute ({equalSplitPerRep}/rep),
                 Custom lead distribution, or Direct Manual ➔
               </p>
             </div>
           </div>
-          <ArrowRight className="w-4 h-4 text-indigo-600 group-hover:translate-x-1 transition-transform" />
+          <ArrowRight className="w-4 h-4 text-blue-600 group-hover:translate-x-1 transition-transform" />
         </div>
       )}
 
@@ -131,7 +131,7 @@ export const LeadCardStream: React.FC<LeadCardStreamProps> = ({
         <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
           Lead Selection Queue ({selectedCount} of {leads.length} Selected)
         </h3>
-        <span className="text-[11px] font-black uppercase text-indigo-600 tracking-wider cursor-pointer hover:underline">
+        <span className="text-[11px] font-semibold uppercase text-blue-600 dark:text-blue-400 tracking-wider cursor-pointer hover:underline">
           Sort: Budget High-Low ▾
         </span>
       </div>
@@ -147,7 +147,7 @@ export const LeadCardStream: React.FC<LeadCardStreamProps> = ({
               onClick={() => onToggleLead(lead.id)}
               className={`flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg border transition-all cursor-pointer ${
                 isSelected
-                  ? "bg-indigo-50/40 dark:bg-indigo-950/20 border-indigo-400 dark:border-indigo-800 shadow-xs"
+                  ? "bg-blue-50/40 dark:bg-blue-950/20 border-blue-400 dark:border-blue-800 shadow-xs"
                   : "bg-white dark:bg-slate-900 border-slate-200/90 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
               }`}
             >
@@ -159,10 +159,10 @@ export const LeadCardStream: React.FC<LeadCardStreamProps> = ({
                     e.stopPropagation();
                     onToggleLead(lead.id);
                   }}
-                  className="mt-0.5 sm:mt-0 text-slate-400 hover:text-indigo-600"
+                  className="mt-0.5 sm:mt-0 text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
                 >
                   {isSelected ? (
-                    <CheckSquare className="w-5 h-5 text-indigo-600" />
+                    <CheckSquare className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                   ) : (
                     <Square className="w-5 h-5" />
                   )}
@@ -185,22 +185,22 @@ export const LeadCardStream: React.FC<LeadCardStreamProps> = ({
                       {lead.customerName}
                     </span>
                     {lead.priority === "URGENT" && (
-                      <span className="text-[10px] font-black px-2 py-0.2 rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950/50 dark:text-rose-300">
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950/50 dark:text-rose-300">
                         URGENT
                       </span>
                     )}
                     {lead.priority === "HIGH" && (
-                      <span className="text-[10px] font-black px-2 py-0.2 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300">
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300">
                         HIGH PRIORITY
                       </span>
                     )}
                     {lead.priority === "MEDIUM" && (
-                      <span className="text-[10px] font-black px-2 py-0.2 rounded-full bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
                         MEDIUM
                       </span>
                     )}
                     {lead.productService && (
-                      <span className="text-[10px] font-bold px-2 py-0.2 rounded-full bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300 uppercase">
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300 uppercase">
                         {lead.productService}
                       </span>
                     )}
@@ -232,7 +232,7 @@ export const LeadCardStream: React.FC<LeadCardStreamProps> = ({
 
               {/* Financial Budget (Right) */}
               <div className="text-right pt-2 sm:pt-0 pl-11 sm:pl-0">
-                <div className="text-base sm:text-lg font-black text-slate-900 dark:text-slate-100">
+                <div className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
                   {lead.budget
                     ? typeof lead.budget === "number"
                       ? `₹${lead.budget.toLocaleString("en-IN")}`

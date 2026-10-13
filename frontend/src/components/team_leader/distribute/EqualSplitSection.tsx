@@ -122,7 +122,7 @@ export const EqualSplitSection: React.FC<EqualSplitSectionProps> = ({
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
               {selectedCount} executives selected
             </span>
             <button
@@ -130,7 +130,7 @@ export const EqualSplitSection: React.FC<EqualSplitSectionProps> = ({
               onClick={
                 isAllSelected ? onDeselectAllExecutives : onSelectAllExecutives
               }
-              className="text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 px-2 py-1 rounded hover:bg-indigo-50 dark:hover:bg-indigo-950/40 transition-colors cursor-pointer"
+              className="text-xs font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 px-2 py-1 rounded hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors cursor-pointer"
             >
               {isAllSelected ? "Deselect All" : "Select All"}
             </button>
@@ -148,7 +148,7 @@ export const EqualSplitSection: React.FC<EqualSplitSectionProps> = ({
                 onClick={() => onToggleExecutive(exec.id)}
                 className={`flex items-center gap-3 p-3 rounded-lg border transition-all cursor-pointer ${
                   isSelected
-                    ? "bg-indigo-50/50 dark:bg-indigo-950/40 border-indigo-300 dark:border-indigo-800 shadow-2xs"
+                    ? "bg-blue-50/50 dark:bg-blue-950/40 border-blue-300 dark:border-blue-800 shadow-2xs"
                     : "bg-card border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50/50 dark:hover:bg-slate-800/50"
                 }`}
               >
@@ -159,17 +159,17 @@ export const EqualSplitSection: React.FC<EqualSplitSectionProps> = ({
                     e.stopPropagation();
                     onToggleExecutive(exec.id);
                   }}
-                  className="text-slate-400 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 focus:outline-none shrink-0"
+                  className="text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none shrink-0"
                 >
                   {isSelected ? (
-                    <CheckSquare className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                    <CheckSquare className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                   ) : (
                     <Square className="w-4 h-4 text-slate-300 dark:text-slate-600" />
                   )}
                 </button>
 
                 {/* Avatar */}
-                <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 font-bold text-xs flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 font-bold text-xs flex items-center justify-center shrink-0">
                   {getInitials(exec.name)}
                 </div>
 
@@ -207,7 +207,7 @@ export const EqualSplitSection: React.FC<EqualSplitSectionProps> = ({
             <span className="text-xs font-medium text-slate-400 dark:text-slate-500">
               Distribution Engine
             </span>
-            <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-2.5 py-1 rounded-md border border-indigo-100 dark:border-indigo-800 mt-1">
+            <span className="text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2.5 py-1 rounded-md border border-blue-100 dark:border-blue-800 mt-1">
               Equal Division Algorithm
             </span>
           </div>
@@ -231,7 +231,7 @@ export const EqualSplitSection: React.FC<EqualSplitSectionProps> = ({
                   : isInputUnderExecs
                     ? "bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800"
                     : quantity > 0
-                      ? "bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border-indigo-100 dark:border-indigo-800"
+                      ? "bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border-blue-100 dark:border-blue-800"
                       : "bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700"
               }`}
             >
@@ -253,7 +253,7 @@ export const EqualSplitSection: React.FC<EqualSplitSectionProps> = ({
                   onClick={() => handleSelectPreset(preset)}
                   className={`px-4 py-2 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
                     isSelected
-                      ? "bg-indigo-600 text-white border-indigo-600 shadow-xs"
+                      ? "bg-blue-600 text-white border-blue-600 shadow-xs"
                       : "bg-card text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800"
                   }`}
                 >
@@ -270,7 +270,7 @@ export const EqualSplitSection: React.FC<EqualSplitSectionProps> = ({
               onClick={() => setIsCustomQty(true)}
               className={`px-4 py-2 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
                 isCustomQty
-                  ? "bg-indigo-600 text-white border-indigo-600 shadow-xs"
+                  ? "bg-blue-600 text-white border-blue-600 shadow-xs"
                   : "bg-card text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800"
               }`}
             >
@@ -291,7 +291,7 @@ export const EqualSplitSection: React.FC<EqualSplitSectionProps> = ({
                       ? "border-rose-400 text-rose-700 dark:text-rose-300 focus:ring-rose-500 bg-rose-50/30 dark:bg-rose-950/30"
                       : isInputUnderExecs
                         ? "border-amber-400 text-amber-700 dark:text-amber-300 focus:ring-amber-500"
-                        : "border-indigo-300 dark:border-indigo-700 text-slate-900 dark:text-slate-100 focus:ring-indigo-500"
+                        : "border-blue-300 dark:border-blue-700 text-slate-900 dark:text-slate-100 focus:ring-blue-500"
                   }`}
                 />
                 <span className="text-xs text-slate-500 dark:text-slate-400">
@@ -373,14 +373,14 @@ export const EqualSplitSection: React.FC<EqualSplitSectionProps> = ({
                   className="flex items-center justify-between px-4 py-2.5 text-xs hover:bg-slate-50/50 dark:hover:bg-slate-800/40"
                 >
                   <div className="flex items-center gap-2.5">
-                    <div className="w-6 h-6 rounded-full bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 font-bold text-[10px] flex items-center justify-center">
+                    <div className="w-6 h-6 rounded-full bg-blue-50 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 font-bold text-[10px] flex items-center justify-center">
                       {getInitials(item.name)}
                     </div>
                     <span className="font-semibold text-slate-800 dark:text-slate-200">
                       {item.name}
                     </span>
                   </div>
-                  <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-2.5 py-0.5 rounded">
+                  <span className="font-mono font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2.5 py-0.5 rounded">
                     {item.allocated} leads
                   </span>
                 </div>
@@ -390,7 +390,7 @@ export const EqualSplitSection: React.FC<EqualSplitSectionProps> = ({
             {/* Remainder Explanation Note */}
             {remainder > 0 && (
               <div className="flex items-start gap-2 p-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-600 dark:text-slate-300">
-                <Info className="w-4 h-4 text-indigo-500 dark:text-indigo-400 shrink-0 mt-0.5" />
+                <Info className="w-4 h-4 text-blue-500 dark:text-blue-400 shrink-0 mt-0.5" />
                 <p>
                   <span className="font-semibold text-slate-800 dark:text-slate-200">
                     {remainder} lead{remainder > 1 ? "s" : ""}

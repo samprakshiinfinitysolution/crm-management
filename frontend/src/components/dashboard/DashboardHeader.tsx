@@ -62,7 +62,7 @@ export default function DashboardHeader({
             <button
               type="button"
               onClick={onToggleMobileNav}
-              className="lg:hidden p-2 rounded-lg text-white hover:bg-white/10 active:scale-95 transition-all cursor-pointer"
+              className="lg:hidden p-2 rounded-lg text-slate-100 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 active:scale-95 transition-all cursor-pointer"
               aria-label="Toggle navigation"
             >
               <Menu className="w-5 h-5" />
@@ -70,25 +70,24 @@ export default function DashboardHeader({
           )}
 
           <Link href="/dashboard" className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-lg bg-indigo-500 dark:bg-indigo-600 shadow-xs flex items-center justify-center text-white font-bold text-sm shrink-0">
+            <div className="w-9 h-9 rounded-lg bg-blue-600 shadow-xs flex items-center justify-center text-white font-bold text-sm shrink-0">
               LF
             </div>
             <div className="flex flex-col min-w-0">
-              <div className="flex items-center gap-1.5">
-                <span className="text-base font-bold text-white tracking-tight truncate leading-tight">
+              <div className="flex items-center max-sm:flex-col gap-1.5">
+                <span className="text-base font-bold text-slate-100 tracking-tight truncate leading-tight">
                   LeadFlow
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-white/15 dark:bg-slate-800 border border-white/20 dark:border-slate-700 text-white dark:text-indigo-300 text-[10px] font-semibold tracking-wide leading-none shrink-0">
-                  {isAdmin ? "Admin": isTL ? "Team Leader" : "Sales Rep"}
+                <span className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-[10px] font-semibold tracking-wide leading-none shrink-0">
+                  {isAdmin ? "Admin" : isTL ? "Team Leader" : "Sales Rep"}
                 </span>
               </div>
-              <span className="text-[11px] text-white/80 dark:text-slate-400 font-medium truncate hidden sm:inline">
-                {isTL ? "Supervisor Dashboard" : "Personal Workspace"}
+              <span className="text-[11px] text-slate-100 dark:text-slate-400 font-medium truncate hidden sm:inline">
                 {isAdmin
-                  ? "Admin Dashboard"
+                  ? "Admin Governance"
                   : isTL
-                    ? "Supervisor Dashboard"
-                    : "Personal Workspace"}
+                    ? "Team Operations"
+                    : "Personal Queue"}
               </span>
             </div>
           </Link>
@@ -96,16 +95,16 @@ export default function DashboardHeader({
 
         {/* Right: Theme Toggle, Notifications, Profile, Logout */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          <ThemeToggle className="w-9 h-9 border-white/20 bg-white/10 hover:bg-white/20 text-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700" />
+          <ThemeToggle className="w-9 h-9 border-slate-200/80 bg-white hover:bg-slate-100 text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700" />
 
           <Link
             href="/dashboard/notifications"
-            className="w-9 h-9 flex items-center justify-center rounded-lg text-white/85 hover:text-white hover:bg-white/10 dark:hover:bg-slate-800 relative active:scale-95 transition-all"
+            className="w-9 h-9 flex items-center justify-center rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800 relative active:scale-95 transition-all"
             title="Notifications"
           >
             <Bell className="w-5 h-5" />
             {unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1 min-w-4.5 h-4.5 px-1 rounded-full bg-rose-500 text-[10px] font-bold text-white flex items-center justify-center ring-2 ring-indigo-600 dark:ring-slate-900 shadow-xs">
+              <span className="absolute -top-1 -right-1 min-w-4.5 h-4.5 px-1 rounded-full bg-rose-500 text-[10px] font-bold text-white flex items-center justify-center ring-2 ring-white dark:ring-slate-900 shadow-xs">
                 {unreadCount > 9 ? "9+" : unreadCount}
               </span>
             )}
@@ -116,7 +115,7 @@ export default function DashboardHeader({
             className="group flex items-center gap-2 p-1.5 rounded-lg hover:bg-white/10 dark:hover:bg-slate-800 active:scale-95 transition-all"
             title="View Profile"
           >
-            <div className="w-8 h-8 rounded-lg bg-white dark:bg-indigo-600 text-indigo-700 dark:text-white font-bold flex items-center justify-center text-xs transition-colors">
+            <div className="w-8 h-8 rounded-lg bg-white dark:bg-blue-600 text-blue-700 dark:text-white font-bold flex items-center justify-center text-xs transition-colors">
               {initials}
             </div>
             <div className="hidden lg:flex flex-col text-left min-w-0">

@@ -133,7 +133,7 @@ export default function UserDetailPage() {
             <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
               Assigned Leads
             </p>
-            <p className="text-2xl font-black text-slate-900 dark:text-slate-100 mt-1">
+            <p className="text-2xl font-bold text-slate-900 dark:text-slate-100 mt-1">
               {user.activeLeads ?? 0}
             </p>
           </div>
@@ -141,15 +141,15 @@ export default function UserDetailPage() {
             <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
               Won Deals
             </p>
-            <p className="text-2xl font-black text-emerald-700 dark:text-emerald-400 mt-1">
+            <p className="text-2xl font-bold text-emerald-700 dark:text-emerald-400 mt-1">
               {user.convertedLeads ?? 0}
             </p>
           </div>
           <div className="bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
-            <p className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+            <p className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
               Conversion Rate
             </p>
-            <p className="text-2xl font-black text-indigo-700 dark:text-indigo-400 mt-1">
+            <p className="text-2xl font-bold text-blue-700 dark:text-blue-400 mt-1">
               {(user.conversionRate ?? 0).toFixed(1)}%
             </p>
           </div>
@@ -211,7 +211,7 @@ export default function UserDetailPage() {
                         }
                         className="hover:bg-slate-50/70 dark:hover:bg-slate-800/50 cursor-pointer transition-colors"
                       >
-                        <td className="py-3 px-4 font-mono font-bold text-indigo-700 dark:text-indigo-400">
+                        <td className="py-3 px-4 font-mono font-bold text-blue-700 dark:text-blue-400">
                           {lead.leadCode}
                         </td>
                         <td className="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">
@@ -228,7 +228,7 @@ export default function UserDetailPage() {
                         <td className="py-3 px-4 text-right">
                           <Link
                             href={`/dashboard/leads/${lead.id}`}
-                            className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
+                            className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline"
                           >
                             View
                           </Link>

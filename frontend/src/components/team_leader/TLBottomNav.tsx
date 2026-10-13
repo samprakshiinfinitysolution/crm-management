@@ -114,7 +114,7 @@ export default function TLBottomNav({
           isSliderOpen ? "w-60" : "w-16"
         } ${className}`}
       >
-        <div className="relative flex flex-col bg-card/95 dark:bg-slate-900/95 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 rounded-3xl p-2.5 shadow-2xl shadow-indigo-950/10 overflow-visible">
+        <div className="relative flex flex-col bg-card/95 dark:bg-slate-900/95 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 rounded-xl p-2.5 shadow-2xl shadow-blue-950/10 overflow-visible">
           {/* Header & Toggle Slider Button */}
           <div className="flex items-center justify-between px-2 py-2 mb-1 border-b border-slate-100 dark:border-slate-800">
             <div
@@ -122,7 +122,7 @@ export default function TLBottomNav({
                 isSliderOpen ? "opacity-100 max-w-full" : "opacity-0 max-w-0"
               }`}
             >
-              <div className="w-6 h-6 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 flex items-center justify-center text-indigo-600">
+              <div className="w-6 h-6 rounded-lg bg-blue-50 dark:bg-blue-950/50 flex items-center justify-center text-blue-600">
                 <Compass className="w-3.5 h-3.5" />
               </div>
               <span className="text-xs font-bold text-slate-800 dark:text-slate-200 tracking-tight whitespace-nowrap">
@@ -162,7 +162,7 @@ export default function TLBottomNav({
                     onClick={() => handleTabClick(tab)}
                     className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all duration-200 active:scale-[0.98] ${
                       isActive
-                        ? "bg-indigo-600 text-white font-semibold shadow-md shadow-indigo-600/25"
+                        ? "bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/25"
                         : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-card/80 dark:hover:bg-slate-800/80"
                     }`}
                   >
@@ -176,7 +176,7 @@ export default function TLBottomNav({
                         className={`w-5 h-5 transition-transform duration-200 group-hover/item:scale-110 ${
                           isActive
                             ? "text-white"
-                            : "text-slate-500 dark:text-slate-400 group-hover/item:text-indigo-600"
+                            : "text-slate-500 dark:text-slate-400 group-hover/item:text-blue-600"
                         }`}
                       />
                     </div>
@@ -208,7 +208,7 @@ export default function TLBottomNav({
                       <span
                         className={`text-[10px] truncate max-w-35 ${
                           isActive
-                            ? "text-indigo-100"
+                            ? "text-blue-100"
                             : "text-slate-400 dark:text-slate-500"
                         }`}
                       >
@@ -274,7 +274,7 @@ export default function TLBottomNav({
               onClick={() => handleTabClick(tab)}
               className={`flex flex-col items-center justify-center min-w-14 h-12 gap-1 rounded-lg transition-all duration-150 active:scale-90 ${
                 isActive
-                  ? "text-indigo-600 dark:text-indigo-400 font-bold bg-indigo-50/80 dark:bg-indigo-950/40"
+                  ? "text-blue-600 dark:text-blue-400 font-bold bg-blue-50/80 dark:bg-blue-950/40"
                   : "text-slate-500 hover:text-slate-800 dark:text-slate-400 font-medium"
               }`}
             >

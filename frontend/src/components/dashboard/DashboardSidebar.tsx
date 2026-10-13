@@ -321,7 +321,7 @@ export default function DashboardSidebar({
     <>
       {/* Sidebar Container */}
       <aside
-        className={`fixed top-0 lg:top-16 bottom-0 left-0 z-50 lg:z-30 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 shadow-xs flex flex-col transition-all duration-300 lg:translate-x-0 ${
+        className={`fixed top-0 lg:top-16 bottom-0 left-0 z-50 lg:z-30 w-64 bg-card dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 shadow-xs flex flex-col transition-all duration-300 lg:translate-x-0 ${
           isOpenMobile ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -359,10 +359,10 @@ export default function DashboardSidebar({
           <span
             className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${
               isAdmin
-                ? "bg-purple-50 text-purple-700 border border-purple-200 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-800"
+                ? "bg-slate-100 text-slate-700 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
                 : isTL
-                ? "bg-indigo-50 text-indigo-700 border border-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 dark:border-indigo-800"
-                : "bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800"
+                ? "bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800"
+                : "bg-slate-100 text-slate-700 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
             }`}
           >
             {isAdmin ? "Superuser" : isTL ? "Supervisor" : "Sales Rep"}
@@ -387,7 +387,7 @@ export default function DashboardSidebar({
                     onClick={() => toggleSubMenu(item.label, parentActive)}
                     className={`w-full group flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all ${
                       parentActive
-                        ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300 font-bold shadow-2xs"
+                        ? "bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 font-bold shadow-2xs"
                         : "text-slate-600 hover:text-slate-900 hover:bg-slate-50 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800/60"
                     }`}
                   >
@@ -395,7 +395,7 @@ export default function DashboardSidebar({
                       <div
                         className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
                           parentActive
-                            ? "bg-indigo-600 text-white shadow-xs"
+                            ? "bg-blue-600 text-white shadow-xs"
                             : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200 group-hover:bg-slate-200/60 dark:group-hover:bg-slate-700"
                         }`}
                       >
@@ -409,7 +409,7 @@ export default function DashboardSidebar({
                         <span
                           className={`text-[9px] font-semibold px-1.5 py-0.5 rounded ${
                             parentActive
-                              ? "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/60 dark:text-indigo-300"
+                              ? "bg-blue-100 text-blue-800 dark:bg-blue-900/60 dark:text-blue-300"
                               : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 group-hover:bg-slate-200/60 dark:group-hover:bg-slate-700"
                           }`}
                         >
@@ -419,7 +419,7 @@ export default function DashboardSidebar({
                       <ChevronDown
                         className={`w-3.5 h-3.5 transition-transform duration-200 ${
                           isOpen
-                            ? "rotate-180 text-indigo-600 dark:text-indigo-400"
+                            ? "rotate-180 text-blue-600 dark:text-blue-400"
                             : "text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300"
                         }`}
                       />
@@ -438,7 +438,7 @@ export default function DashboardSidebar({
                             onClick={onCloseMobile}
                             className={`group flex items-center justify-between px-2.5 py-1.5 rounded-md text-[11px] font-medium transition-all ${
                               subActive
-                                ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300 font-bold"
+                                ? "bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 font-bold"
                                 : "text-slate-500 hover:text-slate-900 hover:bg-slate-50 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800/60"
                             }`}
                           >
@@ -446,14 +446,14 @@ export default function DashboardSidebar({
                               <div
                                 className={`w-1.5 h-1.5 rounded-full transition-all ${
                                   subActive
-                                    ? "bg-indigo-600 ring-2 ring-indigo-200 dark:ring-indigo-900"
+                                    ? "bg-blue-600 ring-2 ring-blue-200 dark:ring-blue-900"
                                     : "bg-slate-300 group-hover:bg-slate-500 dark:bg-slate-700 dark:group-hover:bg-slate-400"
                                 }`}
                               />
                               <span className="truncate">{sub.label}</span>
                             </div>
                             {subActive && (
-                              <ChevronRight className="w-3 h-3 text-indigo-600 dark:text-indigo-400 shrink-0" />
+                              <ChevronRight className="w-3 h-3 text-blue-600 dark:text-blue-400 shrink-0" />
                             )}
                           </Link>
                         );
@@ -471,7 +471,7 @@ export default function DashboardSidebar({
                 onClick={onCloseMobile}
                 className={`group flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all ${
                   parentActive
-                    ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300 font-bold shadow-2xs"
+                    ? "bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 font-bold shadow-2xs"
                     : "text-slate-600 hover:text-slate-900 hover:bg-slate-50 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800/60"
                 }`}
               >
@@ -479,7 +479,7 @@ export default function DashboardSidebar({
                   <div
                     className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
                       parentActive
-                        ? "bg-indigo-600 text-white shadow-xs"
+                        ? "bg-blue-600 text-white shadow-xs"
                         : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200 group-hover:bg-slate-200/60 dark:group-hover:bg-slate-700"
                     }`}
                   >
@@ -493,7 +493,7 @@ export default function DashboardSidebar({
                     <span
                       className={`text-[9px] font-semibold px-1.5 py-0.5 rounded ${
                         parentActive
-                          ? "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/60 dark:text-indigo-300"
+                          ? "bg-blue-100 text-blue-800 dark:bg-blue-900/60 dark:text-blue-300"
                           : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 group-hover:bg-slate-200/60 dark:group-hover:bg-slate-700"
                       }`}
                     >
@@ -501,7 +501,7 @@ export default function DashboardSidebar({
                     </span>
                   )}
                   {parentActive && (
-                    <ChevronRight className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                    <ChevronRight className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                   )}
                 </div>
               </Link>
@@ -513,7 +513,7 @@ export default function DashboardSidebar({
         <div className="p-3 border-t border-slate-100 dark:border-slate-800">
           <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-2">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs font-bold shrink-0">
+              <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center text-xs font-bold shrink-0">
                 {user?.name?.[0]?.toUpperCase() || (isAdmin ? "AD" : isTL ? "TL" : "SE")}
               </div>
               <div className="flex flex-col min-w-0">

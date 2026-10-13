@@ -50,7 +50,7 @@ export default function ProfilePage() {
       {/* Header */}
       <div>
         <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <UserCheck className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+          <UserCheck className="w-6 h-6 text-blue-600 dark:text-blue-400" />
           <span>User Profile & Security</span>
         </h1>
         <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
@@ -63,7 +63,7 @@ export default function ProfilePage() {
       <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-xs p-6 flex flex-col gap-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-xl shadow-md">
+            <div className="w-16 h-16 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-xl shadow-md">
               {initials}
             </div>
             <div>
@@ -99,7 +99,7 @@ export default function ProfilePage() {
         {/* Identity Details */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-center gap-3">
-            <Shield className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" />
+            <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0" />
             <div>
               <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase block">
                 Access Authorization
@@ -152,7 +152,7 @@ export default function ProfilePage() {
             <button
               type="button"
               onClick={() => setIsPasswordModalOpen(true)}
-              className="px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-200 dark:border-indigo-800/60 text-indigo-600 dark:text-indigo-400 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer shrink-0"
+              className="px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/50 hover:bg-blue-100 dark:hover:bg-blue-900/60 border border-blue-200 dark:border-blue-800/60 text-blue-600 dark:text-blue-400 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer shrink-0"
             >
               <Lock className="w-3.5 h-3.5" />
               <span className="whitespace-nowrap">Change Password</span>
@@ -163,7 +163,7 @@ export default function ProfilePage() {
         {/* Appearance & Interface Preferences */}
         <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <Palette className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" />
+            <Palette className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0" />
             <div>
               <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase block">
                 Interface Appearance
@@ -177,7 +177,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Operational Security Notice */}
-        <div className="p-4 rounded-lg bg-indigo-50/60 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-800/60 text-xs text-indigo-900 dark:text-indigo-200 leading-relaxed">
+        <div className="p-4 rounded-lg bg-blue-50/60 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-800/60 text-xs text-blue-900 dark:text-blue-200 leading-relaxed">
           <span className="font-bold block mb-1">
             Authoritative Backend Security
           </span>

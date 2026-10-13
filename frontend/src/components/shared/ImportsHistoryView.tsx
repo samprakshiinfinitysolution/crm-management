@@ -194,13 +194,13 @@ export const ImportsHistoryView: React.FC<ImportsHistoryViewProps> = ({
       <PageHeader
         title={title}
         description={description}
-        icon={<UploadCloud className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />}
+        icon={<UploadCloud className="w-6 h-6 text-blue-600 dark:text-blue-400" />}
         breadcrumbs={breadcrumbs}
         actions={
           uploadHref ? (
             <Link
               href={uploadHref}
-              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition-colors self-start sm:self-auto cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white shadow-xs transition-colors self-start sm:self-auto cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Upload Spreadsheet</span>

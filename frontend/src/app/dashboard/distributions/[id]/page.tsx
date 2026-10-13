@@ -27,7 +27,7 @@ export default function DistributionDetailPage() {
           </Link>
           <div>
             <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-              <GitFork className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              <GitFork className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               <span>Distribution Batch #{id.slice(0, 8)}</span>
             </h1>
             <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -62,7 +62,7 @@ export default function DistributionDetailPage() {
               <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase block">
                 Target Executives
               </span>
-              <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">
+              <span className="text-sm font-bold text-blue-600 dark:text-blue-400">
                 {executives.length} Staff Members
               </span>
             </div>

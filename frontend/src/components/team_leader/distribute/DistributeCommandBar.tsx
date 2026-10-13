@@ -24,7 +24,7 @@ export const DistributeCommandBar: React.FC<DistributeCommandBarProps> = ({
     <div className="sticky bottom-0 z-20 w-full bg-card/95 backdrop-blur-xs border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 sm:p-4 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-3 mt-4">
       {/* Left: Summary Text */}
       <div className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400 animate-pulse" />
+        <span className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 animate-pulse" />
         <span className="text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-100">
           {summaryText}
         </span>
@@ -46,7 +46,7 @@ export const DistributeCommandBar: React.FC<DistributeCommandBarProps> = ({
           type="button"
           onClick={onConfirm}
           disabled={!isValid || isSubmitting}
-          className="inline-flex items-center gap-1.5 px-5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-100 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-500 text-white text-xs sm:text-sm font-semibold shadow-xs transition-colors cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:bg-slate-100 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-500 text-white text-xs sm:text-sm font-semibold shadow-xs transition-colors cursor-pointer"
         >
           {isSubmitting ? (
             <>

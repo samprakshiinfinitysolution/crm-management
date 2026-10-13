@@ -165,7 +165,7 @@ export const ExportLeadsModal: React.FC<ExportLeadsModalProps> = ({
         {/* Modal Header */}
         <div className="flex items-start justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 border border-indigo-100 dark:border-indigo-900/50">
+            <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 border border-blue-100 dark:border-blue-900/50">
               <Download className="w-5 h-5" />
             </div>
             <div>
@@ -201,16 +201,16 @@ export const ExportLeadsModal: React.FC<ExportLeadsModalProps> = ({
                 onClick={() => setExportMode("SELECTED")}
                 className={`p-3 rounded-lg border text-left flex items-start gap-2.5 transition-all cursor-pointer ${
                   exportMode === "SELECTED"
-                    ? "bg-indigo-50/90 border-indigo-400 dark:bg-indigo-950/50 dark:border-indigo-600 text-indigo-950 dark:text-indigo-200 ring-2 ring-indigo-500/20"
+                    ? "bg-blue-50/90 border-blue-400 dark:bg-blue-950/50 dark:border-blue-600 text-blue-950 dark:text-blue-200 ring-2 ring-blue-500/20"
                     : "bg-white hover:bg-slate-50 border-slate-200 dark:bg-slate-800 dark:border-slate-700 text-slate-700 dark:text-slate-300"
                 }`}
               >
-                <CheckSquare className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+                <CheckSquare className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                 <div>
                   <div className="text-xs font-bold flex items-center gap-1.5 text-slate-900 dark:text-slate-100">
                     <span>1. Selected Leads</span>
                     {totalSpecificSelected > 0 && (
-                      <span className="px-1.5 py-0.2 bg-indigo-100 dark:bg-indigo-900/60 text-indigo-800 dark:text-indigo-300 rounded-md text-[10px] font-bold">
+                      <span className="px-1.5 py-0.2 bg-blue-100 dark:bg-blue-900/60 text-blue-800 dark:text-blue-300 rounded-md text-[10px] font-bold">
                         {totalSpecificSelected}
                       </span>
                     )}
@@ -229,11 +229,11 @@ export const ExportLeadsModal: React.FC<ExportLeadsModalProps> = ({
                 onClick={() => setExportMode("TOP_QUANTITY")}
                 className={`p-3 rounded-lg border text-left flex items-start gap-2.5 transition-all cursor-pointer ${
                   exportMode === "TOP_QUANTITY"
-                    ? "bg-indigo-50/90 border-indigo-400 dark:bg-indigo-950/50 dark:border-indigo-600 text-indigo-950 dark:text-indigo-200 ring-2 ring-indigo-500/20"
+                    ? "bg-blue-50/90 border-blue-400 dark:bg-blue-950/50 dark:border-blue-600 text-blue-950 dark:text-blue-200 ring-2 ring-blue-500/20"
                     : "bg-white hover:bg-slate-50 border-slate-200 dark:bg-slate-800 dark:border-slate-700 text-slate-700 dark:text-slate-300"
                 }`}
               >
-                <ListOrdered className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+                <ListOrdered className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                 <div>
                   <div className="text-xs font-bold text-slate-900 dark:text-slate-100">2. Top N / Filtered</div>
                   <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
@@ -270,7 +270,7 @@ export const ExportLeadsModal: React.FC<ExportLeadsModalProps> = ({
                     return (
                       <span
                         key={code}
-                        className="inline-flex items-center gap-1 px-2 py-0.5 font-mono text-[11px] font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400 rounded-md border border-indigo-100 dark:border-indigo-900"
+                        className="inline-flex items-center gap-1 px-2 py-0.5 font-mono text-[11px] font-semibold bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400 rounded-md border border-blue-100 dark:border-blue-900"
                       >
                         <span>{code}</span>
                         {isCustom && (
@@ -306,13 +306,13 @@ export const ExportLeadsModal: React.FC<ExportLeadsModalProps> = ({
                     }
                   }}
                   placeholder="Add code (e.g. CRM-000001, CRM-000002)..."
-                  className="flex-1 h-8 px-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 transition-all font-mono"
+                  className="flex-1 h-8 px-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all font-mono"
                 />
                 <button
                   type="button"
                   onClick={handleAddManualLeadCode}
                   disabled={!manualCodeInput.trim()}
-                  className="h-8 px-3 rounded-lg bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-xs font-semibold transition-all cursor-pointer"
+                  className="h-8 px-3 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-xs font-semibold transition-all cursor-pointer"
                 >
                   Add
                 </button>
@@ -339,8 +339,8 @@ export const ExportLeadsModal: React.FC<ExportLeadsModalProps> = ({
                       onClick={() => handlePresetSelect(preset)}
                       className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
                         isSelected
-                          ? "bg-indigo-600 border-indigo-600 text-white shadow-xs"
-                          : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-indigo-300 dark:hover:border-indigo-600"
+                          ? "bg-blue-600 border-blue-600 text-white shadow-xs"
+                          : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-blue-300 dark:hover:border-blue-600"
                       }`}
                     >
                       Top {preset}
@@ -354,8 +354,8 @@ export const ExportLeadsModal: React.FC<ExportLeadsModalProps> = ({
                   onClick={() => handlePresetSelect("ALL")}
                   className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
                     !isCustomCount && selectedTopCount === "ALL"
-                      ? "bg-indigo-600 border-indigo-600 text-white shadow-xs"
-                      : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-indigo-300 dark:hover:border-indigo-600"
+                      ? "bg-blue-600 border-blue-600 text-white shadow-xs"
+                      : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-blue-300 dark:hover:border-blue-600"
                   }`}
                 >
                   All (
@@ -377,7 +377,7 @@ export const ExportLeadsModal: React.FC<ExportLeadsModalProps> = ({
                   value={customCountInput}
                   onChange={(e) => handleCustomCountChange(e.target.value)}
                   placeholder="e.g. 75, 150..."
-                  className="h-8 w-28 px-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 transition-all"
+                  className="h-8 w-28 px-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
                 />
                 <span className="text-[11px] text-slate-500 dark:text-slate-400">leads</span>
               </div>
@@ -459,7 +459,7 @@ export const ExportLeadsModal: React.FC<ExportLeadsModalProps> = ({
             <button
               type="submit"
               disabled={isExporting}
-              className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+              className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
             >
               {isExporting ? (
                 <>

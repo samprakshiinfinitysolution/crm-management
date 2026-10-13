@@ -54,7 +54,7 @@ export const DistributionSummaryCard: React.FC<
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-3xl p-6 md:p-7 shadow-xs border border-slate-200/90 dark:border-slate-800 flex flex-col justify-between gap-6 transition-all">
+    <div className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-xl p-6 md:p-7 shadow-xs border border-slate-200/90 dark:border-slate-800 flex flex-col justify-between gap-6 transition-all">
       {/* Top Title & Badge */}
       <div className="flex items-center justify-between gap-3">
         <div>
@@ -66,7 +66,7 @@ export const DistributionSummaryCard: React.FC<
           </p>
         </div>
 
-        <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800 tracking-wider uppercase shrink-0">
+        <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800 tracking-wider uppercase shrink-0">
           {formatModeBadge(mode)}
         </span>
       </div>
@@ -77,7 +77,7 @@ export const DistributionSummaryCard: React.FC<
           <span className="text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
             Total Leads
           </span>
-          <div className="text-2xl md:text-3xl font-black text-slate-900 dark:text-slate-100">
+          <div className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-100">
             {totalLeadsToDistribute}
           </div>
         </div>
@@ -86,7 +86,7 @@ export const DistributionSummaryCard: React.FC<
           <span className="text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
             Active Targets
           </span>
-          <div className="text-2xl md:text-3xl font-black text-slate-900 dark:text-slate-100">
+          <div className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-100">
             {selectedExecutiveCount}
           </div>
         </div>
@@ -95,7 +95,7 @@ export const DistributionSummaryCard: React.FC<
           <span className="text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
             Will Allocate
           </span>
-          <div className="text-2xl md:text-3xl font-black text-emerald-600 dark:text-emerald-400">
+          <div className="text-2xl md:text-3xl font-bold text-emerald-600 dark:text-emerald-400">
             {allocatedCount}
           </div>
         </div>
@@ -104,7 +104,7 @@ export const DistributionSummaryCard: React.FC<
           <span className="text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
             Pool Remainder
           </span>
-          <div className="text-2xl md:text-3xl font-black text-amber-600 dark:text-amber-400">
+          <div className="text-2xl md:text-3xl font-bold text-amber-600 dark:text-amber-400">
             {remainderCount}
           </div>
         </div>
@@ -144,7 +144,7 @@ export const DistributionSummaryCard: React.FC<
             </button>
           )}
           <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
-            <Lock className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+            <Lock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
             <span>Authorized Team Leader</span>
           </div>
         </div>
@@ -153,7 +153,7 @@ export const DistributionSummaryCard: React.FC<
           type="button"
           disabled={!isValid || isSubmitting || allocatedCount === 0}
           onClick={onExecuteDistribution}
-          className="w-full sm:w-auto px-8 py-3.5 rounded-lg bg-linear-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-bold text-sm shadow-md shadow-indigo-600/25 flex items-center justify-center gap-2.5 transition-all active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+          className="w-full sm:w-auto px-8 py-3.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-xs flex items-center justify-center gap-2.5 transition-all active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
         >
           {isSubmitting ? (
             <>

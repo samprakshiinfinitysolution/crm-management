@@ -183,7 +183,7 @@ export default function AdminUsersPage() {
               Admin Panel
             </Link>
             <span className="text-slate-400">/</span>
-            <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400">
+            <span className="text-xs font-semibold text-blue-600 dark:text-blue-400">
               Users & Access
             </span>
           </div>
@@ -213,7 +213,7 @@ export default function AdminUsersPage() {
           <button
             type="button"
             onClick={() => setIsCreateModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white shadow-xs transition-colors"
           >
             <UserPlus className="w-4 h-4" />
             <span>+ Invite / Add User</span>
@@ -234,7 +234,7 @@ export default function AdminUsersPage() {
               setPage(1);
             }}
             placeholder="Search by name or email..."
-            className="w-full pl-9 pr-8 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            className="w-full pl-9 pr-8 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
           {search && (
             <button
@@ -339,7 +339,7 @@ export default function AdminUsersPage() {
                     item.role === UserRole.ADMIN
                       ? "bg-purple-100 text-purple-700 dark:bg-purple-950/70 dark:text-purple-300 border-purple-200 dark:border-purple-800"
                       : item.role === UserRole.TEAM_LEADER
-                        ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-950/70 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800"
+                        ? "bg-blue-100 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 border-blue-200 dark:border-blue-800"
                         : "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/70 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800";
 
                   const roleLabel =
@@ -367,7 +367,7 @@ export default function AdminUsersPage() {
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-3">
                           <div className="relative shrink-0">
-                            <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 font-bold flex items-center justify-center shrink-0">
+                            <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 font-bold flex items-center justify-center shrink-0">
                               {item.name ? item.name[0].toUpperCase() : "U"}
                             </div>
                             <span
@@ -425,7 +425,7 @@ export default function AdminUsersPage() {
                             leads
                           </span>
                           {item.activeLeads !== undefined && (
-                            <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-medium">
+                            <span className="text-[10px] text-blue-600 dark:text-blue-400 font-medium">
                               ({item.activeLeads} active)
                             </span>
                           )}
@@ -506,7 +506,7 @@ export default function AdminUsersPage() {
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-xl max-w-md w-full relative">
             <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center">
                   <UserPlus className="w-4 h-4" />
                 </div>
                 <div>
@@ -541,7 +541,7 @@ export default function AdminUsersPage() {
                     value={newUserName}
                     onChange={(e) => setNewUserName(e.target.value)}
                     placeholder="e.g. Maya Sharma"
-                    className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
                 {formErrors.name && (
@@ -564,7 +564,7 @@ export default function AdminUsersPage() {
                     value={newUserEmail}
                     onChange={(e) => setNewUserEmail(e.target.value)}
                     placeholder="maya@company.com"
-                    className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
                 {formErrors.email && (
@@ -618,7 +618,7 @@ export default function AdminUsersPage() {
                     value={newUserPassword}
                     onChange={(e) => setNewUserPassword(e.target.value)}
                     placeholder="Minimum 6 characters"
-                    className="w-full pl-9 pr-10 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full pl-9 pr-10 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                   <button
                     type="button"
@@ -652,7 +652,7 @@ export default function AdminUsersPage() {
                 <button
                   type="submit"
                   disabled={isCreating}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition-colors disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white shadow-xs transition-colors disabled:opacity-50"
                 >
                   {isCreating ? (
                     <>

@@ -142,7 +142,7 @@ export const RecallLeadModal: React.FC<RecallLeadModalProps> = ({
               {leadCodes.map((code) => (
                 <span
                   key={code}
-                  className="px-2 py-0.5 font-mono text-[11px] font-semibold bg-card dark:bg-slate-800 text-indigo-700 dark:text-indigo-400 rounded-md border border-slate-200 dark:border-slate-700 shadow-2xs"
+                  className="px-2 py-0.5 font-mono text-[11px] font-semibold bg-card dark:bg-slate-800 text-blue-700 dark:text-blue-400 rounded-md border border-slate-200 dark:border-slate-700 shadow-2xs"
                 >
                   {code}
                 </span>

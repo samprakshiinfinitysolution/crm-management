@@ -68,7 +68,7 @@ export const UserMetricCards: React.FC<UserMetricCardsProps> = ({ metrics }) => 
           <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
             Assigned Leads
           </span>
-          <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400">
+          <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/50">
             <Users className="w-4 h-4" />
           </div>
         </div>
@@ -80,7 +80,7 @@ export const UserMetricCards: React.FC<UserMetricCardsProps> = ({ metrics }) => 
             ({metrics.activeLeads || 0} active)
           </span>
         </div>
-        <div className="mt-2 text-[11px] text-slate-500 dark:text-slate-400 flex items-center justify-between">
+        <div className="mt-2 text-xs text-slate-500 dark:text-slate-400 flex items-center justify-between">
           <span>Converted: {metrics.convertedLeads || 0}</span>
           <span>Lost: {metrics.lostLeads || 0}</span>
         </div>
@@ -92,7 +92,7 @@ export const UserMetricCards: React.FC<UserMetricCardsProps> = ({ metrics }) => 
           <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
             Pipeline Value
           </span>
-          <div className="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400">
+          <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/50">
             <IndianRupee className="w-4 h-4" />
           </div>
         </div>
@@ -101,8 +101,8 @@ export const UserMetricCards: React.FC<UserMetricCardsProps> = ({ metrics }) => 
             {formatCurrency(metrics.totalPipelineValue)}
           </span>
         </div>
-        <div className="mt-2 text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-          <TrendingUp className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+        <div className="mt-2 text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+          <TrendingUp className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
           <span>Conversion Rate: <strong className="text-slate-800 dark:text-slate-200">{metrics.conversionRate}%</strong></span>
         </div>
       </div>
@@ -113,7 +113,7 @@ export const UserMetricCards: React.FC<UserMetricCardsProps> = ({ metrics }) => 
           <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
             Pending Follow-ups
           </span>
-          <div className="p-2 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400">
+          <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/50">
             <Clock className="w-4 h-4" />
           </div>
         </div>
@@ -128,7 +128,7 @@ export const UserMetricCards: React.FC<UserMetricCardsProps> = ({ metrics }) => 
             </span>
           )}
         </div>
-        <div className="mt-2 text-[11px] text-slate-500 dark:text-slate-400">
+        <div className="mt-2 text-xs text-slate-500 dark:text-slate-400">
           {metrics.followUpsOverdue > 0
             ? "Requires urgent follow-up action"
             : "All scheduled follow-ups on track"}
@@ -141,7 +141,7 @@ export const UserMetricCards: React.FC<UserMetricCardsProps> = ({ metrics }) => 
           <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
             Workload Capacity
           </span>
-          <div className="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">
+          <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/50">
             <Activity className="w-4 h-4" />
           </div>
         </div>

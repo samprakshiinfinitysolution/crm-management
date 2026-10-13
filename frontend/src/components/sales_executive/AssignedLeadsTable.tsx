@@ -184,9 +184,9 @@ export default function AssignedLeadsTable({
                     <button
                       type="button"
                       onClick={() => setSchedulingLead(lead)}
-                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 hover:text-indigo-900 text-[11px] font-semibold transition-all cursor-pointer shadow-2xs"
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 hover:text-blue-900 text-[11px] font-semibold transition-all cursor-pointer shadow-2xs"
                     >
-                      <Calendar className="w-3 h-3 text-indigo-600" />
+                      <Calendar className="w-3 h-3 text-blue-600" />
                       <span>Follow-Up</span>
                     </button>
                   </td>

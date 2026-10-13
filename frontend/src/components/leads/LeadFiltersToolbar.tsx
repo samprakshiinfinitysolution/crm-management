@@ -36,7 +36,7 @@ export function LeadFiltersToolbar({
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search by customer name, mobile, email, lead code or company..."
-          className="w-full h-10 pl-9 pr-4 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-600 transition-all"
+          className="w-full h-10 pl-9 pr-4 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
         />
       </div>
 
@@ -47,7 +47,7 @@ export function LeadFiltersToolbar({
           value={statusFilter}
           onValueChange={(val) => onStatusFilterChange(val || "ALL")}
         >
-          <SelectTrigger className="h-10 px-3 min-w-38.75 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs text-slate-700 dark:text-slate-200 font-medium focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-600 transition-all">
+          <SelectTrigger className="h-10 px-3 min-w-38.75 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs text-slate-700 dark:text-slate-200 font-medium focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all">
             <SelectValue placeholder="All Statuses" />
           </SelectTrigger>
           <SelectContent className="border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-md">
@@ -113,7 +113,7 @@ export function LeadFiltersToolbar({
           value={sourceFilter}
           onValueChange={(val) => onSourceFilterChange(val || "ALL")}
         >
-          <SelectTrigger className="h-10 px-3 min-w-36 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs text-slate-700 dark:text-slate-200 font-medium focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-600 transition-all">
+          <SelectTrigger className="h-10 px-3 min-w-36 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs text-slate-700 dark:text-slate-200 font-medium focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all">
             <SelectValue placeholder="All Sources" />
           </SelectTrigger>
           <SelectContent className="border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-md">

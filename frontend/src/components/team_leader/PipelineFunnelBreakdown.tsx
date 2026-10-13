@@ -65,8 +65,8 @@ export default function PipelineFunnelBreakdown({
       count: 0,
       pct: 0,
       totalValue: 0,
-      colorClass: "bg-indigo-600",
-      dotBg: "bg-indigo-600",
+      colorClass: "bg-blue-600",
+      dotBg: "bg-blue-600",
     },
     {
       key: "proposal",
@@ -158,7 +158,7 @@ export default function PipelineFunnelBreakdown({
               onClick={() => handleStageClick(stage)}
               className={`p-2 rounded-lg text-left transition-all border cursor-pointer ${
                 selectedStage === stage.key
-                  ? "border-indigo-600 bg-indigo-50/50 shadow-xs"
+                  ? "border-blue-600 bg-blue-50/50 shadow-xs"
                   : "border-crm-subtle bg-crm-subtle hover:bg-crm-muted"
               }`}
             >

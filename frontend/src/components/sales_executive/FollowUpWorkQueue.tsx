@@ -79,7 +79,7 @@ export default function FollowUpWorkQueue({
       case "Meeting":
         return <Users className="w-3.5 h-3.5 text-blue-600" />;
       case "Email":
-        return <Mail className="w-3.5 h-3.5 text-indigo-600" />;
+        return <Mail className="w-3.5 h-3.5 text-blue-600" />;
       case "WhatsApp":
         return <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />;
       default:

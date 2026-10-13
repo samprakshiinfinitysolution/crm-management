@@ -3,10 +3,11 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import AuthForm from "@/components/auth/AuthForm";
-import AuthIllustration from "@/components/auth/AuthIllustration";
 import { useAppDispatch, useAppSelector, setAuthMode } from "@/store";
 import { UserRole } from "@/types/api.types";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import Image from "next/image";
+import { CLOUDINARY_IMAGES } from "@/lib/cloudinaryImages";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -33,53 +34,33 @@ export default function LoginPage() {
   }, [router, dispatch, user]);
 
   return (
-    <main className="min-h-screen bg-[#eaf2f8] dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col justify-center items-center px-4 py-8 sm:py-12 relative overflow-hidden font-sans select-none transition-colors">
+    <main className="min-h-screen bg-slate-900 text-slate-900 dark:text-slate-100 flex flex-col justify-center items-center px-4 py-8 sm:py-12 relative overflow-hidden transition-colors">
       <div className="absolute top-4 right-4 z-30">
-        <ThemeToggle />
+        <ThemeToggle
+          variant="button"
+          className="shadow-md bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200/80 dark:border-slate-800"
+        />
       </div>
-      {/* ------------------------------------------------------------- */}
-      {/* Subtle Minimalist Wavy Background Patterns (Top-Right & Bottom-Left) */}
-      {/* ------------------------------------------------------------- */}
-      <svg
-        className="absolute top-6 right-6 w-48 sm:w-64 h-28 text-slate-300/45 pointer-events-none -z-10"
-        viewBox="0 0 240 100"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinecap="round"
-      >
-        <path d="M0 25 Q30 5 60 25 T120 25 T180 25 T240 25" />
-        <path d="M0 50 Q30 30 60 50 T120 50 T180 50 T240 50" />
-        <path d="M0 75 Q30 55 60 75 T120 75 T180 75 T240 75" />
-      </svg>
 
-      <svg
-        className="absolute bottom-6 left-6 w-48 sm:w-64 h-28 text-slate-300/45 pointer-events-none -z-10"
-        viewBox="0 0 240 100"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinecap="round"
-      >
-        <path d="M0 25 Q30 5 60 25 T120 25 T180 25 T240 25" />
-        <path d="M0 50 Q30 30 60 50 T120 50 T180 50 T240 50" />
-        <path d="M0 75 Q30 55 60 75 T120 75 T180 75 T240 75" />
-      </svg>
+      {/* Atmospheric softening overlay so background image contrasts cleanly */}
+      <div className="absolute inset-0 bg-slate-500/15 dark:bg-slate-950/60 backdrop-blur-[2px] z-10 transition-all pointer-events-none" />
+
+      <Image
+        src={CLOUDINARY_IMAGES.signIn}
+        alt="LeadFlow CRM Enterprise Workspace"
+        fill
+        priority
+        className="object-cover object-center scale-105 transition-transform duration-1000"
+        sizes="100vw"
+      />
 
       {/* ------------------------------------------------------------- */}
       {/* Main Floating Auth Container */}
       {/* ------------------------------------------------------------- */}
-      <div className="w-full max-w-4xl lg:max-w-5xl bg-white dark:bg-slate-900 rounded-3xl shadow-xl shadow-slate-300/40 dark:shadow-none border border-slate-100 dark:border-slate-800 overflow-hidden relative z-10 transition-all">
-        <div className="grid grid-cols-1 lg:grid-cols-12 min-h-135">
-          {/* Left Column: Isometric Team Collaboration Illustration */}
-          <div className="hidden lg:flex lg:col-span-6 bg-slate-50/70 dark:bg-slate-800/40 p-6 sm:p-10 flex-col items-center justify-center border-r border-slate-100 dark:border-slate-800 relative">
-            <AuthIllustration />
-          </div>
-
-          {/* Right Column: Clean Minimalist Auth Form */}
-          <div className="lg:col-span-6 p-6 sm:p-10 lg:p-12 flex flex-col justify-center bg-white dark:bg-slate-900">
-            <AuthForm />
-          </div>
+      <div className="w-full max-w-sm sm:max-w-md bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl rounded-lg shadow-2xl border border-white/60 dark:border-slate-800/80 overflow-hidden relative z-20 transition-all">
+        {/* Clean Minimalist Auth Form */}
+        <div className="p-6 sm:p-10 flex flex-col justify-center">
+          <AuthForm />
         </div>
       </div>
     </main>

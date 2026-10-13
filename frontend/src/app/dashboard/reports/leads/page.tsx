@@ -28,7 +28,7 @@ export default function LeadsReportPage() {
   // Lead Sources Distribution for Pie Chart
   const sourceSegments = useMemo(() => {
     return [
-      { label: "Meta Ads", count: 420, percentage: 42, color: "#6366f1" },
+      { label: "Meta Ads", count: 420, percentage: 42, color: "#2563eb" },
       { label: "Google Search", count: 280, percentage: 28, color: "#3b82f6" },
       { label: "Direct Referral", count: 180, percentage: 18, color: "#10b981" },
       { label: "Partner Network", count: 120, percentage: 12, color: "#f59e0b" },
@@ -41,7 +41,7 @@ export default function LeadsReportPage() {
       label: s.stage,
       value: s.count,
       formattedValue: `${s.count} leads`,
-      color: s.stage === "WON" ? "#10b981" : "#4f46e5",
+      color: s.stage === "WON" ? "#10b981" : "#2563eb",
     }));
   }, [stages]);
 
@@ -71,7 +71,7 @@ export default function LeadsReportPage() {
             </Link>
             <div>
               <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                <PieChartIcon className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                <PieChartIcon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 <span>Lead Pipeline & Funnel Breakdown</span>
               </h1>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -87,7 +87,7 @@ export default function LeadsReportPage() {
                 if (val) setTimeRange(val);
               }}
             >
-              <SelectTrigger className="h-9 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 cursor-pointer shadow-2xs">
+              <SelectTrigger className="h-9 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 cursor-pointer shadow-2xs">
                 <SelectValue placeholder="Select Range" />
               </SelectTrigger>
               <SelectContent>
@@ -151,7 +151,7 @@ export default function LeadsReportPage() {
                 height={200}
                 primaryLabel="Total Inflow"
                 secondaryLabel="Qualified"
-                primaryColor="#6366f1"
+                primaryColor="#2563eb"
                 secondaryColor="#10b981"
                 isLoading={isLoading}
               />

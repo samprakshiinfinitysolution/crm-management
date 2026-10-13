@@ -130,7 +130,7 @@ export class ErrorBoundary extends Component<
     return (
       <div className="w-full min-h-[calc(100vh-50px)] flex-1 flex items-center justify-center p-4 sm:p-6 my-auto">
         <div
-          className={`w-full max-w-lg rounded-2xl border bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm dark:shadow-2xl flex flex-col items-center text-center transition-all ${
+          className={`w-full max-w-lg rounded-xl border bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm dark:shadow-2xl flex flex-col items-center text-center transition-all ${
             variant === "card"
               ? "border-slate-200 dark:border-slate-800"
               : "border-slate-200/80 dark:border-slate-800"

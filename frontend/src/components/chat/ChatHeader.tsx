@@ -20,7 +20,7 @@ export function ChatHeader({
   const isOnline = selectedContact ? isUserOnline(selectedContact.id) : false;
 
   return (
-    <div className="bg-linear-to-r from-indigo-600 via-indigo-700 to-blue-600 text-white p-3.5 flex items-center justify-between shadow-md">
+    <div className="bg-linear-to-r from-blue-600 via-blue-700 to-blue-600 text-white p-3.5 flex items-center justify-between shadow-md">
       {selectedContact ? (
         <div className="flex items-center gap-2.5 min-w-0">
           <button
@@ -37,7 +37,7 @@ export function ChatHeader({
               {selectedContact.name[0]?.toUpperCase()}
             </div>
             <span
-              className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-indigo-700 ${
+              className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-blue-700 ${
                 isOnline ? "bg-emerald-400" : "bg-slate-400"
               }`}
             />
@@ -46,7 +46,7 @@ export function ChatHeader({
             <h3 className="font-bold text-xs truncate leading-tight">
               {selectedContact.name}
             </h3>
-            <span className="text-[10px] text-indigo-100/80 block truncate">
+            <span className="text-[10px] text-blue-100/80 block truncate">
               {isOnline ? "Online" : "Offline"}
             </span>
           </div>
@@ -60,7 +60,7 @@ export function ChatHeader({
             <h3 className="font-bold text-xs leading-none flex items-center gap-1.5">
               Team Workspace Chat
             </h3>
-            <span className="text-[10px] text-indigo-100/80">
+            <span className="text-[10px] text-blue-100/80">
               Connect with executives & managers
             </span>
           </div>

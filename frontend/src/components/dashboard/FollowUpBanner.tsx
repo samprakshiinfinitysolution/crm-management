@@ -179,7 +179,7 @@ export default function FollowUpBanner({
               className={`w-11 h-11 rounded-lg flex items-center justify-center shrink-0 shadow-2xs border ${
                 overdueCount > 0
                   ? "bg-amber-50 dark:bg-amber-950/50 border-amber-200 dark:border-amber-800 text-amber-600 dark:text-amber-400"
-                  : "bg-indigo-50 dark:bg-indigo-950/50 border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400"
+                  : "bg-blue-50 dark:bg-blue-950/50 border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400"
               }`}
             >
               {overdueCount > 0 ? (
@@ -195,7 +195,7 @@ export default function FollowUpBanner({
                   Follow-Up Command Hub
                 </span>
                 {isTL && (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
                     SUPERVISOR VIEW
                   </span>
                 )}
@@ -237,7 +237,7 @@ export default function FollowUpBanner({
                   onClick={() => setTlViewMode("my")}
                   className={`px-2.5 py-1 rounded-lg transition-all text-xs font-semibold cursor-pointer ${
                     tlViewMode === "my"
-                      ? "bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 shadow-2xs"
+                      ? "bg-white dark:bg-slate-900 text-blue-700 dark:text-blue-400 shadow-2xs"
                       : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
                   }`}
                 >
@@ -248,7 +248,7 @@ export default function FollowUpBanner({
                   onClick={() => setTlViewMode("team")}
                   className={`px-2.5 py-1 rounded-lg transition-all text-xs font-semibold cursor-pointer ${
                     tlViewMode === "team"
-                      ? "bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 shadow-2xs"
+                      ? "bg-white dark:bg-slate-900 text-blue-700 dark:text-blue-400 shadow-2xs"
                       : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
                   }`}
                 >
@@ -266,7 +266,7 @@ export default function FollowUpBanner({
               }}
               className={`px-3 py-1.5 rounded-lg border text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
                 activeTab === "today" && isExpanded
-                  ? "bg-indigo-600 border-indigo-600 text-white shadow-xs"
+                  ? "bg-blue-600 border-blue-600 text-white shadow-xs"
                   : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
               }`}
             >
@@ -276,7 +276,7 @@ export default function FollowUpBanner({
                 className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
                   activeTab === "today" && isExpanded
                     ? "bg-white/20 text-white"
-                    : "bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300"
+                    : "bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300"
                 }`}
               >
                 {todayCount}
@@ -359,7 +359,7 @@ export default function FollowUpBanner({
               <div className="flex items-center gap-3">
                 <Link
                   href="/dashboard/follow-ups"
-                  className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 transition-colors"
+                  className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1 transition-colors"
                 >
                   <span>Open Full Follow-Up Workspace</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -408,7 +408,7 @@ export default function FollowUpBanner({
                   return (
                     <div
                       key={item.id}
-                      className="bg-white dark:bg-slate-900 rounded-lg p-3.5 border border-slate-200 dark:border-slate-800 hover:border-indigo-300 dark:hover:border-indigo-700 hover:shadow-xs transition-all flex flex-col justify-between gap-3 group"
+                      className="bg-white dark:bg-slate-900 rounded-lg p-3.5 border border-slate-200 dark:border-slate-800 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-xs transition-all flex flex-col justify-between gap-3 group"
                     >
                       {/* Top Row: Type, Scheduled Time & Status */}
                       <div className="flex items-start justify-between gap-2">
@@ -422,7 +422,7 @@ export default function FollowUpBanner({
                             className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[11px] font-semibold border ${
                               isItemOverdue
                                 ? "bg-rose-50 dark:bg-rose-950/50 border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-400"
-                                : "bg-indigo-50 dark:bg-indigo-950/50 border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-400"
+                                : "bg-blue-50 dark:bg-blue-950/50 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-400"
                             }`}
                           >
                             <Clock className="w-3 h-3" />
@@ -449,7 +449,7 @@ export default function FollowUpBanner({
                             onClick={() =>
                               router.push(`/dashboard/leads/${item.leadId}`)
                             }
-                            className="text-xs font-bold text-slate-900 dark:text-slate-100 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer truncate"
+                            className="text-xs font-bold text-slate-900 dark:text-slate-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer truncate"
                           >
                             {item.lead?.customerName || "Customer Lead"}
                           </h4>
@@ -470,7 +470,7 @@ export default function FollowUpBanner({
                         {/* TL Team assignee badge */}
                         {isTL && tlViewMode === "team" && item.assignedTo && (
                           <div className="mt-1.5 flex items-center gap-1 text-[10px] font-medium text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/80 px-2 py-0.5 rounded-md border border-slate-100 dark:border-slate-800">
-                            <UserCheck className="w-3 h-3 text-indigo-500" />
+                            <UserCheck className="w-3 h-3 text-blue-500" />
                             <span>Assigned: {item.assignedTo.name}</span>
                           </div>
                         )}
@@ -511,7 +511,7 @@ export default function FollowUpBanner({
                             onClick={() =>
                               router.push(`/dashboard/leads/${item.leadId}`)
                             }
-                            className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-700 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 text-slate-600 dark:text-slate-300 hover:text-indigo-600 transition-colors cursor-pointer"
+                            className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950/40 text-slate-600 dark:text-slate-300 hover:text-blue-600 transition-colors cursor-pointer"
                             title="View Lead File"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />

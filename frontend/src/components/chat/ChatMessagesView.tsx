@@ -52,7 +52,7 @@ export function ChatMessagesView({
   if (isLoading && messages.length === 0) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center text-slate-400 text-xs py-10">
-        <div className="w-5 h-5 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin mb-2" />
+        <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mb-2" />
         <span>Loading messages...</span>
       </div>
     );
@@ -61,7 +61,7 @@ export function ChatMessagesView({
   if (messages.length === 0) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center text-slate-400 text-xs py-10 text-center px-4">
-        <div className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-950/50 flex items-center justify-center mb-2 text-indigo-500">
+        <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-950/50 flex items-center justify-center mb-2 text-blue-500">
           <MessageSquare className="w-5 h-5" />
         </div>
         <p className="font-semibold text-slate-700 dark:text-slate-200">
@@ -90,14 +90,14 @@ export function ChatMessagesView({
             }`}
           >
             {!isUser && (
-              <div className="w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5 border border-indigo-200 dark:border-indigo-800">
+              <div className="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5 border border-blue-200 dark:border-blue-800">
                 {selectedContact.name[0]?.toUpperCase()}
               </div>
             )}
             <div
-              className={`max-w-[78%] rounded-2xl shadow-2xs overflow-hidden ${
+              className={`max-w-[78%] rounded-xl shadow-2xs overflow-hidden ${
                 isUser
-                  ? "bg-indigo-600 text-white rounded-br-xs"
+                  ? "bg-blue-600 text-white rounded-br-xs"
                   : "bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-slate-200/80 dark:border-slate-800 rounded-bl-xs"
               }`}
             >
@@ -204,7 +204,7 @@ export function ChatMessagesView({
                     className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
                       isUser
                         ? "bg-white/20 text-white"
-                        : "bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400"
+                        : "bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400"
                     }`}
                   >
                     <FileText className="w-4 h-4" />
@@ -216,7 +216,7 @@ export function ChatMessagesView({
                     {msg.attachment?.bytes ? (
                       <p
                         className={`text-[10px] mt-0.5 ${
-                          isUser ? "text-indigo-200" : "text-slate-400"
+                          isUser ? "text-blue-200" : "text-slate-400"
                         }`}
                       >
                         {formatBytes(msg.attachment.bytes)}
@@ -269,12 +269,12 @@ export function ChatMessagesView({
                   msg.text || isImage || isFile ? "pt-1" : ""
                 } ${
                   isUser
-                    ? "text-indigo-200"
+                    ? "text-blue-200"
                     : "text-slate-400 dark:text-slate-500"
                 }`}
               >
                 <span>{msg.timestamp}</span>
-                {isUser && <CheckCheck className="w-3 h-3 text-indigo-200" />}
+                {isUser && <CheckCheck className="w-3 h-3 text-blue-200" />}
               </div>
             </div>
           </div>

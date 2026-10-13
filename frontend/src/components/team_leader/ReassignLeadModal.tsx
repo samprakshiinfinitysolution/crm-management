@@ -122,7 +122,7 @@ export const ReassignLeadModal: React.FC<ReassignLeadModalProps> = ({
         {/* Header */}
         <div className="flex items-start justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 border border-indigo-100 dark:border-indigo-900/50">
+            <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 border border-blue-100 dark:border-blue-900/50">
               <UserCheck className="w-5 h-5" />
             </div>
             <div>
@@ -148,12 +148,12 @@ export const ReassignLeadModal: React.FC<ReassignLeadModalProps> = ({
 
         {/* Informational Banner */}
         {currentAssigneeName && (
-          <div className="p-3 rounded-lg bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50 flex items-center justify-between gap-3">
+          <div className="p-3 rounded-lg bg-blue-50/70 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/50 flex items-center justify-between gap-3">
             <div className="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300">
               <span className="text-slate-400 font-medium">
                 Current Assignee:
               </span>
-              <span className="font-bold text-indigo-700 dark:text-indigo-400">
+              <span className="font-bold text-blue-700 dark:text-blue-400">
                 {currentAssigneeName}
               </span>
             </div>
@@ -177,7 +177,7 @@ export const ReassignLeadModal: React.FC<ReassignLeadModalProps> = ({
               {leadCodes.map((code) => (
                 <span
                   key={code}
-                  className="px-2 py-0.5 font-mono text-[11px] font-semibold bg-card dark:bg-slate-800 text-indigo-700 dark:text-indigo-400 rounded-md border border-slate-200 dark:border-slate-700 shadow-2xs"
+                  className="px-2 py-0.5 font-mono text-[11px] font-semibold bg-card dark:bg-slate-800 text-blue-700 dark:text-blue-400 rounded-md border border-slate-200 dark:border-slate-700 shadow-2xs"
                 >
                   {code}
                 </span>
@@ -205,7 +205,7 @@ export const ReassignLeadModal: React.FC<ReassignLeadModalProps> = ({
                   setTargetExecutiveId(val || "")
                 }
               >
-                <SelectTrigger className="w-full text-xs h-10 rounded-lg bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 focus:bg-card focus:outline-none focus:ring-2 focus:ring-indigo-600 font-medium">
+                <SelectTrigger className="w-full text-xs h-10 rounded-lg bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 focus:bg-card focus:outline-none focus:ring-2 focus:ring-blue-600 font-medium">
                   <SelectValue placeholder="Select target sales representative" />
                 </SelectTrigger>
                 <SelectContent className="border border-slate-200 bg-card dark:bg-slate-800 shadow-md max-h-56">
@@ -255,12 +255,12 @@ export const ReassignLeadModal: React.FC<ReassignLeadModalProps> = ({
                     onClick={() => handlePresetSelect(preset)}
                     className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-all cursor-pointer flex items-center gap-1 ${
                       isSelected
-                        ? "bg-indigo-50 border-indigo-300 text-indigo-700 dark:bg-indigo-950/60 dark:border-indigo-700 dark:text-indigo-300 font-semibold"
+                        ? "bg-blue-50 border-blue-300 text-blue-700 dark:bg-blue-950/60 dark:border-blue-700 dark:text-blue-300 font-semibold"
                         : "bg-slate-50 hover:bg-card border-slate-200 text-slate-600 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400"
                     }`}
                   >
                     {isSelected && (
-                      <Check className="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
+                      <Check className="w-3 h-3 text-blue-600 dark:text-blue-400" />
                     )}
                     <span>{preset}</span>
                   </button>
@@ -279,7 +279,7 @@ export const ReassignLeadModal: React.FC<ReassignLeadModalProps> = ({
               value={customNote}
               onChange={(e) => setCustomNote(e.target.value)}
               placeholder="e.g. Lead requested technical architect consultation..."
-              className="w-full p-3 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 transition-all resize-none"
+              className="w-full p-3 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all resize-none"
             />
           </div>
 
@@ -296,7 +296,7 @@ export const ReassignLeadModal: React.FC<ReassignLeadModalProps> = ({
             <button
               type="submit"
               disabled={isSubmitting || !targetExecutiveId || isLoadingExecs}
-              className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+              className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
             >
               {isSubmitting ? (
                 <>

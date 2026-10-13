@@ -248,7 +248,7 @@ export default function CompleteFollowUpModal({
             {scheduleNext && (
               <div className="bg-crm-subtle border border-crm-subtle rounded-lg p-3.5 flex flex-col gap-2.5">
                 <label className="text-[11px] font-medium text-crm-secondary flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-indigo-600" />
+                  <Calendar className="w-3.5 h-3.5 text-blue-600" />
                   Next Scheduled Date & Time{" "}
                   <span className="text-rose-600">*</span>
                 </label>

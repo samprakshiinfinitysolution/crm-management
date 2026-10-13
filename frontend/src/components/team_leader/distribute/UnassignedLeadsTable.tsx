@@ -211,7 +211,7 @@ export const UnassignedLeadsTable: React.FC<UnassignedLeadsTableProps> = ({
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-xs overflow-hidden flex flex-col">
+    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-xs overflow-hidden flex flex-col">
       {/* Header & Quick Action Selection Bar */}
       <div className="p-4 md:p-5 border-b border-slate-100 dark:border-slate-800 space-y-3.5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -261,7 +261,7 @@ export const UnassignedLeadsTable: React.FC<UnassignedLeadsTableProps> = ({
             <button
               type="button"
               onClick={handleToggleSelectAll}
-              className="text-xs font-semibold px-3 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900 text-indigo-700 dark:text-indigo-300 transition-colors"
+              className="text-xs font-semibold px-3 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/60 dark:hover:bg-blue-900 text-blue-700 dark:text-blue-300 transition-colors cursor-pointer"
             >
               {isAllFilteredSelected ? "Deselect All" : "Select All Filtered"}
             </button>
@@ -278,7 +278,7 @@ export const UnassignedLeadsTable: React.FC<UnassignedLeadsTableProps> = ({
               placeholder="Search by code, customer, mobile, city..."
               value={activeSearchTerm}
               onChange={(e) => handleSearchChange(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-xs rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all"
+              className="w-full pl-9 pr-3 py-2 text-xs rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all"
             />
           </div>
 
@@ -318,9 +318,9 @@ export const UnassignedLeadsTable: React.FC<UnassignedLeadsTableProps> = ({
 
       {/* Selected Leads Sticky Pill */}
       {selectedLeadIds.length > 0 && (
-        <div className="bg-indigo-50/90 dark:bg-indigo-950/40 px-4 py-2 border-b border-indigo-100 dark:border-indigo-900/50 flex items-center justify-between text-xs">
-          <div className="flex items-center gap-2 text-indigo-900 dark:text-indigo-200 font-medium">
-            <CheckSquare className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+        <div className="bg-blue-50/90 dark:bg-blue-950/40 px-4 py-2 border-b border-blue-100 dark:border-blue-900/50 flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2 text-blue-900 dark:text-blue-200 font-medium">
+            <CheckSquare className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             <span>
               <strong className="font-bold">{selectedLeadIds.length}</strong>{" "}
               leads currently selected for distribution
@@ -329,7 +329,7 @@ export const UnassignedLeadsTable: React.FC<UnassignedLeadsTableProps> = ({
           <button
             type="button"
             onClick={onClearSelection}
-            className="text-xs text-indigo-700 dark:text-indigo-300 hover:underline font-semibold"
+            className="text-xs text-blue-700 dark:text-blue-300 hover:underline font-semibold cursor-pointer"
           >
             Clear
           </button>
@@ -345,11 +345,11 @@ export const UnassignedLeadsTable: React.FC<UnassignedLeadsTableProps> = ({
                 <button
                   type="button"
                   onClick={handleToggleSelectAll}
-                  className="text-slate-400 hover:text-indigo-600 focus:outline-none"
+                  className="text-slate-400 hover:text-blue-600 focus:outline-none cursor-pointer"
                   title="Toggle select all on this page"
                 >
                   {isAllFilteredSelected ? (
-                    <CheckSquare className="w-4 h-4 text-indigo-600" />
+                    <CheckSquare className="w-4 h-4 text-blue-600" />
                   ) : (
                     <Square className="w-4 h-4" />
                   )}
@@ -368,7 +368,7 @@ export const UnassignedLeadsTable: React.FC<UnassignedLeadsTableProps> = ({
               <tr>
                 <td colSpan={7} className="py-12 text-center text-slate-400">
                   <div className="flex flex-col items-center justify-center gap-2">
-                    <div className="w-6 h-6 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+                    <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
                     <span>Loading unassigned lead pool...</span>
                   </div>
                 </td>
@@ -398,7 +398,7 @@ export const UnassignedLeadsTable: React.FC<UnassignedLeadsTableProps> = ({
                     onClick={() => onToggleLead(lead.id)}
                     className={`hover:bg-slate-50/80 dark:hover:bg-slate-800/40 cursor-pointer transition-colors ${
                       isSelected
-                        ? "bg-indigo-50/50 dark:bg-indigo-950/30 font-medium"
+                        ? "bg-blue-50/50 dark:bg-blue-950/30 font-medium"
                         : ""
                     }`}
                   >
@@ -410,10 +410,10 @@ export const UnassignedLeadsTable: React.FC<UnassignedLeadsTableProps> = ({
                       <button
                         type="button"
                         onClick={() => onToggleLead(lead.id)}
-                        className="text-slate-400 hover:text-indigo-600 focus:outline-none"
+                        className="text-slate-400 hover:text-blue-600 focus:outline-none cursor-pointer"
                       >
                         {isSelected ? (
-                          <CheckSquare className="w-4 h-4 text-indigo-600" />
+                          <CheckSquare className="w-4 h-4 text-blue-600" />
                         ) : (
                           <Square className="w-4 h-4" />
                         )}
@@ -422,7 +422,7 @@ export const UnassignedLeadsTable: React.FC<UnassignedLeadsTableProps> = ({
 
                     {/* Lead Code */}
                     <td className="py-3 px-3">
-                      <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">
+                      <span className="font-mono font-bold text-blue-600 dark:text-blue-400">
                         {lead.leadCode}
                       </span>
                     </td>

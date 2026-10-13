@@ -22,7 +22,7 @@ export function ChatTriggerButton({
     <button
       type="button"
       onClick={onToggle}
-      className="group relative p-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full shadow-lg hover:shadow-indigo-500/25 transition-all duration-200 active:scale-95 flex items-center justify-center cursor-pointer"
+      className="group relative p-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg hover:shadow-blue-500/25 transition-all duration-200 active:scale-95 flex items-center justify-center cursor-pointer"
       aria-label="Open Workspace Chat"
     >
       <MessageSquare

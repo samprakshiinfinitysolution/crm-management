@@ -5,6 +5,8 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-y: scroll;
+  font-family: 'Inter';
 }
 
 :root {
@@ -17,11 +19,11 @@ html {
   --crm-bg-dark: #0f172a;
   --crm-bg-dark-hover: #1e293b;
 
-  /* Brand Palette (Indigo Enterprise) */
-  --crm-brand-primary: #4f46e5;
-  --crm-brand-hover: #4338ca;
-  --crm-brand-subtle: #eef2ff;
-  --crm-brand-border: #c7d2fe;
+  /* Brand Palette (Enterprise Blue) */
+  --crm-brand-primary: #2563eb;
+  --crm-brand-hover: #1d4ed8;
+  --crm-brand-subtle: #eff6ff;
+  --crm-brand-border: #bfdbfe;
 
   /* Typography / Text Hierarchy */
   --crm-text-primary: #0f172a;
@@ -33,7 +35,7 @@ html {
   /* Borders & Dividers */
   --crm-border-subtle: #e2e8f0;
   --crm-border-default: #cbd5e1;
-  --crm-border-focus: #4f46e5;
+  --crm-border-focus: #2563eb;
 
   /* Status Colors (SLA, Progression, Pipeline) */
   --crm-success-text: #059669;
@@ -373,11 +375,11 @@ body {
   --crm-bg-dark: #020617;
   --crm-bg-dark-hover: #0f172a;
 
-  /* Brand Palette (Indigo Enterprise adjusted for dark mode) */
-  --crm-brand-primary: #6366f1;
-  --crm-brand-hover: #4f46e5;
-  --crm-brand-subtle: rgba(99, 102, 241, 0.15);
-  --crm-brand-border: rgba(99, 102, 241, 0.3);
+  /* Brand Palette (Enterprise Blue adjusted for dark mode) */
+  --crm-brand-primary: #3b82f6;
+  --crm-brand-hover: #2563eb;
+  --crm-brand-subtle: rgba(59, 130, 246, 0.15);
+  --crm-brand-border: rgba(59, 130, 246, 0.3);
 
   /* Typography / Text Hierarchy */
   --crm-text-primary: #f8fafc;
@@ -389,7 +391,7 @@ body {
   /* Borders & Dividers */
   --crm-border-subtle: #1e293b;
   --crm-border-default: #334155;
-  --crm-border-focus: #6366f1;
+  --crm-border-focus: #3b82f6;
 
   /* Status Colors (SLA, Progression, Pipeline) */
   --crm-success-text: #34d399;
@@ -460,7 +462,7 @@ body {
   }
 
   .glass-input {
-    @apply backdrop-blur-sm bg-white/5 border border-white/10 focus:border-indigo-500 focus:bg-white/10;
+    @apply backdrop-blur-sm bg-white/5 border border-white/10 focus:border-blue-500 focus:bg-white/10;
   }
 }
 
@@ -470,13 +472,20 @@ body {
   }
   html {
     @apply font-sans;
-    scrollbar-gutter: stable;
+  }
+  html[data-base-ui-scroll-locked],
+  html[data-scroll-locked] {
+    scrollbar-gutter: auto !important;
   }
   body {
     @apply bg-background text-foreground;
   }
-  body[style*="overflow: hidden"],
-  body[data-scroll-locked] {
+  body[data-base-ui-scroll-locked],
+  html[data-base-ui-scroll-locked] body,
+  body[data-scroll-locked],
+  body[style*="overflow: hidden"] {
+    width: 100% !important;
+    max-width: 100vw !important;
     margin-right: 0 !important;
     padding-right: 0 !important;
   }

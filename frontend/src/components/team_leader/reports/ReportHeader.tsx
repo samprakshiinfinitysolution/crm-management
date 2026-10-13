@@ -18,7 +18,7 @@ export const ReportHeader: React.FC<ReportHeaderProps> = ({
     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-5 bg-card dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-lg shadow-xs">
       <div>
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-100 dark:border-indigo-800/60 rounded-lg text-indigo-600 dark:text-indigo-400">
+          <div className="p-2.5 bg-blue-50 dark:bg-blue-950/50 border border-blue-100 dark:border-blue-800/60 rounded-lg text-blue-600 dark:text-blue-400">
             <BarChart3 className="w-6 h-6" />
           </div>
           <div>
@@ -47,7 +47,7 @@ export const ReportHeader: React.FC<ReportHeaderProps> = ({
 
         <button
           onClick={onOpenExport}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-xs transition-all active:scale-95"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-all active:scale-95"
         >
           <Download className="w-3.5 h-3.5" />
           <span>Export Excel Report</span>

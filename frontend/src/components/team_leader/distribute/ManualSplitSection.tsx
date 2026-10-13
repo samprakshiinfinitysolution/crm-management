@@ -182,7 +182,7 @@ export const ManualSplitSection: React.FC<ManualSplitSectionProps> = ({
       <div className="bg-card rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs flex flex-col gap-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-2">
-            <Users className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+            <Users className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             <div>
               <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                 Selected Sales Executives
@@ -200,7 +200,7 @@ export const ManualSplitSection: React.FC<ManualSplitSectionProps> = ({
               onClick={() => setAssignmentMode("SINGLE")}
               className={`px-3 py-1 rounded-md font-semibold transition-colors cursor-pointer ${
                 assignmentMode === "SINGLE"
-                  ? "bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800"
+                  ? "bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800"
                   : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
               }`}
             >
@@ -211,7 +211,7 @@ export const ManualSplitSection: React.FC<ManualSplitSectionProps> = ({
               onClick={() => setAssignmentMode("MULTI")}
               className={`px-3 py-1 rounded-md font-semibold transition-colors cursor-pointer ${
                 assignmentMode === "MULTI"
-                  ? "bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800"
+                  ? "bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800"
                   : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
               }`}
             >
@@ -232,7 +232,7 @@ export const ManualSplitSection: React.FC<ManualSplitSectionProps> = ({
                 setSingleTargetExecId(val === "UNSELECTED" ? "" : (val || ""));
               }}
             >
-              <SelectTrigger className="h-8 px-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-card text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer">
+              <SelectTrigger className="h-8 px-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-card text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
                 <SelectValue placeholder="Select Executive" />
               </SelectTrigger>
               <SelectContent className="max-h-60 overflow-y-auto">
@@ -258,7 +258,7 @@ export const ManualSplitSection: React.FC<ManualSplitSectionProps> = ({
                 selectedLeadIds.length === 0
               }
               onClick={() => onAssignToSingle(singleTargetExecId)}
-              className="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-100 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-500 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors cursor-pointer ml-auto"
+              className="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-100 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-500 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors cursor-pointer ml-auto"
             >
               {isSubmitting ? "Assigning..." : "Assign to Executive"}
             </button>
@@ -286,7 +286,7 @@ export const ManualSplitSection: React.FC<ManualSplitSectionProps> = ({
                       onChange={(e) =>
                         handleMultiAllocationChange(exec.id, e.target.value)
                       }
-                      className="w-14 px-2 py-1 border border-slate-200 dark:border-slate-700 rounded font-mono font-bold text-center bg-card text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="w-14 px-2 py-1 border border-slate-200 dark:border-slate-700 rounded font-mono font-bold text-center bg-card text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
                     <span className="text-[11px] text-slate-400 dark:text-slate-500">leads</span>
                   </div>
@@ -319,7 +319,7 @@ export const ManualSplitSection: React.FC<ManualSplitSectionProps> = ({
                     }));
                   onAssignMulti(payload);
                 }}
-                className="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-100 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-500 text-white rounded-lg font-semibold shadow-xs transition-colors cursor-pointer"
+                className="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-100 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-500 text-white rounded-lg font-semibold shadow-xs transition-colors cursor-pointer"
               >
                 {isSubmitting ? "Assigning..." : "Assign to Executives"}
               </button>
@@ -340,7 +340,7 @@ export const ManualSplitSection: React.FC<ManualSplitSectionProps> = ({
               Select individual leads from the unassigned pool to manually allocate.
             </p>
           </div>
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 self-start sm:self-auto">
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 self-start sm:self-auto">
             {selectedLeadIds.length} leads selected
           </span>
         </div>
@@ -355,7 +355,7 @@ export const ManualSplitSection: React.FC<ManualSplitSectionProps> = ({
               placeholder="Search Lead ID / Customer / Mobile..."
               value={searchTerm}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 bg-card text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+              className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500 bg-card text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
             />
           </div>
 
@@ -364,7 +364,7 @@ export const ManualSplitSection: React.FC<ManualSplitSectionProps> = ({
             value={statusFilter}
             onValueChange={(val) => setStatusFilter(val || "ALL")}
           >
-            <SelectTrigger className="h-8 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-card text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-xs cursor-pointer">
+            <SelectTrigger className="h-8 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-card text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 text-xs cursor-pointer">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
@@ -380,7 +380,7 @@ export const ManualSplitSection: React.FC<ManualSplitSectionProps> = ({
             value={selectedPriority}
             onValueChange={(val) => onPriorityChange(val || "ALL")}
           >
-            <SelectTrigger className="h-8 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-card text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-xs cursor-pointer">
+            <SelectTrigger className="h-8 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-card text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 text-xs cursor-pointer">
               <SelectValue placeholder="Priority" />
             </SelectTrigger>
             <SelectContent>
@@ -397,7 +397,7 @@ export const ManualSplitSection: React.FC<ManualSplitSectionProps> = ({
             value={selectedSource}
             onValueChange={(val) => onSourceChange(val || "ALL")}
           >
-            <SelectTrigger className="h-8 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-card text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-xs cursor-pointer">
+            <SelectTrigger className="h-8 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-card text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 text-xs cursor-pointer">
               <SelectValue placeholder="Source" />
             </SelectTrigger>
             <SelectContent>
@@ -414,7 +414,7 @@ export const ManualSplitSection: React.FC<ManualSplitSectionProps> = ({
             value={cityFilter}
             onValueChange={(val) => setCityFilter(val || "ALL")}
           >
-            <SelectTrigger className="h-8 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-card text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-xs cursor-pointer">
+            <SelectTrigger className="h-8 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-card text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 text-xs cursor-pointer">
               <SelectValue placeholder="City" />
             </SelectTrigger>
             <SelectContent>
@@ -453,7 +453,7 @@ export const ManualSplitSection: React.FC<ManualSplitSectionProps> = ({
           <button
             type="button"
             onClick={handleToggleSelectAllVisible}
-            className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-semibold cursor-pointer"
+            className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-semibold cursor-pointer"
           >
             {isAllVisibleSelected
               ? "Deselect All Visible"
@@ -473,7 +473,7 @@ export const ManualSplitSection: React.FC<ManualSplitSectionProps> = ({
                     className="cursor-pointer"
                   >
                     {isAllVisibleSelected ? (
-                      <CheckSquare className="w-4 h-4 text-indigo-600 dark:text-indigo-400 mx-auto" />
+                      <CheckSquare className="w-4 h-4 text-blue-600 dark:text-blue-400 mx-auto" />
                     ) : (
                       <Square className="w-4 h-4 text-slate-400 dark:text-slate-500 mx-auto" />
                     )}
@@ -512,7 +512,7 @@ export const ManualSplitSection: React.FC<ManualSplitSectionProps> = ({
                     onClick={() => onToggleLead(lead.id)}
                     className={`cursor-pointer transition-colors ${
                       isSelected
-                        ? "bg-indigo-50/50 dark:bg-indigo-950/40 hover:bg-indigo-50/80 dark:hover:bg-indigo-950/60"
+                        ? "bg-blue-50/50 dark:bg-blue-950/40 hover:bg-blue-50/80 dark:hover:bg-blue-950/60"
                         : "hover:bg-slate-50/60 dark:hover:bg-slate-800/40"
                     }`}
                   >
@@ -526,13 +526,13 @@ export const ManualSplitSection: React.FC<ManualSplitSectionProps> = ({
                         className="cursor-pointer"
                       >
                         {isSelected ? (
-                          <CheckSquare className="w-4 h-4 text-indigo-600 dark:text-indigo-400 mx-auto" />
+                          <CheckSquare className="w-4 h-4 text-blue-600 dark:text-blue-400 mx-auto" />
                         ) : (
                           <Square className="w-4 h-4 text-slate-300 dark:text-slate-600 mx-auto" />
                         )}
                       </button>
                     </td>
-                    <td className="py-2.5 px-3 font-mono font-bold text-indigo-600 dark:text-indigo-400">
+                    <td className="py-2.5 px-3 font-mono font-bold text-blue-600 dark:text-blue-400">
                       {lead.leadCode}
                     </td>
                     <td className="py-2.5 px-3 font-medium text-slate-900 dark:text-slate-100">

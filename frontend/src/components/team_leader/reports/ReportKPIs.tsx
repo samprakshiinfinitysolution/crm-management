@@ -41,7 +41,7 @@ export const ReportKPIs: React.FC<ReportKPIsProps> = ({
         "text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800/60",
       icon: TrendingUp,
       iconColor:
-        "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 border-indigo-100 dark:border-indigo-800/60",
+        "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 border-blue-100 dark:border-blue-900/60",
     },
     {
       title: "Funnel Conversion Rate",
@@ -49,7 +49,7 @@ export const ReportKPIs: React.FC<ReportKPIsProps> = ({
       sub: `${kpis?.wonDealsCount || 0} Deals Closed Won`,
       icon: Target,
       iconColor:
-        "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 border-emerald-100 dark:border-emerald-800/60",
+        "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 border-blue-100 dark:border-blue-900/60",
     },
     {
       title: "Avg. First Response Time",
@@ -57,7 +57,7 @@ export const ReportKPIs: React.FC<ReportKPIsProps> = ({
       sub: "Lead assignment to outreach",
       icon: Clock,
       iconColor:
-        "text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/50 border-purple-100 dark:border-purple-800/60",
+        "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 border-blue-100 dark:border-blue-900/60",
     },
     {
       title: "SLA Adherence Rate",
@@ -65,7 +65,7 @@ export const ReportKPIs: React.FC<ReportKPIsProps> = ({
       sub: "Contacted within 4-hour SLA",
       icon: AlertTriangle,
       iconColor:
-        "text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/50 border-amber-100 dark:border-amber-800/60",
+        "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 border-blue-100 dark:border-blue-900/60",
     },
   ];
 

@@ -48,7 +48,7 @@ export const LeadCriteriaMatrix: React.FC<LeadCriteriaMatrixProps> = ({
       {/* Top Unallocated Batch Meta Badge */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-black px-2.5 py-1 rounded-lg bg-amber-100 text-amber-900 dark:bg-amber-950/60 dark:text-amber-300 uppercase tracking-wide">
+          <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-amber-100 text-amber-900 dark:bg-amber-950/60 dark:text-amber-300 uppercase tracking-wide">
             {totalUnallocated} Unallocated
           </span>
           {batchNumber && (
@@ -68,7 +68,7 @@ export const LeadCriteriaMatrix: React.FC<LeadCriteriaMatrixProps> = ({
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search by customer, company, city, mobile, requirement..."
-            className="w-full pl-10 pr-9 py-2.5 text-xs rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all shadow-xs"
+            className="w-full pl-10 pr-9 py-2.5 text-xs rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all shadow-xs"
           />
           {searchTerm && (
             <button
@@ -84,15 +84,15 @@ export const LeadCriteriaMatrix: React.FC<LeadCriteriaMatrixProps> = ({
         <button
           type="button"
           onClick={() => setIsCriteriaOpen(!isCriteriaOpen)}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold border transition-all ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold border transition-all cursor-pointer ${
             isCriteriaOpen
-              ? "bg-indigo-50 dark:bg-indigo-950/60 border-indigo-300 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300"
+              ? "bg-blue-50 dark:bg-blue-950/60 border-blue-300 dark:border-blue-800 text-blue-700 dark:text-blue-300"
               : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300"
           }`}
         >
           <SlidersHorizontal className="w-3.5 h-3.5" />
           <span>Filters</span>
-          <span className="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px]">
+          <span className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px]">
             {activeFilterCount}
           </span>
         </button>
@@ -173,14 +173,14 @@ export const LeadCriteriaMatrix: React.FC<LeadCriteriaMatrixProps> = ({
       {isCriteriaOpen && (
         <div className="bg-slate-50/80 dark:bg-slate-800/40 border border-slate-200/90 dark:border-slate-800 rounded-lg p-4 space-y-3.5">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-              <SlidersHorizontal className="w-3.5 h-3.5 text-indigo-600" />
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
               Active Criteria Matrix
             </span>
             <button
               type="button"
               onClick={onResetFilters}
-              className="text-xs text-red-600 hover:text-red-700 font-bold flex items-center gap-1"
+              className="text-xs text-red-600 hover:text-red-700 font-bold flex items-center gap-1 cursor-pointer"
             >
               <RotateCcw className="w-3 h-3" /> Reset Filters
             </button>
@@ -261,7 +261,7 @@ export const LeadCriteriaMatrix: React.FC<LeadCriteriaMatrixProps> = ({
             <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 font-medium text-[11px]">
               <span>Active filters applied</span>
             </div>
-            <span className="font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 px-2.5 py-0.5 rounded-md text-[11px]">
+            <span className="font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2.5 py-0.5 rounded-md text-[11px]">
               {filteredCount} / {totalUnallocated} leads
             </span>
           </div>

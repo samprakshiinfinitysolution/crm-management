@@ -124,7 +124,7 @@ export default function AdminLayout({
     <ProtectedRoute allowedRoles={[UserRole.ADMIN]}>
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors">
         {/* Mobile Top App Bar */}
-        <div className="lg:hidden sticky top-0 z-40 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 h-16 flex items-center justify-between shadow-xs">
+        <div className="lg:hidden sticky top-0 z-40 bg-brand-primary dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 h-16 flex items-center justify-between shadow-xs">
           <div className="flex items-center gap-3">
             <button
               type="button"
@@ -132,16 +132,16 @@ export default function AdminLayout({
                 window.dispatchEvent(new CustomEvent("crm:menu-open"));
                 setIsMobileMenuOpen(true);
               }}
-              className="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none"
+              className="p-2 rounded-lg text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none"
               aria-label="Open sidebar navigation"
             >
               <Menu className="w-5 h-5" />
             </button>
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold shadow-xs">
+              <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold shadow-xs">
                 <Shield className="w-4 h-4" />
               </div>
-              <span className="font-bold text-sm tracking-tight text-slate-900 dark:text-slate-100">
+              <span className="font-bold text-sm tracking-tight text-slate-100">
                 LeadFlow Admin
               </span>
             </div>
@@ -149,8 +149,8 @@ export default function AdminLayout({
 
           <div className="flex items-center gap-2">
             <ThemeToggle size="sm" variant="button" />
-            <div className="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center text-xs font-bold shrink-0">
-              {user?.name?.[0]?.toUpperCase() || 'A'}
+            <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center text-xs font-bold shrink-0">
+              {user?.name?.[0]?.toUpperCase() || "A"}
             </div>
           </div>
         </div>
@@ -167,13 +167,13 @@ export default function AdminLayout({
         {/* Left Sidebar Navigation */}
         <aside
           className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 ${
-            isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+            isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
           {/* Brand Header */}
           <div className="h-16 px-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0">
             <Link href="/admin" className="flex items-center gap-3 group">
-              <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold shadow-xs group-hover:scale-105 transition-transform">
+              <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold shadow-xs group-hover:scale-105 transition-transform">
                 <Shield className="w-5 h-5" />
               </div>
               <div className="flex flex-col">
@@ -181,7 +181,7 @@ export default function AdminLayout({
                   <span className="font-bold text-sm text-slate-900 dark:text-slate-100 tracking-tight">
                     LeadFlow
                   </span>
-                  <span className="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-950/70 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
+                  <span className="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                     Admin
                   </span>
                 </div>
@@ -216,16 +216,16 @@ export default function AdminLayout({
                   href={item.href}
                   className={`group flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all ${
                     active
-                      ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300 font-bold shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800/60'
+                      ? "bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 font-bold shadow-2xs"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800/60"
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div
                       className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
                         active
-                          ? 'bg-indigo-600 text-white shadow-xs'
-                          : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200 group-hover:bg-slate-200/60 dark:group-hover:bg-slate-700'
+                          ? "bg-blue-600 text-white shadow-xs"
+                          : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200 group-hover:bg-slate-200/60 dark:group-hover:bg-slate-700"
                       }`}
                     >
                       <Icon className="w-3.5 h-3.5" />
@@ -234,7 +234,7 @@ export default function AdminLayout({
                   </div>
 
                   {active && (
-                    <ChevronRight className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                    <ChevronRight className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                   )}
                 </Link>
               );
@@ -252,20 +252,22 @@ export default function AdminLayout({
                 <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
                 <span>Back to CRM</span>
               </span>
-              <span className="text-[10px] text-slate-400 dark:text-slate-500">Workspace</span>
+              <span className="text-[10px] text-slate-400 dark:text-slate-500">
+                Workspace
+              </span>
             </Link>
 
             {/* Profile, Theme, and Signout Card */}
             <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-2">
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center text-xs font-bold shrink-0">
-                  {user?.name?.[0]?.toUpperCase() || 'A'}
+                <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center text-xs font-bold shrink-0">
+                  {user?.name?.[0]?.toUpperCase() || "A"}
                 </div>
                 <div className="flex flex-col min-w-0">
                   <span className="text-xs font-semibold text-slate-800 dark:text-slate-100 truncate">
-                    {user?.name || 'Administrator'}
+                    {user?.name || "Administrator"}
                   </span>
-                  <span className="text-[10px] text-purple-600 dark:text-purple-400 font-medium leading-none">
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium leading-none">
                     Superuser
                   </span>
                 </div>
@@ -297,15 +299,13 @@ export default function AdminLayout({
 
         {/* Main Content Workspace (Offset by sidebar width on lg screens) */}
         <div className="flex-1 w-full lg:pl-64 flex flex-col min-h-[90dvh] transition-all duration-300">
-          <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-4 py-4">
             <ErrorBoundary resetKeys={[pathname]}>
               {children}
               <FloatingChatWidget />
             </ErrorBoundary>
           </main>
         </div>
-
-       
       </div>
     </ProtectedRoute>
   );

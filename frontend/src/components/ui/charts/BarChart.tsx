@@ -26,7 +26,7 @@ export const BarChart: React.FC<BarChartProps> = ({
   data = [],
   height = 200,
   orientation = "vertical",
-  barColor = "#4f46e5", // Indigo 600
+  barColor = "#2563eb", // Blue 600
   valuePrefix = "",
   valueSuffix = "",
   showValuesOnTop = false,
@@ -115,7 +115,7 @@ export const BarChart: React.FC<BarChartProps> = ({
   return (
     <div className={cn("w-full flex flex-col gap-2", className)}>
       {/* Active value banner */}
-      <div className="flex justify-end h-5 text-xs font-bold text-indigo-600 dark:text-indigo-400">
+      <div className="flex justify-end h-5 text-xs font-bold text-blue-600 dark:text-blue-400">
         {activeItem && (
           <span className="animate-in fade-in duration-150">
             {activeItem.label}: {activeItem.formattedValue || `${valuePrefix}${activeItem.value.toLocaleString()}${valueSuffix}`}
@@ -141,7 +141,7 @@ export const BarChart: React.FC<BarChartProps> = ({
               className="flex-1 flex flex-col items-center justify-end h-full group cursor-pointer relative"
             >
               {showValuesOnTop && isHovered && (
-                <span className="absolute -top-6 text-[10px] font-bold text-indigo-600 dark:text-indigo-400 bg-white dark:bg-slate-800 px-1.5 py-0.5 rounded shadow-xs border border-slate-200 dark:border-slate-700 z-20 whitespace-nowrap">
+                <span className="absolute -top-6 text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-800 px-1.5 py-0.5 rounded shadow-xs border border-slate-200 dark:border-slate-700 z-20 whitespace-nowrap">
                   {item.formattedValue || item.value}
                 </span>
               )}
@@ -155,7 +155,7 @@ export const BarChart: React.FC<BarChartProps> = ({
                 className={cn(
                   "w-full max-w-[24px] rounded-t-md transition-all duration-200 shadow-2xs",
                   isHovered
-                    ? "brightness-115 scale-x-110 shadow-md ring-2 ring-indigo-500/20"
+                    ? "brightness-115 scale-x-110 shadow-md ring-2 ring-blue-500/20"
                     : "opacity-90 hover:opacity-100"
                 )}
               />
@@ -171,7 +171,7 @@ export const BarChart: React.FC<BarChartProps> = ({
             key={item.label}
             className={cn(
               "flex-1 text-center truncate px-0.5 transition-colors",
-              hoveredIndex === idx && "font-bold text-indigo-600 dark:text-indigo-400"
+              hoveredIndex === idx && "font-bold text-blue-600 dark:text-blue-400"
             )}
           >
             {item.label}

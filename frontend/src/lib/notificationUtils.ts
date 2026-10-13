@@ -55,8 +55,8 @@ export const getNotificationMeta = (type: string): NotificationMeta => {
   if (t === "ASSIGNMENT" || t.includes("LEAD")) {
     return {
       Icon: UserCheck,
-      iconBg: "bg-indigo-50",
-      iconColor: "text-indigo-600",
+      iconBg: "bg-blue-50 dark:bg-blue-950/60",
+      iconColor: "text-blue-600 dark:text-blue-400",
       category: "Lead Assignment",
     };
   }

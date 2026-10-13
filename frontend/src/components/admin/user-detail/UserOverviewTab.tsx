@@ -28,9 +28,9 @@ export const UserOverviewTab: React.FC<UserOverviewTabProps> = ({ user }) => {
         text: "text-sky-700 dark:text-sky-300",
       },
       CONTACTED: {
-        bg: "bg-indigo-50 dark:bg-indigo-950/40",
-        bar: "bg-indigo-500",
-        text: "text-indigo-700 dark:text-indigo-300",
+        bg: "bg-blue-50 dark:bg-blue-950/40",
+        bar: "bg-blue-500",
+        text: "text-blue-700 dark:text-blue-300",
       },
       IN_PROGRESS: {
         bg: "bg-amber-50 dark:bg-amber-950/40",
@@ -116,7 +116,7 @@ export const UserOverviewTab: React.FC<UserOverviewTabProps> = ({ user }) => {
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs flex flex-col justify-between">
         <div>
           <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2 mb-1">
-            <Activity className="w-4 h-4 text-indigo-600" />
+            <Activity className="w-4 h-4 text-blue-600" />
             Performance & SLA Summary
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400 mb-5">
@@ -187,7 +187,7 @@ export const UserOverviewTab: React.FC<UserOverviewTabProps> = ({ user }) => {
                   {user.capacityPercentage || 0}%
                 </span>
               </div>
-              <span className="text-[11px] text-indigo-600 dark:text-indigo-400 font-medium mt-1 inline-block">
+              <span className="text-[11px] text-blue-600 dark:text-blue-400 font-medium mt-1 inline-block">
                 Status: {user.workloadStatus || "OPTIMAL"}
               </span>
             </div>

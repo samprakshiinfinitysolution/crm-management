@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Inter, Geist } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/components/providers/query-provider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
@@ -11,8 +11,6 @@ const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
 });
-
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "LeadFlow CRM | Lead Management & Sales Distribution",
@@ -46,8 +44,7 @@ export default function RootLayout({
         "scroll-smooth",
         "antialiased",
         inter.variable,
-        "font-sans",
-        geist.variable
+        "font-sans"
       )}
     >
       <head>
@@ -79,7 +76,7 @@ export default function RootLayout({
       </head>
       <body
         suppressHydrationWarning
-        className="min-h-full flex flex-col font-sans bg-crm-canvas text-crm-primary antialiased selection:bg-indigo-600 selection:text-white"
+        className="min-h-full flex flex-col font-sans bg-crm-canvas text-crm-primary antialiased selection:bg-blue-600 selection:text-white"
       >
         <ThemeProvider>
           <QueryProvider>

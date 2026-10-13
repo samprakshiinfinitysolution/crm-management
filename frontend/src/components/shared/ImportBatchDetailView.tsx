@@ -182,7 +182,7 @@ export function ImportBatchDetailView({
             <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
               Total Rows
             </p>
-            <p className="text-2xl font-black text-slate-900 dark:text-slate-100 mt-1">
+            <p className="text-2xl font-bold text-slate-900 dark:text-slate-100 mt-1">
               {batch.totalRows}
             </p>
           </div>
@@ -190,7 +190,7 @@ export function ImportBatchDetailView({
             <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
               Imported
             </p>
-            <p className="text-2xl font-black text-emerald-700 dark:text-emerald-400 mt-1">
+            <p className="text-2xl font-bold text-emerald-700 dark:text-emerald-400 mt-1">
               {batch.importedCount}
             </p>
           </div>
@@ -198,7 +198,7 @@ export function ImportBatchDetailView({
             <p className="text-xs font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
               Duplicates
             </p>
-            <p className="text-2xl font-black text-amber-700 dark:text-amber-400 mt-1">
+            <p className="text-2xl font-bold text-amber-700 dark:text-amber-400 mt-1">
               {batch.duplicateCount}
             </p>
           </div>
@@ -206,7 +206,7 @@ export function ImportBatchDetailView({
             <p className="text-xs font-semibold text-rose-600 dark:text-rose-400 uppercase tracking-wider">
               Failed Rows
             </p>
-            <p className="text-2xl font-black text-rose-700 dark:text-rose-400 mt-1">
+            <p className="text-2xl font-bold text-rose-700 dark:text-rose-400 mt-1">
               {batch.failedCount}
             </p>
           </div>

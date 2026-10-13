@@ -151,7 +151,7 @@ export default function ExecutivesTable({
       {/* Table Title Bar */}
       <div className="p-4 border-b border-slate-200/90 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+          <ShieldCheck className="w-4 h-4 text-blue-600 dark:text-blue-400" />
           <h2 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">
             Sales Executive Directory & Workload Audit Table
           </h2>
@@ -168,7 +168,7 @@ export default function ExecutivesTable({
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-slate-50/80 dark:bg-slate-800/40 border-b border-slate-200/90 dark:border-slate-800 text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+            <tr className="bg-slate-50/80 dark:bg-slate-800/40 border-b border-slate-200/90 dark:border-slate-800 text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
               <th className="py-3 px-4">Sales Executive</th>
               <th className="py-3 px-3">Status</th>
               <th className="py-3 px-3">Active Workload</th>
@@ -224,7 +224,7 @@ export default function ExecutivesTable({
                       </div>
                       <div className="flex flex-col min-w-0">
                         <div className="flex items-center gap-1.5">
-                          <span className="font-semibold text-slate-900 dark:text-white truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                          <span className="font-semibold text-slate-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                             {exec.name}
                           </span>
                         </div>
@@ -318,7 +318,7 @@ export default function ExecutivesTable({
                     <button
                       type="button"
                       onClick={() => dispatch(setSelectedExecutiveId(exec.id))}
-                      className="px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 text-xs font-semibold inline-flex items-center gap-1 transition-all group-hover:bg-indigo-600 group-hover:text-white"
+                      className="px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 text-xs font-semibold inline-flex items-center gap-1 transition-all group-hover:bg-blue-600 group-hover:text-white"
                     >
                       <span>Details</span>
                       <ChevronRight className="w-3.5 h-3.5" />

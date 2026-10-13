@@ -123,7 +123,7 @@ export const CustomSplitSection: React.FC<CustomSplitSectionProps> = ({
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
               {selectedExecs.length} executives selected
             </span>
             <button
@@ -131,7 +131,7 @@ export const CustomSplitSection: React.FC<CustomSplitSectionProps> = ({
               onClick={
                 isAllSelected ? onDeselectAllExecutives : onSelectAllExecutives
               }
-              className="text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 px-2 py-1 rounded hover:bg-indigo-50 dark:hover:bg-indigo-950/40 transition-colors cursor-pointer"
+              className="text-xs font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 px-2 py-1 rounded hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors cursor-pointer"
             >
               {isAllSelected ? "Deselect All" : "Select All"}
             </button>
@@ -158,16 +158,16 @@ export const CustomSplitSection: React.FC<CustomSplitSectionProps> = ({
                   <button
                     type="button"
                     onClick={() => onToggleExecutive(exec.id)}
-                    className="text-slate-400 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 focus:outline-none shrink-0 cursor-pointer"
+                    className="text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none shrink-0 cursor-pointer"
                   >
                     {isSelected ? (
-                      <CheckSquare className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                      <CheckSquare className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                     ) : (
                       <Square className="w-4 h-4 text-slate-300 dark:text-slate-600" />
                     )}
                   </button>
 
-                  <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 font-bold text-xs flex items-center justify-center shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 font-bold text-xs flex items-center justify-center shrink-0">
                     {getInitials(exec.name)}
                   </div>
 
@@ -201,7 +201,7 @@ export const CustomSplitSection: React.FC<CustomSplitSectionProps> = ({
                       onChange={(e) =>
                         handleInputChange(exec.id, e.target.value)
                       }
-                      className="w-16 h-8 text-center text-xs font-mono font-bold rounded-lg border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-card text-slate-900 dark:text-slate-100"
+                      className="w-16 h-8 text-center text-xs font-mono font-bold rounded-lg border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-card text-slate-900 dark:text-slate-100"
                     />
 
                     <button
@@ -306,7 +306,7 @@ export const CustomSplitSection: React.FC<CustomSplitSectionProps> = ({
                   onClick={() => handleSelectPreset(preset)}
                   className={`px-4 py-2 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
                     isSelected
-                      ? "bg-indigo-600 text-white border-indigo-600 shadow-xs"
+                      ? "bg-blue-600 text-white border-blue-600 shadow-xs"
                       : "bg-card text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800"
                   }`}
                 >
@@ -320,7 +320,7 @@ export const CustomSplitSection: React.FC<CustomSplitSectionProps> = ({
               onClick={() => setIsCustomTarget(true)}
               className={`px-4 py-2 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
                 isCustomTarget
-                  ? "bg-indigo-600 text-white border-indigo-600 shadow-xs"
+                  ? "bg-blue-600 text-white border-blue-600 shadow-xs"
                   : "bg-card text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800"
               }`}
             >
@@ -336,7 +336,7 @@ export const CustomSplitSection: React.FC<CustomSplitSectionProps> = ({
                   value={customTargetVal}
                   onChange={handleCustomTargetChange}
                   placeholder="Target quantity"
-                  className="w-28 px-3 py-1.5 text-xs font-mono font-medium rounded-lg border border-indigo-300 dark:border-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-card text-slate-900 dark:text-slate-100"
+                  className="w-28 px-3 py-1.5 text-xs font-mono font-medium rounded-lg border border-blue-300 dark:border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-card text-slate-900 dark:text-slate-100"
                 />
                 <span className="text-xs text-slate-500 dark:text-slate-400">
                   max {totalUnassignedCount.toLocaleString()}

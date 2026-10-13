@@ -58,9 +58,9 @@ export const UserLeadsTab: React.FC<UserLeadsTabProps> = ({ leads = [] }) => {
         border: "border-sky-200 dark:border-sky-800",
       },
       CONTACTED: {
-        bg: "bg-indigo-50 dark:bg-indigo-950/50",
-        text: "text-indigo-700 dark:text-indigo-300",
-        border: "border-indigo-200 dark:border-indigo-800",
+        bg: "bg-blue-50 dark:bg-blue-950/50",
+        text: "text-blue-700 dark:text-blue-300",
+        border: "border-blue-200 dark:border-blue-800",
       },
       IN_PROGRESS: {
         bg: "bg-amber-50 dark:bg-amber-950/50",

@@ -240,7 +240,7 @@ export default function ExecutiveDetailDrawer() {
           <div className="flex items-center gap-2 shrink-0">
             <Link
               href="/team_leader/distribute"
-              className="h-9 px-3 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold hidden sm:flex items-center gap-1.5 transition-all shadow-xs"
+              className="h-9 px-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold hidden sm:flex items-center gap-1.5 transition-all shadow-xs"
             >
               <ExternalLink className="w-3.5 h-3.5" />
               <span>Distribute Leads</span>
@@ -281,7 +281,7 @@ export default function ExecutiveDetailDrawer() {
         {/* Content Body */}
         {isLoading || isFetching ? (
           <div className="flex-1 flex flex-col items-center justify-center p-8 gap-3">
-            <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
             <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
               Retrieving executive performance dossier & assigned leads...
             </p>
@@ -308,7 +308,7 @@ export default function ExecutiveDetailDrawer() {
                 <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
                   Active Pipeline
                 </div>
-                <div className="text-lg font-black text-slate-900 dark:text-white mt-0.5">
+                <div className="text-lg font-bold text-slate-900 dark:text-white mt-0.5">
                   {executive.activeLeads}
                 </div>
                 <div className="text-[10px] text-slate-500 dark:text-slate-400">
@@ -320,7 +320,7 @@ export default function ExecutiveDetailDrawer() {
                 <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
                   Closed (Won)
                 </div>
-                <div className="text-lg font-black text-emerald-600 dark:text-emerald-400 mt-0.5">
+                <div className="text-lg font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
                   {executive.convertedLeads} Deals
                 </div>
                 <div className="text-[10px] text-slate-500 dark:text-slate-400">
@@ -332,7 +332,7 @@ export default function ExecutiveDetailDrawer() {
                 <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
                   Follow-Up Health
                 </div>
-                <div className="text-lg font-black text-slate-900 dark:text-white mt-0.5">
+                <div className="text-lg font-bold text-slate-900 dark:text-white mt-0.5">
                   {executive.followUpsPending} Tasks
                 </div>
                 <div className="text-[10px] text-amber-600 dark:text-amber-400 font-semibold">
@@ -346,7 +346,7 @@ export default function ExecutiveDetailDrawer() {
                 <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
                   Pipeline Value
                 </div>
-                <div className="text-lg font-black text-purple-600 dark:text-purple-400 mt-0.5">
+                <div className="text-lg font-bold text-purple-600 dark:text-purple-400 mt-0.5">
                   ₹{Number(executive.totalPipelineValue || 0).toLocaleString()}
                 </div>
                 <div className="text-[10px] text-slate-500 dark:text-slate-400">
@@ -366,7 +366,7 @@ export default function ExecutiveDetailDrawer() {
                     onClick={() => dispatch(setDetailTab(tab.id))}
                     className={`h-full px-3 text-xs font-semibold border-b-2 flex items-center gap-1.5 transition-all whitespace-nowrap cursor-pointer ${
                       isActive
-                        ? "border-indigo-600 text-indigo-600 dark:text-indigo-400"
+                        ? "border-blue-600 text-blue-600 dark:text-blue-400"
                         : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                     }`}
                   >
@@ -376,7 +376,7 @@ export default function ExecutiveDetailDrawer() {
                       <span
                         className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
                           isActive
-                            ? "bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300"
+                            ? "bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300"
                             : "bg-card dark:bg-slate-800 text-slate-600 dark:text-slate-300"
                         }`}
                       >
@@ -407,7 +407,7 @@ export default function ExecutiveDetailDrawer() {
                           dispatch(setLeadSearchQuery(e.target.value))
                         }
                         placeholder="Search lead code, name, phone, company..."
-                        className="w-full h-9 pl-8 pr-8 rounded-lg bg-card dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                        className="w-full h-9 pl-8 pr-8 rounded-lg bg-card dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600"
                       />
                       {leadSearchQuery && (
                         <button
@@ -427,7 +427,7 @@ export default function ExecutiveDetailDrawer() {
                           if (val) dispatch(setLeadStatusFilter(val));
                         }}
                       >
-                        <SelectTrigger className="h-9 px-3 rounded-lg bg-card dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 cursor-pointer">
+                        <SelectTrigger className="h-9 px-3 rounded-lg bg-card dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 cursor-pointer">
                           <SelectValue placeholder="All Statuses" />
                         </SelectTrigger>
                         <SelectContent className="max-h-60 overflow-y-auto">
@@ -495,7 +495,7 @@ export default function ExecutiveDetailDrawer() {
                                     key={lead.id}
                                     className="hover:bg-slate-50/80 dark:hover:bg-slate-700/40 transition-colors"
                                   >
-                                    <td className="py-3 px-3 font-mono font-bold text-indigo-600 dark:text-indigo-400 text-[11px]">
+                                    <td className="py-3 px-3 font-mono font-bold text-blue-600 dark:text-blue-400 text-[11px]">
                                       {lead.leadCode}
                                     </td>
                                     <td className="py-3 px-3">
@@ -633,7 +633,7 @@ export default function ExecutiveDetailDrawer() {
                                   ? "bg-emerald-500"
                                   : status === LeadStatus.LOST
                                     ? "bg-rose-400"
-                                    : "bg-indigo-500"
+                                    : "bg-blue-500"
                               }`}
                               style={{ width: `${percentage}%` }}
                             />
@@ -669,7 +669,7 @@ export default function ExecutiveDetailDrawer() {
                                 className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
                                   isOverdue
                                     ? "bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-400"
-                                    : "bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400"
+                                    : "bg-blue-50 dark:bg-blue-950/60 border border-blue-100 dark:border-blue-800 text-blue-600 dark:text-blue-400"
                                 }`}
                               >
                                 <Clock className="w-4 h-4" />
@@ -681,7 +681,7 @@ export default function ExecutiveDetailDrawer() {
                                     {task.lead?.customerName || "Lead"}
                                   </span>
                                   {task.lead?.leadCode && (
-                                    <span className="font-mono text-[10px] text-indigo-600 dark:text-indigo-400 font-bold">
+                                    <span className="font-mono text-[10px] text-blue-600 dark:text-blue-400 font-bold">
                                       ({task.lead.leadCode})
                                     </span>
                                   )}
@@ -731,7 +731,7 @@ export default function ExecutiveDetailDrawer() {
                       <div className="relative border-l-2 border-slate-200 dark:border-slate-700 ml-3 pl-4 space-y-4">
                         {executive.recentActivities.map((act) => (
                           <div key={act.id} className="relative">
-                            <span className="absolute -left-5.75 top-1 w-3 h-3 rounded-full bg-indigo-600 ring-4 ring-white dark:ring-slate-900" />
+                            <span className="absolute -left-5.75 top-1 w-3 h-3 rounded-full bg-blue-600 ring-4 ring-white dark:ring-slate-900" />
                             <div className="flex flex-col text-xs">
                               <span className="font-semibold text-slate-900 dark:text-white">
                                 {act.actionType.replace(/_/g, " ")}

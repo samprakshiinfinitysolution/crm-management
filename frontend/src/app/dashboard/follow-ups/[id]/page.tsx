@@ -69,7 +69,7 @@ export default function FollowUpDetailPage() {
           </Link>
           <div>
             <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-              <CalendarClock className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              <CalendarClock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               <span>{followUp.type} Follow-up Details</span>
             </h1>
             <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -113,7 +113,7 @@ export default function FollowUpDetailPage() {
               {followUp.status}
             </span>
             <span className="text-xs text-slate-400">·</span>
-            <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400">
+            <span className="text-xs font-semibold text-blue-600 dark:text-blue-400">
               {followUp.type} Action
             </span>
           </div>
@@ -130,7 +130,7 @@ export default function FollowUpDetailPage() {
                 {followUp.lead.customerName}
               </span>
               <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 mt-1">
-                <span className="flex items-center gap-1 font-mono text-indigo-700 dark:text-indigo-400">
+                <span className="flex items-center gap-1 font-mono text-blue-700 dark:text-blue-400">
                   {followUp.lead.leadCode}
                 </span>
                 <span className="flex items-center gap-1">
@@ -142,7 +142,7 @@ export default function FollowUpDetailPage() {
 
             <Link
               href={`/dashboard/leads/${followUp.lead.id}`}
-              className="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-300 dark:hover:border-indigo-700 transition-all shadow-2xs self-start sm:self-auto"
+              className="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-700 transition-all shadow-2xs self-start sm:self-auto"
             >
               View Full Lead Profile
             </Link>

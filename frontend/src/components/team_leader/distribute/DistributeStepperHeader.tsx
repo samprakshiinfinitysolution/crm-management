@@ -21,7 +21,7 @@ export const DistributeStepperHeader: React.FC<
 
       {/* 2. Page Structure Header */}
       <div className="flex flex-col gap-1">
-        <span className="text-[11px] font-bold tracking-wider text-indigo-600 dark:text-indigo-400 uppercase">
+        <span className="text-[11px] font-bold tracking-wider text-blue-600 dark:text-blue-400 uppercase">
           STEP {currentStep} OF 3
         </span>
         <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
@@ -51,7 +51,7 @@ export const DistributeStepperHeader: React.FC<
                 currentStep > 1
                   ? "bg-emerald-600 text-white"
                   : currentStep === 1
-                    ? "bg-indigo-600 text-white ring-4 ring-indigo-50 dark:ring-indigo-950/60"
+                    ? "bg-blue-600 text-white ring-4 ring-blue-50 dark:ring-blue-950/60"
                     : "bg-slate-100 text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-slate-700"
               }`}
             >
@@ -65,7 +65,7 @@ export const DistributeStepperHeader: React.FC<
               <span
                 className={`text-xs font-semibold ${
                   currentStep === 1
-                    ? "text-indigo-600 dark:text-indigo-400 font-bold"
+                    ? "text-blue-600 dark:text-blue-400 font-bold"
                     : "text-slate-800 dark:text-slate-200"
                 }`}
               >
@@ -76,7 +76,7 @@ export const DistributeStepperHeader: React.FC<
                   currentStep > 1
                     ? "text-emerald-600 dark:text-emerald-400"
                     : currentStep === 1
-                      ? "text-indigo-600 dark:text-indigo-400"
+                      ? "text-blue-600 dark:text-blue-400"
                       : "text-slate-400 dark:text-slate-500"
                 }`}
               >
@@ -92,7 +92,7 @@ export const DistributeStepperHeader: React.FC<
           {/* Stepper Connector 1 -> 2 */}
           <div
             className={`flex-1 mx-3 sm:mx-5 h-[2px] rounded-full transition-all ${
-              currentStep >= 2 ? "bg-indigo-600 dark:bg-indigo-500" : "bg-slate-200 dark:bg-slate-800"
+              currentStep >= 2 ? "bg-blue-600 dark:bg-blue-500" : "bg-slate-200 dark:bg-slate-800"
             }`}
           />
 
@@ -107,7 +107,7 @@ export const DistributeStepperHeader: React.FC<
                 currentStep > 2
                   ? "bg-emerald-600 text-white"
                   : currentStep === 2
-                    ? "bg-indigo-600 text-white ring-4 ring-indigo-50 dark:ring-indigo-950/60"
+                    ? "bg-blue-600 text-white ring-4 ring-blue-50 dark:ring-blue-950/60"
                     : "bg-slate-100 text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-slate-700"
               }`}
             >
@@ -121,7 +121,7 @@ export const DistributeStepperHeader: React.FC<
               <span
                 className={`text-xs font-semibold ${
                   currentStep === 2
-                    ? "text-indigo-600 dark:text-indigo-400 font-bold"
+                    ? "text-blue-600 dark:text-blue-400 font-bold"
                     : "text-slate-800 dark:text-slate-200"
                 }`}
               >
@@ -132,7 +132,7 @@ export const DistributeStepperHeader: React.FC<
                   currentStep > 2
                     ? "text-emerald-600 dark:text-emerald-400"
                     : currentStep === 2
-                      ? "text-indigo-600 dark:text-indigo-400"
+                      ? "text-blue-600 dark:text-blue-400"
                       : "text-slate-400 dark:text-slate-500"
                 }`}
               >
@@ -148,7 +148,7 @@ export const DistributeStepperHeader: React.FC<
           {/* Stepper Connector 2 -> 3 */}
           <div
             className={`flex-1 mx-3 sm:mx-5 h-[2px] rounded-full transition-all ${
-              currentStep >= 3 ? "bg-indigo-600 dark:bg-indigo-500" : "bg-slate-200 dark:bg-slate-800"
+              currentStep >= 3 ? "bg-blue-600 dark:bg-blue-500" : "bg-slate-200 dark:bg-slate-800"
             }`}
           />
 
@@ -161,7 +161,7 @@ export const DistributeStepperHeader: React.FC<
             <div
               className={`w-7 h-7 rounded-full flex items-center justify-center font-medium text-xs shrink-0 transition-all ${
                 currentStep === 3
-                  ? "bg-indigo-600 text-white font-bold ring-4 ring-indigo-50 dark:ring-indigo-950/60 shadow-xs"
+                  ? "bg-blue-600 text-white font-bold ring-4 ring-blue-50 dark:ring-blue-950/60 shadow-xs"
                   : "bg-slate-100 text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-slate-700"
               }`}
             >
@@ -171,7 +171,7 @@ export const DistributeStepperHeader: React.FC<
               <span
                 className={`text-xs font-semibold ${
                   currentStep === 3
-                    ? "text-indigo-600 dark:text-indigo-400 font-bold"
+                    ? "text-blue-600 dark:text-blue-400 font-bold"
                     : "text-slate-600 dark:text-slate-300"
                 }`}
               >
@@ -179,7 +179,7 @@ export const DistributeStepperHeader: React.FC<
               </span>
               <p
                 className={`text-[11px] font-medium ${
-                  currentStep === 3 ? "text-indigo-600 dark:text-indigo-400" : "text-slate-400 dark:text-slate-500"
+                  currentStep === 3 ? "text-blue-600 dark:text-blue-400" : "text-slate-400 dark:text-slate-500"
                 }`}
               >
                 {currentStep === 3 ? "Ready" : "Final Step"}

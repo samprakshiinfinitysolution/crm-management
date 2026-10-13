@@ -39,7 +39,7 @@ export default function ExecutiveWorkloadAudit({
 
   if (isLoading) {
     return (
-      <div className="bg-card dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 shadow-xs space-y-4">
+      <div className="bg-card dark:bg-slate-900 rounded-xl border border-slate-200/90 dark:border-slate-800 p-6 shadow-xs space-y-4">
         <div className="flex items-center justify-between">
           <div className="h-5 w-48 bg-card/70 dark:bg-slate-800 animate-pulse rounded-lg" />
           <div className="h-4 w-24 bg-card/70 dark:bg-slate-800 animate-pulse rounded-lg" />
@@ -59,7 +59,7 @@ export default function ExecutiveWorkloadAudit({
   const reps = executives || [];
 
   return (
-    <div className="bg-card dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-xs overflow-hidden flex flex-col">
+    <div className="bg-card dark:bg-slate-900 rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-xs overflow-hidden flex flex-col">
       {/* Header bar */}
       <div className="p-5 md:p-6 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
@@ -67,7 +67,7 @@ export default function ExecutiveWorkloadAudit({
             <h2 className="text-base font-bold text-slate-900 dark:text-white">
               Executive Workload & SLA Audit
             </h2>
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800">
+            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800">
               {reps.length} Active Reps
             </span>
           </div>
@@ -80,7 +80,7 @@ export default function ExecutiveWorkloadAudit({
         <button
           type="button"
           onClick={() => router.push("/dashboard/users")}
-          className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer self-start sm:self-auto"
+          className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer self-start sm:self-auto"
         >
           Manage All Reps →
         </button>
@@ -141,7 +141,7 @@ export default function ExecutiveWorkloadAudit({
                     {/* Representative Info */}
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-lg bg-linear-to-tr from-indigo-600 to-blue-500 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-2xs">
+                        <div className="w-9 h-9 rounded-lg bg-linear-to-tr from-blue-600 to-blue-500 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-2xs">
                           {initials}
                         </div>
                         <div className="min-w-0">
@@ -191,7 +191,7 @@ export default function ExecutiveWorkloadAudit({
                           isOverloaded
                             ? "bg-rose-50 text-rose-700 dark:bg-rose-950/50 dark:text-rose-300 border border-rose-200/60"
                             : isOptimal
-                              ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950/50 dark:text-indigo-300 border border-indigo-200/60"
+                              ? "bg-blue-50 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300 border border-blue-200/60"
                               : "bg-card text-slate-700 dark:bg-slate-800 dark:text-slate-300"
                         }`}
                       >
@@ -235,7 +235,7 @@ export default function ExecutiveWorkloadAudit({
                               rep.slaPercent >= 90
                                 ? "bg-emerald-500"
                                 : rep.slaPercent >= 70
-                                  ? "bg-indigo-600"
+                                  ? "bg-blue-600"
                                   : "bg-amber-500"
                             }`}
                             style={{
@@ -262,7 +262,7 @@ export default function ExecutiveWorkloadAudit({
                         <button
                           type="button"
                           onClick={() => handleAction(rep)}
-                          className="px-3 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900 text-indigo-700 dark:text-indigo-300 font-bold text-xs transition-colors inline-flex items-center gap-1.5 border border-indigo-200/60 dark:border-indigo-800 cursor-pointer"
+                          className="px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/60 dark:hover:bg-blue-900 text-blue-700 dark:text-blue-300 font-bold text-xs transition-colors inline-flex items-center gap-1.5 border border-blue-200/60 dark:border-blue-800 cursor-pointer"
                         >
                           <PlusCircle className="w-3.5 h-3.5" />
                           <span>Assign</span>

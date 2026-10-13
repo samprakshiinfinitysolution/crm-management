@@ -323,7 +323,7 @@ export default function FollowUpLoginDialog({
                             handleClose();
                             router.push(`/dashboard/leads/${item.leadId}`);
                           }}
-                          className="text-sm font-semibold text-slate-900 dark:text-slate-100 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-left truncate"
+                          className="text-sm font-semibold text-slate-900 dark:text-slate-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-left truncate"
                         >
                           {item.lead?.customerName || "Customer Lead"}
                         </button>
@@ -386,7 +386,7 @@ export default function FollowUpLoginDialog({
                         <button
                           type="button"
                           onClick={() => setCompletingFollowUp(item)}
-                          className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium transition-colors"
+                          className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium transition-colors"
                         >
                           Complete
                         </button>
@@ -405,7 +405,7 @@ export default function FollowUpLoginDialog({
                 type="checkbox"
                 checked={dontShowAgain}
                 onChange={(e) => setDontShowAgain(e.target.checked)}
-                className="rounded border-slate-300 dark:border-slate-700 text-indigo-600 focus:ring-indigo-500"
+                className="rounded border-slate-300 dark:border-slate-700 text-blue-600 focus:ring-blue-500"
               />
               <span>Don&apos;t show again today</span>
             </label>

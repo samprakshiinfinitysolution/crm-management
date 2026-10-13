@@ -43,7 +43,7 @@ export default function AdminOverviewPage() {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-200">
+    <div className="space-y-3 animate-in fade-in duration-200">
       {/* 1. Header & Quick Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
         <div>
@@ -80,7 +80,7 @@ export default function AdminOverviewPage() {
 
           <Link
             href="/admin/users"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white shadow-xs transition-colors"
           >
             <Users className="w-3.5 h-3.5" />
             <span>Manage Users</span>
@@ -97,14 +97,14 @@ export default function AdminOverviewPage() {
       </div>
 
       {/* 2. Top Administrative KPI Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
         {/* Total Leads & Intake */}
         <div className="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
               Lead Inventory
             </span>
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center">
               <Layers className="w-4 h-4" />
             </div>
           </div>
@@ -167,7 +167,7 @@ export default function AdminOverviewPage() {
           </div>
           <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
             <span>
-              TLs: <strong className="text-indigo-600 dark:text-indigo-400">{overview?.totalTeamLeaders ?? 0}</strong>
+              TLs: <strong className="text-blue-600 dark:text-blue-400">{overview?.totalTeamLeaders ?? 0}</strong>
             </span>
             <span>
               Execs: <strong className="text-emerald-600 dark:text-emerald-400">{overview?.totalSalesExecutives ?? 0}</strong>
@@ -206,7 +206,7 @@ export default function AdminOverviewPage() {
       </div>
 
       {/* 3. Primary Operations Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
         {/* Left 2 Cols: User Governance & Workforce Overview */}
         <div className="lg:col-span-2 space-y-6">
           {/* User Governance Banner */}
@@ -222,7 +222,7 @@ export default function AdminOverviewPage() {
               </div>
               <Link
                 href="/admin/users"
-                className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline"
               >
                 <span>Directory</span>
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -250,7 +250,7 @@ export default function AdminOverviewPage() {
                   <span className="text-xs font-medium text-slate-600 dark:text-slate-300">
                     Team Leaders
                   </span>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900/60 dark:text-indigo-300">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/60 dark:text-blue-300">
                     Supervisors
                   </span>
                 </div>
@@ -290,7 +290,7 @@ export default function AdminOverviewPage() {
                 </Link>
                 <Link
                   href="/admin/users"
-                  className="px-3 py-1.5 rounded-md font-semibold bg-indigo-600 hover:bg-indigo-700 text-white transition-colors"
+                  className="px-3 py-1.5 rounded-md font-semibold bg-blue-600 hover:bg-blue-700 text-white transition-colors"
                 >
                   + Add User
                 </Link>
@@ -311,7 +311,7 @@ export default function AdminOverviewPage() {
               </div>
               <Link
                 href="/dashboard/distributions"
-                className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline"
               >
                 <span>Distribution Suite</span>
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -335,30 +335,30 @@ export default function AdminOverviewPage() {
                 <div className="mt-3">
                   <Link
                     href="/dashboard/distributions/create"
-                    className="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline"
+                    className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline"
                   >
                     <span>Launch Distribution Wizard →</span>
                   </Link>
                 </div>
               </div>
 
-              <div className="p-4 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200/80 dark:border-indigo-900/50">
+              <div className="p-4 rounded-lg bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200/80 dark:border-blue-900/50">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-indigo-800 dark:text-indigo-300">
+                  <span className="text-xs font-semibold text-blue-800 dark:text-blue-300">
                     Active Assigned Leads
                   </span>
-                  <span className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
                 </div>
-                <div className="mt-2 text-3xl font-extrabold text-indigo-900 dark:text-indigo-100">
+                <div className="mt-2 text-3xl font-extrabold text-blue-900 dark:text-blue-100">
                   {overview?.assignedLeads ?? 0}
                 </div>
-                <p className="text-xs text-indigo-700 dark:text-indigo-400 mt-1">
+                <p className="text-xs text-blue-700 dark:text-blue-400 mt-1">
                   Active in field pipeline with assigned owners.
                 </p>
                 <div className="mt-3">
                   <Link
                     href="/dashboard/leads"
-                    className="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline"
+                    className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline"
                   >
                     <span>Open Lead Directory →</span>
                   </Link>
@@ -381,7 +381,7 @@ export default function AdminOverviewPage() {
               </div>
               <Link
                 href="/dashboard/audit-logs"
-                className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
+                className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline"
               >
                 All Logs
               </Link>
@@ -403,7 +403,7 @@ export default function AdminOverviewPage() {
                       ? "text-emerald-700 bg-emerald-50 dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800"
                       : log.action === "DELETE"
                       ? "text-rose-700 bg-rose-50 dark:bg-rose-950/60 dark:text-rose-300 border-rose-200 dark:border-rose-800"
-                      : "text-indigo-700 bg-indigo-50 dark:bg-indigo-950/60 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800";
+                      : "text-blue-700 bg-blue-50 dark:bg-blue-950/60 dark:text-blue-300 border-blue-200 dark:border-blue-800";
 
                   return (
                     <div

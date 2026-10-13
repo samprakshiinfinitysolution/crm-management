@@ -161,7 +161,7 @@ export default function LeadsListPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-            <Users className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+            <Users className="w-6 h-6 text-blue-600 dark:text-blue-400" />
             <span>Lead Directory</span>
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
@@ -176,7 +176,7 @@ export default function LeadsListPage() {
             <>
               <Link
                 href="/dashboard/leads/create"
-                className="px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
+                className="px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 <span>Create Lead</span>
@@ -206,7 +206,7 @@ export default function LeadsListPage() {
             className="px-3.5 py-2 rounded-lg bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
             title="Update pipeline status for selected leads"
           >
-            <Tag className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+            <Tag className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             <span>
               Update Status
               {selectedLeadIds.length > 0 ? ` (${selectedLeadIds.length})` : ""}
@@ -219,7 +219,7 @@ export default function LeadsListPage() {
             className="px-3.5 py-2 rounded-lg bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
             title="Export Leads to Excel or CSV"
           >
-            <Download className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+            <Download className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             <span>Export</span>
           </button>
         </div>

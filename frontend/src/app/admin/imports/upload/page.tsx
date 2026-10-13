@@ -76,10 +76,10 @@ export default function AdminImportUploadPage() {
               <span>/</span>
               <Link href="/admin/imports" className="hover:underline">Imports</Link>
               <span>/</span>
-              <span className="text-indigo-600 dark:text-indigo-400 font-semibold">Upload</span>
+              <span className="text-blue-600 dark:text-blue-400 font-semibold">Upload</span>
             </div>
             <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-              <UploadCloud className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+              <UploadCloud className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               <span>Spreadsheet Ingestion & Validation</span>
             </h1>
           </div>
@@ -90,7 +90,7 @@ export default function AdminImportUploadPage() {
           onClick={handleDownloadSample}
           className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 shadow-xs transition-colors self-start sm:self-auto"
         >
-          <Download className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+          <Download className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
           <span>Download Clean Template</span>
         </button>
       </div>

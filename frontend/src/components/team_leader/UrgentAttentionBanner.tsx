@@ -118,7 +118,7 @@ export default function UrgentAttentionBanner({
           <button
             type="button"
             onClick={handleEqualSplit}
-            className="px-3.5 py-2 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs flex items-center gap-1.5 cursor-pointer transition-all"
+            className="px-3.5 py-2 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-xs flex items-center gap-1.5 cursor-pointer transition-all"
           >
             <Split className="w-3.5 h-3.5" />
             <span>Equally leads distribute ({execCount} Reps)</span>

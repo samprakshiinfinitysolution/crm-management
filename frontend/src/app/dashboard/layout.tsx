@@ -38,7 +38,7 @@ export default function DashboardLayout({
 
         {/* Main Content Area */}
         <div className="flex-1 w-full pt-6 lg:pl-64 transition-all duration-300">
-          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-4 py-4">
             <ErrorBoundary resetKeys={[pathname]}>
               {children}
             </ErrorBoundary>

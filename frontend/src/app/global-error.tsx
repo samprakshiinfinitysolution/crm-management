@@ -17,7 +17,7 @@ export default function GlobalError({
   return (
     <html lang="en">
       <body className="min-h-screen bg-slate-50 text-slate-900 dark:text-slate-100 flex items-center justify-center p-4 font-sans antialiased">
-        <div className="max-w-md w-full bg-card rounded-3xl border border-slate-200 shadow-xl p-8 text-center flex flex-col items-center">
+        <div className="max-w-md w-full bg-card rounded-xl border border-slate-200 shadow-xl p-8 text-center flex flex-col items-center">
           <div className="w-16 h-16 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center mb-5 border border-rose-100 shadow-xs">
             <AlertOctagon className="w-8 h-8" />
           </div>
@@ -41,7 +41,7 @@ export default function GlobalError({
             <button
               type="button"
               onClick={() => reset()}
-              className="w-full sm:w-1/2 py-2.5 px-4 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full sm:w-1/2 py-2.5 px-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
             >
               <RefreshCw className="w-3.5 h-3.5" />
               Try Again

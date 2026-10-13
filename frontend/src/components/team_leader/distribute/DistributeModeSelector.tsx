@@ -68,14 +68,14 @@ export const DistributeModeSelector: React.FC<DistributeModeSelectorProps> = ({
               onClick={() => onSelectMode(tab.id)}
               className={`flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-left transition-all duration-150 cursor-pointer ${
                 isSelected
-                  ? "bg-card dark:bg-slate-800 text-indigo-900 dark:text-indigo-300 border border-slate-200 dark:border-slate-700 shadow-xs"
+                  ? "bg-card dark:bg-slate-800 text-blue-900 dark:text-blue-300 border border-slate-200 dark:border-slate-700 shadow-xs"
                   : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/60 border border-transparent"
               }`}
             >
               <div
                 className={`p-2 rounded-lg shrink-0 transition-colors ${
                   isSelected
-                    ? "bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400"
+                    ? "bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400"
                     : "bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400"
                 }`}
               >
@@ -86,14 +86,14 @@ export const DistributeModeSelector: React.FC<DistributeModeSelectorProps> = ({
                   <span
                     className={`text-sm font-semibold tracking-tight ${
                       isSelected
-                        ? "text-indigo-900 dark:text-indigo-300 font-bold"
+                        ? "text-blue-900 dark:text-blue-300 font-bold"
                         : "text-slate-800 dark:text-slate-200"
                     }`}
                   >
                     {tab.label}
                   </span>
                   {isSelected && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-blue-400" />
                   )}
                 </div>
                 <p className="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">
@@ -118,7 +118,7 @@ export const DistributeModeSelector: React.FC<DistributeModeSelectorProps> = ({
           }
           className={`text-xs inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
             activeMode === "REASSIGN_RECALL"
-              ? "bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-medium border border-indigo-200 dark:border-indigo-800"
+              ? "bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-medium border border-blue-200 dark:border-blue-800"
               : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-card dark:hover:bg-slate-800"
           }`}
         >
