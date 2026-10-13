@@ -35,6 +35,13 @@ import {
 import { PriorityLevel, LeadStatus, FollowUpStatus } from "@/types/api.types";
 import { Pagination } from "@/components/ui/Pagination";
 import { useDebounce } from "@/lib/useDebounce";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function ExecutiveDetailDrawer() {
   const dispatch = useAppDispatch();
@@ -414,20 +421,24 @@ export default function ExecutiveDetailDrawer() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <select
+                      <Select
                         value={leadStatusFilter}
-                        onChange={(e) =>
-                          dispatch(setLeadStatusFilter(e.target.value))
-                        }
-                        className="h-9 px-3 rounded-lg bg-card dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                        onValueChange={(val) => {
+                          if (val) dispatch(setLeadStatusFilter(val));
+                        }}
                       >
-                        <option value="ALL">All Statuses</option>
-                        {Object.values(LeadStatus).map((s) => (
-                          <option key={s} value={s}>
-                            {s.replace(/_/g, " ")}
-                          </option>
-                        ))}
-                      </select>
+                        <SelectTrigger className="h-9 px-3 rounded-lg bg-card dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 cursor-pointer">
+                          <SelectValue placeholder="All Statuses" />
+                        </SelectTrigger>
+                        <SelectContent className="max-h-60 overflow-y-auto">
+                          <SelectItem value="ALL">All Statuses</SelectItem>
+                          {Object.values(LeadStatus).map((s) => (
+                            <SelectItem key={s} value={s}>
+                              {s.replace(/_/g, " ")}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
 

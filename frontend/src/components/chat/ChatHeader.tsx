@@ -2,6 +2,7 @@
 
 import React from "react";
 import { ArrowLeft, Bot, X } from "lucide-react";
+import { useSocket } from "@/components/providers/SocketProvider";
 import type { ChatContact } from "./types";
 
 interface ChatHeaderProps {
@@ -15,6 +16,9 @@ export function ChatHeader({
   onBack,
   onClose,
 }: ChatHeaderProps) {
+  const { isUserOnline } = useSocket();
+  const isOnline = selectedContact ? isUserOnline(selectedContact.id) : false;
+
   return (
     <div className="bg-linear-to-r from-indigo-600 via-indigo-700 to-blue-600 text-white p-3.5 flex items-center justify-between shadow-md">
       {selectedContact ? (
@@ -34,7 +38,7 @@ export function ChatHeader({
             </div>
             <span
               className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-indigo-700 ${
-                selectedContact.isActive ? "bg-emerald-400" : "bg-slate-400"
+                isOnline ? "bg-emerald-400" : "bg-slate-400"
               }`}
             />
           </div>
@@ -43,7 +47,7 @@ export function ChatHeader({
               {selectedContact.name}
             </h3>
             <span className="text-[10px] text-indigo-100/80 block truncate">
-              {selectedContact.isActive ? "Online · Active" : "Offline"}
+              {isOnline ? "Online" : "Offline"}
             </span>
           </div>
         </div>

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Search, ShieldAlert, Users } from "lucide-react";
+import { useSocket } from "@/components/providers/SocketProvider";
 import type { ChatContact, LatestMessageInfo, TabType } from "./types";
 
 interface ChatContactListProps {
@@ -29,6 +30,7 @@ export function ChatContactList({
   getContactLatestMessage,
   onSelectContact,
 }: ChatContactListProps) {
+  const { isUserOnline } = useSocket();
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-slate-50/50 dark:bg-slate-950/40">
       {/* Navigation Tabs */}
@@ -105,8 +107,9 @@ export function ChatContactList({
                     {contact.name[0]?.toUpperCase()}
                   </div>
                   <span
+                    title={isUserOnline(contact.id) ? "Online" : "Offline"}
                     className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-slate-900 ${
-                      contact.isActive
+                      isUserOnline(contact.id)
                         ? "bg-emerald-500"
                         : "bg-slate-300 dark:bg-slate-600"
                     }`}

@@ -40,9 +40,11 @@ import { useDebounce } from "@/lib/useDebounce";
 import { createUserSchema } from "@/lib/utils";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
+import { useSocket } from "@/components/providers/SocketProvider";
 
 export default function AdminUsersPage() {
   const { user: currentUser } = useAppSelector((state) => state.auth);
+  const { isUserOnline } = useSocket();
 
   // Filters & Pagination State
   const [search, setSearch] = useState("");
@@ -358,8 +360,18 @@ export default function AdminUsersPage() {
                       {/* Name & Email */}
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 font-bold flex items-center justify-center shrink-0">
-                            {item.name ? item.name[0].toUpperCase() : "U"}
+                          <div className="relative shrink-0">
+                            <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 font-bold flex items-center justify-center shrink-0">
+                              {item.name ? item.name[0].toUpperCase() : "U"}
+                            </div>
+                            <span
+                              title={isUserOnline(item.id) ? "Online" : "Offline"}
+                              className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full ring-2 ring-white dark:ring-slate-900 ${
+                                isUserOnline(item.id)
+                                  ? "bg-emerald-500"
+                                  : "bg-slate-300 dark:bg-slate-600"
+                              }`}
+                            />
                           </div>
                           <div className="flex flex-col min-w-0">
                             <div className="flex items-center gap-1.5">

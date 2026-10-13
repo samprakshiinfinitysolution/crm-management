@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useSocket } from "@/components/providers/SocketProvider";
 import type { TLDashboardExecutiveWorkload } from "@/types/api.types";
 
 interface ExecutiveWorkloadAuditProps {
@@ -22,6 +23,7 @@ export default function ExecutiveWorkloadAudit({
   isLoading,
 }: ExecutiveWorkloadAuditProps) {
   const router = useRouter();
+  const { isUserOnline } = useSocket();
 
   const handleAction = (rep: TLDashboardExecutiveWorkload) => {
     if (rep.actionType === "assign") {
@@ -147,12 +149,14 @@ export default function ExecutiveWorkloadAudit({
                             <span className="font-bold text-slate-900 dark:text-white truncate">
                               {rep.name}
                             </span>
-                            {rep.isOnline && (
-                              <span
-                                className="w-2 h-2 rounded-full bg-emerald-500 shrink-0"
-                                title="Online"
-                              />
-                            )}
+                            <span
+                              className={`w-2 h-2 rounded-full shrink-0 ${
+                                isUserOnline(rep.id)
+                                  ? "bg-emerald-500"
+                                  : "bg-slate-300 dark:bg-slate-600"
+                              }`}
+                              title={isUserOnline(rep.id) ? "Online" : "Offline"}
+                            />
                             {rep.roleBadge && (
                               <span
                                 className={`px-1.5 py-0.5 rounded-md text-[9px] font-extrabold ${

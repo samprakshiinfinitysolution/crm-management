@@ -8,6 +8,13 @@ import { UserRole } from "@/types/api.types";
 import { useGetReportsSummaryQuery } from "@/store/api/leadApi";
 import { FunnelAnalyticsCard } from "@/components/team_leader/reports";
 import { ChartCard, PieChart, BarChart, AreaChart } from "@/components/ui/charts";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function LeadsReportPage() {
   const [timeRange, setTimeRange] = useState("30d");
@@ -74,15 +81,21 @@ export default function LeadsReportPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <select
+            <Select
               value={timeRange}
-              onChange={(e) => setTimeRange(e.target.value)}
-              className="h-9 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 cursor-pointer shadow-2xs"
+              onValueChange={(val) => {
+                if (val) setTimeRange(val);
+              }}
             >
-              <option value="7d">Last 7 Days</option>
-              <option value="30d">Last 30 Days</option>
-              <option value="90d">Last Quarter</option>
-            </select>
+              <SelectTrigger className="h-9 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 cursor-pointer shadow-2xs">
+                <SelectValue placeholder="Select Range" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="7d">Last 7 Days</SelectItem>
+                <SelectItem value="30d">Last 30 Days</SelectItem>
+                <SelectItem value="90d">Last Quarter</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 

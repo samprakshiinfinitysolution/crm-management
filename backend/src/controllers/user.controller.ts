@@ -1,5 +1,6 @@
 import { Response, NextFunction } from "express";
 import { UserService } from "../services/user.service.js";
+import { getOnlineUserIds } from "../config/socket.js";
 import { ApiResponse, AuthRequest, type UserRole } from "../types/index.js";
 import { z } from "zod";
 import AuditService from "../services/audit.service.js";
@@ -239,3 +240,21 @@ export const createUser = async (
     next(error);
   }
 };
+
+export const getOnlineUsers = async (
+  _req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const onlineUserIds = getOnlineUserIds();
+    res.status(200).json({
+      success: true,
+      message: "Online users retrieved successfully",
+      data: onlineUserIds,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+

@@ -7,6 +7,7 @@ import {
   toggleExecutiveStatus,
   toggleUserStatus,
   createUser,
+  getOnlineUsers,
 } from "../controllers/user.controller.js";
 import {
   authenticateUser,
@@ -18,6 +19,9 @@ const userRouter = Router();
 
 // Require authenticated user for all user management queries
 userRouter.use(authenticateUser);
+
+// Allow all authenticated users to retrieve currently online user IDs
+userRouter.get("/online", getOnlineUsers);
 
 // Allow all authenticated users (Admin, Team Leader, Sales Executive) to search active directory users
 userRouter.get(

@@ -224,6 +224,7 @@ export interface SalesExecutiveSummary {
   email: string;
   role: UserRole;
   isActive: boolean;
+  isOnline?: boolean;
   createdAt: string;
   totalAssignedLeads: number;
   activeLeads: number;

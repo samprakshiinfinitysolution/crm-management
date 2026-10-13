@@ -16,6 +16,9 @@ export const WS_EVENTS = {
   DASHBOARD_METRICS_UPDATE: "dashboard:metrics_update",
   MESSAGE: "message",
   MESSAGE_NEW: "message:new",
+  USER_STATUS_CHANGED: "user:status_changed",
+  USERS_ONLINE_LIST: "users:online_list",
+  USERS_GET_ONLINE: "users:get_online",
 } as const;
 
 let socket: Socket | null = null;

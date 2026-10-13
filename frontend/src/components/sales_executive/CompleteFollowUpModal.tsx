@@ -12,6 +12,13 @@ import { useCompleteFollowUpMutation } from "@/store/api/followUpApi";
 import { toast } from "sonner";
 import { LeadStatus } from "@/types/api.types";
 import { DatePicker } from "@/components/ui/DatePicker";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface CompleteFollowUpModalProps {
   followUp: {
@@ -195,20 +202,33 @@ export default function CompleteFollowUpModal({
               <ArrowRight className="w-3.5 h-3.5 inline mr-1 opacity-70" />
               Update Lead Pipeline Stage (Optional)
             </label>
-            <select
-              value={nextStatus}
-              onChange={(e) => setNextStatus(e.target.value as LeadStatus)}
-              className="w-full bg-card border border-crm-subtle rounded-lg px-3 py-2.5 text-sm text-crm-secondary focus:outline-none focus:border-emerald-600 transition-colors cursor-pointer"
+            <Select
+              value={nextStatus || "UNCHANGED"}
+              onValueChange={(val) => {
+                if (!val || val === "UNCHANGED") {
+                  setNextStatus("");
+                } else {
+                  setNextStatus(val as LeadStatus);
+                }
+              }}
             >
-              <option value="">
-                Keep current status ({followUp.lead?.status || "UNCHANGED"})
-              </option>
-              {NEXT_STATUS_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label} — {opt.description}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="w-full h-10 bg-card border border-crm-subtle rounded-lg px-3 py-2 text-xs text-crm-secondary focus:outline-none focus:border-emerald-600 transition-colors cursor-pointer">
+                <SelectValue placeholder={`Keep current status (${followUp.lead?.status || "UNCHANGED"})`} />
+              </SelectTrigger>
+              <SelectContent className="max-h-60 overflow-y-auto">
+                <SelectItem value="UNCHANGED">
+                  Keep current status ({followUp.lead?.status || "UNCHANGED"})
+                </SelectItem>
+                {NEXT_STATUS_OPTIONS.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    <span>{opt.label}</span>
+                    <span className="text-crm-muted text-[11px] ml-1">
+                      ({opt.description})
+                    </span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Schedule Next Touchpoint */}

@@ -59,6 +59,7 @@ export interface SalesExecutiveSummary {
   email: string;
   role: UserRole;
   isActive: boolean;
+  isOnline?: boolean;
   createdAt: Date | string;
   totalAssignedLeads: number;
   activeLeads: number;

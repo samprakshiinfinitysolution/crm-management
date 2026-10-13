@@ -208,8 +208,7 @@ export function FloatingChatWidget() {
     return allContacts.filter(
       (c) =>
         c.role === UserRole.SALES_EXECUTIVE ||
-        c.role === "SALES_EXECUTIVE" ||
-        !c.role?.includes("ADMIN"),
+        c.role === "SALES_EXECUTIVE"
     );
   }, [allContacts]);
 
@@ -219,7 +218,7 @@ export function FloatingChatWidget() {
         c.role === UserRole.ADMIN ||
         c.role === UserRole.TEAM_LEADER ||
         c.role === "ADMIN" ||
-        c.role === "TEAM_LEADER",
+        c.role === "TEAM_LEADER"
     );
   }, [allContacts]);
 

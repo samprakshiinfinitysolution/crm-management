@@ -14,6 +14,13 @@ import {
 import { format } from "date-fns";
 import { LeadItem } from "@/types/api.types";
 import { Pagination } from "@/components/ui/Pagination";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface UserLeadsTabProps {
   leads: LeadItem[];
@@ -193,39 +200,51 @@ export const UserLeadsTab: React.FC<UserLeadsTabProps> = ({ leads = [] }) => {
         {/* Filters */}
         <div className="flex items-center gap-2 flex-wrap">
           {/* Status Select */}
-          <select
+          <Select
             value={statusFilter}
-            onChange={(e) => {
-              setStatusFilter(e.target.value);
-              setCurrentPage(1);
+            onValueChange={(val) => {
+              if (val) {
+                setStatusFilter(val);
+                setCurrentPage(1);
+              }
             }}
-            className="text-xs px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           >
-            <option value="ALL">All Statuses</option>
-            <option value="NEW">New</option>
-            <option value="ASSIGNED">Assigned</option>
-            <option value="CONTACTED">Contacted</option>
-            <option value="IN_PROGRESS">In Progress</option>
-            <option value="QUALIFIED">Qualified</option>
-            <option value="WON">Won</option>
-            <option value="LOST">Lost</option>
-          </select>
+            <SelectTrigger className="h-8 text-xs px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer">
+              <SelectValue placeholder="All Statuses" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">All Statuses</SelectItem>
+              <SelectItem value="NEW">New</SelectItem>
+              <SelectItem value="ASSIGNED">Assigned</SelectItem>
+              <SelectItem value="CONTACTED">Contacted</SelectItem>
+              <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
+              <SelectItem value="QUALIFIED">Qualified</SelectItem>
+              <SelectItem value="WON">Won</SelectItem>
+              <SelectItem value="LOST">Lost</SelectItem>
+            </SelectContent>
+          </Select>
 
           {/* Priority Select */}
-          <select
+          <Select
             value={priorityFilter}
-            onChange={(e) => {
-              setPriorityFilter(e.target.value);
-              setCurrentPage(1);
+            onValueChange={(val) => {
+              if (val) {
+                setPriorityFilter(val);
+                setCurrentPage(1);
+              }
             }}
-            className="text-xs px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           >
-            <option value="ALL">All Priorities</option>
-            <option value="URGENT">Urgent</option>
-            <option value="HIGH">High</option>
-            <option value="MEDIUM">Medium</option>
-            <option value="LOW">Low</option>
-          </select>
+            <SelectTrigger className="h-8 text-xs px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer">
+              <SelectValue placeholder="All Priorities" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">All Priorities</SelectItem>
+              <SelectItem value="URGENT">Urgent</SelectItem>
+              <SelectItem value="HIGH">High</SelectItem>
+              <SelectItem value="MEDIUM">Medium</SelectItem>
+              <SelectItem value="LOW">Low</SelectItem>
+            </SelectContent>
+          </Select>
 
           {(search || statusFilter !== "ALL" || priorityFilter !== "ALL") && (
             <button

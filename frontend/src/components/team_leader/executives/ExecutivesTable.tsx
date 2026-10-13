@@ -17,6 +17,7 @@ import {
   setSelectedExecutiveId,
   useToggleExecutiveStatusMutation,
 } from "@/store";
+import { useSocket } from "@/components/providers/SocketProvider";
 import type { SalesExecutiveSummary } from "@/types/api.types";
 import { Pagination } from "@/components/ui";
 
@@ -46,6 +47,7 @@ export default function ExecutivesTable({
   totalPages,
 }: ExecutivesTableProps) {
   const dispatch = useAppDispatch();
+  const { isUserOnline } = useSocket();
   const [toggleStatus, { isLoading: isToggling }] =
     useToggleExecutiveStatusMutation();
 
@@ -212,8 +214,9 @@ export default function ExecutivesTable({
                           {initials}
                         </div>
                         <span
+                          title={isUserOnline(exec.id) ? "Online" : "Offline"}
                           className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full ring-2 ring-white dark:ring-slate-900 ${
-                            exec.isActive
+                            isUserOnline(exec.id)
                               ? "bg-emerald-500"
                               : "bg-slate-300 dark:bg-slate-600"
                           }`}

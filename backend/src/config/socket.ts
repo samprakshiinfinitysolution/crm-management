@@ -48,9 +48,24 @@ export const WS_EVENTS = {
   DASHBOARD_METRICS_UPDATE: "dashboard:metrics_update",
   MESSAGE: "message",
   MESSAGE_NEW: "message:new",
+  USER_STATUS_CHANGED: "user:status_changed",
+  USERS_ONLINE_LIST: "users:online_list",
+  USERS_GET_ONLINE: "users:get_online",
 } as const;
 
 let io: SocketIOServer | null = null;
+
+// User presence tracking: userId -> Set of socket IDs
+const onlineUserSockets = new Map<string, Set<string>>();
+
+export const isUserOnline = (userId: string): boolean => {
+  const sockets = onlineUserSockets.get(userId);
+  return Boolean(sockets && sockets.size > 0);
+};
+
+export const getOnlineUserIds = (): string[] => {
+  return Array.from(onlineUserSockets.keys());
+};
 
 export const initSocketServer = (
   server: HttpServer | HttpsServer,
@@ -277,8 +292,37 @@ export const initSocketServer = (
 
     socket.join(roleRoom);
 
+    // ------------------------------------------------
+    // Track presence
+    // ------------------------------------------------
+    let userSockets = onlineUserSockets.get(user.id);
+    const wasOffline = !userSockets || userSockets.size === 0;
+    if (!userSockets) {
+      userSockets = new Set<string>();
+      onlineUserSockets.set(user.id, userSockets);
+    }
+    userSockets.add(socket.id);
+
+    if (wasOffline) {
+      io?.emit(WS_EVENTS.USER_STATUS_CHANGED, {
+        userId: user.id,
+        isOnline: true,
+      });
+    }
+
+    // Send current online user IDs to the connected client
+    socket.emit(WS_EVENTS.USERS_ONLINE_LIST, getOnlineUserIds());
+
+    // Allow socket to explicitly query online users
+    socket.on(
+      WS_EVENTS.USERS_GET_ONLINE,
+      (_data?: unknown, ack?: (res: string[]) => void) => {
+        ack?.(getOnlineUserIds());
+      },
+    );
+
     console.log(
-      `🔌 WS Client connected: ${socket.id} | User: ${user.email} (${user.role})`,
+      `🔌 WS Client connected: ${socket.id} | User: ${user.email} (${user.role}) | Status: Online`,
     );
 
     // ==================================================
@@ -464,6 +508,20 @@ export const initSocketServer = (
 
     socket.on("disconnect", (reason) => {
       console.log(`🔌 WS Client disconnected: ${socket.id} (${reason})`);
+      if (user?.id) {
+        const sockets = onlineUserSockets.get(user.id);
+        if (sockets) {
+          sockets.delete(socket.id);
+          if (sockets.size === 0) {
+            onlineUserSockets.delete(user.id);
+            io?.emit(WS_EVENTS.USER_STATUS_CHANGED, {
+              userId: user.id,
+              isOnline: false,
+            });
+            console.log(`🔌 User ${user.email} is now Offline`);
+          }
+        }
+      }
     });
   });
 

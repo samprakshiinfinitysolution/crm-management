@@ -1,4 +1,5 @@
 import prisma from '../config/db.js';
+import { isUserOnline } from '../config/socket.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { CacheService } from './cache.service.js';
 import {
@@ -843,7 +844,7 @@ export class ReportService {
           roleBadge,
           statusText,
           isStatusPositive: !capacityWarning && overdueCount === 0,
-          isOnline: exec.isActive,
+          isOnline: isUserOnline(exec.id),
           wonAmount: stats.wonAmount,
           formattedWonAmount: formatCurrencyINR(stats.wonAmount),
           wonCount: stats.wonCount,
@@ -2140,7 +2141,7 @@ export class ReportService {
         roleBadge,
         statusText,
         isStatusPositive: !capacityWarning && overdueCount === 0,
-        isOnline: exec.isActive,
+        isOnline: isUserOnline(exec.id),
         wonAmount: stats.wonAmount,
         formattedWonAmount: formatCurrencyINR(stats.wonAmount),
         wonCount: stats.wonCount,

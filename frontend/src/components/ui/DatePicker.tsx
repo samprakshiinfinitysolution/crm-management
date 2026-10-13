@@ -16,6 +16,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export interface DatePickerProps {
   value?: string | Date;
@@ -207,7 +214,7 @@ export function DatePicker({
               variant="outline"
               disabled={disabled}
               className={cn(
-                "w-full justify-between text-left font-normal h-11 px-3.5 rounded-lg bg-card border border-slate-200 hover:border-indigo-300 hover:bg-slate-50/80 transition-all cursor-pointer text-xs group",
+                "w-full justify-between text-left font-normal h-11 px-3.5 rounded-lg bg-card border border-slate-200  dark:border-slate-700 hover:border-indigo-300 hover:bg-slate-50/80 transition-all cursor-pointer text-xs group",
                 !value && "text-slate-400",
                 open && "border-indigo-500 ring-2 ring-indigo-500/10",
               )}
@@ -247,11 +254,11 @@ export function DatePicker({
         />
 
         <PopoverContent
-          className="w-auto p-0 bg-card border border-slate-200/90 rounded-lg shadow-2xl z-50 overflow-hidden flex flex-col"
+          className="w-auto p-0 bg-card border border-slate-200/90 dark:border-slate-700 rounded-lg shadow-2xl z-50 overflow-hidden flex flex-col"
           align="start"
         >
           {/* Quick Presets Bar */}
-          <div className="px-3.5 py-2.5 bg-slate-50 border-b border-slate-100 flex items-center gap-1.5 overflow-x-auto text-[11px]">
+          <div className="px-3.5 py-2.5 bg-card border-b border-slate-100 dark:border-slate-700 flex items-center gap-1.5 overflow-x-auto text-[11px]">
             <span className="text-slate-400 font-medium flex items-center gap-1 shrink-0 mr-1">
               <Clock className="w-3 h-3 text-slate-500" />
               Quick:
@@ -259,42 +266,42 @@ export function DatePicker({
             <button
               type="button"
               onClick={() => applyQuickPreset(0, 3, 0, "PM")}
-              className="px-2 py-1 rounded-lg bg-card border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/50 hover:text-indigo-700 text-slate-600 font-medium transition-colors shrink-0 cursor-pointer"
+              className="px-2 py-1 rounded-lg bg-card border border-slate-200  dark:border-slate-700 hover:border-indigo-300 hover:bg-brand-primary text-accent-foreground hover:text-card font-medium transition-colors shrink-0 cursor-pointer"
             >
               Today 3 PM
             </button>
             <button
               type="button"
               onClick={() => applyQuickPreset(1, 10, 0, "AM")}
-              className="px-2 py-1 rounded-lg bg-card border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/50 hover:text-indigo-700 text-slate-600 font-medium transition-colors shrink-0 cursor-pointer"
+              className="px-2 py-1 rounded-lg bg-card border border-slate-200  dark:border-slate-700 hover:border-indigo-300 hover:bg-brand-primary text-accent-foreground hover:text-card font-medium transition-colors shrink-0 cursor-pointer"
             >
               Tomorrow 10 AM
             </button>
-            <button
+            <button 
               type="button"
               onClick={() => applyQuickPreset(1, 3, 0, "PM")}
-              className="px-2 py-1 rounded-lg bg-card border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/50 hover:text-indigo-700 text-slate-600 font-medium transition-colors shrink-0 cursor-pointer"
+              className="px-2 py-1 rounded-lg bg-card border border-slate-200  dark:border-slate-700 hover:border-indigo-300 hover:bg-brand-primary text-accent-foreground hover:text-card font-medium transition-colors shrink-0 cursor-pointer"
             >
               Tomorrow 3 PM
             </button>
-            <button
+            <button 
               type="button"
               onClick={() => applyQuickPreset(2, 10, 0, "AM")}
-              className="px-2 py-1 rounded-lg bg-card border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/50 hover:text-indigo-700 text-slate-600 font-medium transition-colors shrink-0 cursor-pointer"
+              className="px-2 py-1 rounded-lg bg-card border border-slate-200  dark:border-slate-700 hover:border-indigo-300 hover:bg-brand-primary text-accent-foreground hover:text-card font-medium transition-colors shrink-0 cursor-pointer"
             >
               In 2 Days
             </button>
-            <button
+            <button 
               type="button"
               onClick={applyNextMonday}
-              className="px-2 py-1 rounded-lg bg-card border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/50 hover:text-indigo-700 text-slate-600 font-medium transition-colors shrink-0 cursor-pointer"
+              className="px-2 py-1 rounded-lg bg-card border border-slate-200  dark:border-slate-700 hover:border-indigo-300 hover:bg-brand-primary text-accent-foreground hover:text-card font-medium transition-colors shrink-0 cursor-pointer"
             >
               Next Mon
             </button>
           </div>
 
           {/* Main Body: Calendar + Custom Time Selector */}
-          <div className="flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-slate-100">
+          <div className="flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-slate-100 dark:divide-slate-500">
             {/* Calendar */}
             <div className="p-3">
               <Calendar
@@ -308,9 +315,9 @@ export function DatePicker({
 
             {/* Custom Time Selector (Zero Native Windows Pickers) */}
             {showTime && (
-              <div className="p-4 flex flex-col justify-between w-full md:w-64 bg-slate-50/40">
+              <div className="p-4 flex flex-col justify-between w-full md:w-64 bg-card">
                 <div className="flex flex-col gap-3.5">
-                  <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-500">
                     <span className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
                       <Clock className="w-3.5 h-3.5 text-indigo-600" />
                       Select Time
@@ -340,7 +347,7 @@ export function DatePicker({
                               "px-2 py-1.5 rounded-lg border text-xs font-medium transition-all text-left flex items-center justify-between cursor-pointer",
                               isSelected
                                 ? "bg-indigo-600 text-white border-indigo-600 shadow-xs font-semibold"
-                                : "bg-card border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50",
+                                : "bg-card border-slate-200  dark:border-slate-700 text-slate-600 hover:border-slate-300 hover:bg-slate-50",
                             )}
                           >
                             <span>{slot.label}</span>
@@ -354,28 +361,32 @@ export function DatePicker({
                   </div>
 
                   {/* Custom Hour, Minute & AM/PM Controls */}
-                  <div className="pt-2 border-t border-slate-100">
+                  <div className="pt-2 border-t border-slate-100 ">
                     <label className="block text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-2">
                       Custom Time
                     </label>
                     <div className="flex items-center gap-1.5">
                       {/* Hour Dropdown */}
                       <div className="flex-1">
-                        <select
-                          value={hour}
-                          onChange={(e) =>
-                            handleHourChange(Number(e.target.value))
-                          }
-                          className="w-full bg-card border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 focus:outline-none focus:border-indigo-500 cursor-pointer shadow-2xs"
+                        <Select
+                          value={String(hour)}
+                          onValueChange={(val) => {
+                            if (val) handleHourChange(Number(val));
+                          }}
                         >
-                          {Array.from({ length: 12 }, (_, i) => i + 1).map(
-                            (h) => (
-                              <option key={h} value={h}>
-                                {String(h).padStart(2, "0")}
-                              </option>
-                            ),
-                          )}
-                        </select>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Hour" />
+                          </SelectTrigger>
+                          <SelectContent >
+                            {Array.from({ length: 12 }, (_, i) => i + 1).map(
+                              (h) => (
+                                <SelectItem key={h} value={String(h)}>
+                                  {String(h).padStart(2, "0")}
+                                </SelectItem>
+                              ),
+                            )}
+                          </SelectContent>
+                        </Select>
                       </div>
 
                       <span className="text-slate-400 font-bold text-sm">
@@ -384,25 +395,30 @@ export function DatePicker({
 
                       {/* Minute Dropdown */}
                       <div className="flex-1">
-                        <select
-                          value={minute}
-                          onChange={(e) =>
-                            handleMinuteChange(Number(e.target.value))
-                          }
-                          className="w-full bg-card border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 focus:outline-none focus:border-indigo-500 cursor-pointer shadow-2xs"
+                        <Select
+                          value={String(minute)}
+                          onValueChange={(val) => {
+                            if (val !== null && val !== undefined)
+                              handleMinuteChange(Number(val));
+                          }}
                         >
-                          {[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55].map(
-                            (m) => (
-                              <option key={m} value={m}>
-                                {String(m).padStart(2, "0")}
-                              </option>
-                            ),
-                          )}
-                        </select>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Min" />
+                          </SelectTrigger>
+                          <SelectContent >
+                            {[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55].map(
+                              (m) => (
+                                <SelectItem key={m} value={String(m)}>
+                                  {String(m).padStart(2, "0")}
+                                </SelectItem>
+                              ),
+                            )}
+                          </SelectContent>
+                        </Select>
                       </div>
 
                       {/* AM / PM Segmented Toggle */}
-                      <div className="flex rounded-lg border border-slate-200 bg-card p-0.5 shrink-0">
+                      <div className="flex rounded-lg border border-slate-200  dark:border-slate-700 bg-card p-0.5 shrink-0">
                         <button
                           type="button"
                           onClick={() => handlePeriodChange("AM")}
@@ -433,7 +449,7 @@ export function DatePicker({
                 </div>
 
                 {/* Confirm Button */}
-                <div className="pt-3 mt-3 border-t border-slate-100">
+                <div className="pt-3 mt-3 border-t border-slate-100 dark:border-slate-500">
                   <button
                     type="button"
                     onClick={() => {

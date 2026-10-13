@@ -18,6 +18,7 @@ import {
   setSelectedExecutiveId,
   useToggleExecutiveStatusMutation,
 } from "@/store";
+import { useSocket } from "@/components/providers/SocketProvider";
 import type { SalesExecutiveSummary } from "@/types/api.types";
 import { Pagination } from "@/components/ui";
 
@@ -45,6 +46,7 @@ export const ExecutiveCardStreamView: React.FC<
   totalPages,
 }) => {
   const dispatch = useAppDispatch();
+  const { isUserOnline } = useSocket();
   const [toggleStatus, { isLoading: isToggling }] =
     useToggleExecutiveStatusMutation();
 
@@ -186,8 +188,9 @@ export const ExecutiveCardStreamView: React.FC<
                     {initials}
                   </div>
                   <span
+                    title={isUserOnline(exec.id) ? "Online" : "Offline"}
                     className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full ring-2 ring-white dark:ring-slate-900 ${
-                      exec.isActive
+                      isUserOnline(exec.id)
                         ? "bg-emerald-500"
                         : "bg-slate-300 dark:bg-slate-600"
                     }`}
@@ -205,7 +208,7 @@ export const ExecutiveCardStreamView: React.FC<
                     >
                       {statusInfo.label}
                     </span>
-                    <span className="text-[10px] font-bold px-2 py-0.2 rounded-full bg-card text-slate-800 dark:text-slate-200 dark:bg-slate-800 dark:text-slate-300 uppercase">
+                    <span className="text-[10px] font-bold px-2 py-0.2 rounded-full bg-card text-slate-800 dark:bg-slate-800 dark:text-slate-300 uppercase">
                       SALES EXECUTIVE
                     </span>
                   </div>

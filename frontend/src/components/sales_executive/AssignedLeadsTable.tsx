@@ -3,14 +3,27 @@
 import React, { useState } from "react";
 import { Search, Phone, Calendar, Building } from "lucide-react";
 import { useGetLeadsQuery } from "@/store/api/leadApi";
-import type { LeadItem } from "@/types/api.types";
+import type { LeadItem, LeadStatus } from "@/types/api.types";
 import ScheduleFollowUpModal from "./ScheduleFollowUpModal";
 import { TableSkeletonRows } from "../ui/TableSkeletonRows";
 import { useDebounce } from "@/lib/useDebounce";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui";
 
 interface AssignedLeadsTableProps {
   onSelectLead?: (leadId: string) => void;
 }
+
+const options = [
+  { value: "ALL", label: "All Statuses" },
+  { value: "NEW", label: "New" },
+  { value: "ASSIGNED", label: "Assigned" },
+  { value: "CONTACTED", label: "Contacted" },
+  { value: "INTERESTED", label: "Interested" },
+  { value: "FOLLOW_UP", label: "Follow-Up" },
+  { value: "QUALIFIED", label: "Qualified" },
+  { value: "WON_SOLD", label: "Won / Sold" },
+  { value: "LOST", label: "Lost" },
+];
 
 export default function AssignedLeadsTable({
   onSelectLead,
@@ -68,24 +81,24 @@ export default function AssignedLeadsTable({
           </div>
 
           {/* Status Filter */}
-          <select
+          <Select
             value={statusFilter}
-            onChange={(e) => {
-              setStatusFilter(e.target.value);
+            onValueChange={(value) => {
+              setStatusFilter(value as LeadStatus);
               setPage(1);
             }}
-            className="bg-card border border-crm-subtle rounded-lg px-2.5 py-1.5 text-xs text-crm-secondary focus:outline-none focus:border-crm-brand shadow-2xs cursor-pointer"
           >
-            <option value="ALL">All Statuses</option>
-            <option value="NEW">New</option>
-            <option value="ASSIGNED">Assigned</option>
-            <option value="CONTACTED">Contacted</option>
-            <option value="INTERESTED">Interested</option>
-            <option value="FOLLOW_UP">Follow-Up</option>
-            <option value="QUALIFIED">Qualified</option>
-            <option value="WON_SOLD">Won / Sold</option>
-            <option value="LOST">Lost</option>
-          </select>
+            <SelectTrigger className="bg-card border border-crm-subtle rounded-lg px-2.5 py-1.5 text-xs text-crm-secondary focus:outline-none focus:border-crm-brand shadow-2xs cursor-pointer">
+              <SelectValue placeholder={"Select Status"} />
+            </SelectTrigger>
+            <SelectContent className="bg-card border border-crm-subtle rounded-lg px-0.5 py-1.5 text-xs text-crm-secondary shadow-2xs cursor-pointer">
+              {options.map((option) => (
+                <SelectItem key={option.value} value={option.value} className="bg-card px-2.5 py-1.5 text-xs text-crm-secondary hover:bg-crm-brand-subtle! cursor-pointer">
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 

@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import { prisma } from "../config/db.js";
 import { config } from "../config/env.js";
+import { isUserOnline } from "../config/socket.js";
 import { AppError } from "../middleware/errorHandler.js";
 import AuditService from "./audit.service.js";
 import {
@@ -126,6 +127,7 @@ export class UserService {
         email: tl.email,
         role: tl.role as UserRole,
         isActive: tl.isActive,
+        isOnline: isUserOnline(tl.id),
         createdAt: tl.createdAt,
         ...metrics,
       };
@@ -256,6 +258,7 @@ export class UserService {
       email: executive.email,
       role: executive.role as UserRole,
       isActive: executive.isActive,
+      isOnline: isUserOnline(executive.id),
       createdAt: executive.createdAt,
       ...metrics,
       leads: (executive.assignedLeads || []).map((l) => ({
@@ -348,6 +351,7 @@ export class UserService {
         email: exec.email,
         role: exec.role as UserRole,
         isActive: exec.isActive,
+        isOnline: isUserOnline(exec.id),
         createdAt: exec.createdAt,
         ...metrics,
       };
@@ -479,6 +483,7 @@ export class UserService {
       email: executive.email,
       role: executive.role as UserRole,
       isActive: executive.isActive,
+      isOnline: isUserOnline(executive.id),
       createdAt: executive.createdAt,
       ...metrics,
       leads: (executive.assignedLeads || []).map((l) => ({

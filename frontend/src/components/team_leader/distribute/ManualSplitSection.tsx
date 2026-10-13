@@ -9,6 +9,13 @@ import {
   SalesExecutiveSummary,
 } from "@/types/api.types";
 import { Pagination } from "@/components/ui/Pagination";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface ManualSplitSectionProps {
   executives: SalesExecutiveSummary[];
@@ -219,18 +226,24 @@ export const ManualSplitSection: React.FC<ManualSplitSectionProps> = ({
             <span className="text-xs text-slate-600 dark:text-slate-300 font-medium">
               Target Executive:
             </span>
-            <select
-              value={singleTargetExecId}
-              onChange={(e) => setSingleTargetExecId(e.target.value)}
-              className="px-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-card text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            <Select
+              value={singleTargetExecId || "UNSELECTED"}
+              onValueChange={(val) => {
+                setSingleTargetExecId(val === "UNSELECTED" ? "" : (val || ""));
+              }}
             >
-              <option value="">Select Executive ▼</option>
-              {executives.map((e) => (
-                <option key={e.id} value={e.id}>
-                  {e.name} ({e.totalAssignedLeads ?? e.activeLeads ?? 0} leads currently)
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="h-8 px-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-card text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer">
+                <SelectValue placeholder="Select Executive" />
+              </SelectTrigger>
+              <SelectContent className="max-h-60 overflow-y-auto">
+                <SelectItem value="UNSELECTED">Select Executive</SelectItem>
+                {executives.map((e) => (
+                  <SelectItem key={e.id} value={e.id}>
+                    {e.name} ({e.totalAssignedLeads ?? e.activeLeads ?? 0} leads currently)
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
             <span className="text-xs text-slate-500 dark:text-slate-400">
               {selectedLeadIds.length} lead
@@ -347,56 +360,72 @@ export const ManualSplitSection: React.FC<ManualSplitSectionProps> = ({
           </div>
 
           {/* Status Dropdown */}
-          <select
+          <Select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-card text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            onValueChange={(val) => setStatusFilter(val || "ALL")}
           >
-            <option value="ALL">Status</option>
-            <option value="NEW">New</option>
-            <option value="CONTACTED">Contacted</option>
-            <option value="QUALIFIED">Qualified</option>
-          </select>
+            <SelectTrigger className="h-8 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-card text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-xs cursor-pointer">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">Status (All)</SelectItem>
+              <SelectItem value="NEW">New</SelectItem>
+              <SelectItem value="CONTACTED">Contacted</SelectItem>
+              <SelectItem value="QUALIFIED">Qualified</SelectItem>
+            </SelectContent>
+          </Select>
 
           {/* Priority Dropdown */}
-          <select
+          <Select
             value={selectedPriority}
-            onChange={(e) => onPriorityChange(e.target.value)}
-            className="px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-card text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            onValueChange={(val) => onPriorityChange(val || "ALL")}
           >
-            <option value="ALL">Priority</option>
-            <option value="URGENT">Urgent</option>
-            <option value="HIGH">High</option>
-            <option value="MEDIUM">Medium</option>
-            <option value="LOW">Low</option>
-          </select>
+            <SelectTrigger className="h-8 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-card text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-xs cursor-pointer">
+              <SelectValue placeholder="Priority" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">Priority (All)</SelectItem>
+              <SelectItem value="URGENT">Urgent</SelectItem>
+              <SelectItem value="HIGH">High</SelectItem>
+              <SelectItem value="MEDIUM">Medium</SelectItem>
+              <SelectItem value="LOW">Low</SelectItem>
+            </SelectContent>
+          </Select>
 
           {/* Source Dropdown */}
-          <select
+          <Select
             value={selectedSource}
-            onChange={(e) => onSourceChange(e.target.value)}
-            className="px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-card text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            onValueChange={(val) => onSourceChange(val || "ALL")}
           >
-            <option value="ALL">Source</option>
-            <option value="Website">Website</option>
-            <option value="Referral">Referral</option>
-            <option value="Campaign">Campaign</option>
-            <option value="Inbound Call">Inbound Call</option>
-          </select>
+            <SelectTrigger className="h-8 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-card text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-xs cursor-pointer">
+              <SelectValue placeholder="Source" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">Source (All)</SelectItem>
+              <SelectItem value="Website">Website</SelectItem>
+              <SelectItem value="Referral">Referral</SelectItem>
+              <SelectItem value="Campaign">Campaign</SelectItem>
+              <SelectItem value="Inbound Call">Inbound Call</SelectItem>
+            </SelectContent>
+          </Select>
 
           {/* City Dropdown */}
-          <select
+          <Select
             value={cityFilter}
-            onChange={(e) => setCityFilter(e.target.value)}
-            className="px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-card text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            onValueChange={(val) => setCityFilter(val || "ALL")}
           >
-            <option value="ALL">City</option>
-            <option value="Delhi">Delhi</option>
-            <option value="Mumbai">Mumbai</option>
-            <option value="Bengaluru">Bengaluru</option>
-            <option value="Bhopal">Bhopal</option>
-            <option value="Pune">Pune</option>
-          </select>
+            <SelectTrigger className="h-8 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-card text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-xs cursor-pointer">
+              <SelectValue placeholder="City" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">City (All)</SelectItem>
+              <SelectItem value="Delhi">Delhi</SelectItem>
+              <SelectItem value="Mumbai">Mumbai</SelectItem>
+              <SelectItem value="Bengaluru">Bengaluru</SelectItem>
+              <SelectItem value="Bhopal">Bhopal</SelectItem>
+              <SelectItem value="Pune">Pune</SelectItem>
+            </SelectContent>
+          </Select>
 
           {/* Reset Filters */}
           <button

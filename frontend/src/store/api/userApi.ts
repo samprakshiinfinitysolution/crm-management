@@ -99,6 +99,12 @@ export const userApi = crmApi.injectEndpoints({
       ],
     }),
     
+    getOnlineUsers: builder.query<ApiResponse<string[]>, void>({
+      query: () => "/users/online",
+      providesTags: [{ type: "Users", id: "ONLINE" }],
+      keepUnusedDataFor: 30,
+    }),
+
     getExecutives: builder.query<ApiResponse<SalesExecutiveDetail[]>, void>({
       query: () => "/users",
       providesTags: (result) =>
@@ -286,6 +292,7 @@ export const {
   useToggleExecutiveStatusMutation,
   useToggleUserStatusMutation,
   useGetExecutivesQuery,
+  useGetOnlineUsersQuery,
   useCreateUserMutation,
   useGetConversationsQuery,
   useGetMessagesQuery,

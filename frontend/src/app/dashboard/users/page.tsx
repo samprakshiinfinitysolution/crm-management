@@ -13,6 +13,7 @@ import {
   useGetUsersQuery,
   useToggleExecutiveStatusMutation,
 } from "@/store";
+import { useSocket } from "@/components/providers/SocketProvider";
 import { ExecutiveStatsCards } from "@/components/team_leader/executives";
 import {
   Select,
@@ -26,6 +27,7 @@ import { useDebounce } from "@/lib/useDebounce";
 
 export default function UsersManagementPage() {
   const router = useRouter();
+  const { isUserOnline } = useSocket();
   const [search, setSearch] = useState("");  
   
   const [roleFilter, setRoleFilter] = useState<string>("all");
@@ -143,10 +145,10 @@ export default function UsersManagementPage() {
                   setPage(1);
                 }}
               >
-                <SelectTrigger className="h-9 px-3 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200">
+                <SelectTrigger >
                   <SelectValue placeholder="Filter by role" />
                 </SelectTrigger>
-                <SelectContent className="border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <SelectContent>
                   <SelectItem value="all">All Roles</SelectItem>
                   <SelectItem value={UserRole.TEAM_LEADER}>Team Leaders</SelectItem>
                   <SelectItem value={UserRole.SALES_EXECUTIVE}>Sales Executives</SelectItem>
@@ -208,8 +210,18 @@ export default function UsersManagementPage() {
                     >
                       <td className="py-3.5 px-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 flex items-center justify-center font-bold text-xs">
-                            {exec.name[0]}
+                          <div className="relative shrink-0">
+                            <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 flex items-center justify-center font-bold text-xs">
+                              {exec.name[0]}
+                            </div>
+                            <span
+                              title={isUserOnline(exec.id) ? "Online" : "Offline"}
+                              className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full ring-2 ring-white dark:ring-slate-900 ${
+                                isUserOnline(exec.id)
+                                  ? "bg-emerald-500"
+                                  : "bg-slate-300 dark:bg-slate-600"
+                              }`}
+                            />
                           </div>
                           <div className="flex flex-col">
                             <span className="font-semibold text-slate-900 dark:text-slate-100">

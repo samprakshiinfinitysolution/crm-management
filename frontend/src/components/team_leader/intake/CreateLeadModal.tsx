@@ -6,6 +6,13 @@ import { toast } from "sonner";
 import { useCreateLeadMutation } from "@/store";
 import { PriorityLevel } from "@/types/api.types";
 import { handleApiError } from "@/lib/errorHandler";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface CreateLeadModalProps {
   isOpen: boolean;
@@ -202,42 +209,49 @@ export const CreateLeadModal: React.FC<CreateLeadModalProps> = ({
               <label className="block text-xs font-medium text-slate-300 mb-1">
                 Lead Source
               </label>
-              <select
+              <Select
                 value={formData.source}
-                onChange={(e) =>
-                  setFormData({ ...formData, source: e.target.value })
-                }
-                aria-label="Lead source selection"
-                className="w-full px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-xs text-white focus:outline-none focus:border-blue-500/50 cursor-pointer"
+                onValueChange={(val) => {
+                  if (val) setFormData({ ...formData, source: val });
+                }}
               >
-                <option value="MANUAL_ENTRY">Manual Entry</option>
-                <option value="DIRECT_CALL">Direct Inbound Call</option>
-                <option value="WEBSITE">Website Organic</option>
-                <option value="CAMPAIGN">Marketing Campaign</option>
-                <option value="REFERRAL">Partner Referral</option>
-              </select>
+                <SelectTrigger className="w-full h-9 px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-xs text-white focus:outline-none focus:border-blue-500/50 cursor-pointer">
+                  <SelectValue placeholder="Select Source" />
+                </SelectTrigger>
+                <SelectContent className="bg-slate-900 border border-slate-700 text-white">
+                  <SelectItem value="MANUAL_ENTRY">Manual Entry</SelectItem>
+                  <SelectItem value="DIRECT_CALL">Direct Inbound Call</SelectItem>
+                  <SelectItem value="WEBSITE">Website Organic</SelectItem>
+                  <SelectItem value="CAMPAIGN">Marketing Campaign</SelectItem>
+                  <SelectItem value="REFERRAL">Partner Referral</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div>
               <label className="block text-xs font-medium text-slate-300 mb-1">
                 Priority
               </label>
-              <select
+              <Select
                 value={formData.priority}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    priority: e.target.value as PriorityLevel,
-                  })
-                }
-                aria-label="Lead priority selection"
-                className="w-full px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-xs text-white focus:outline-none focus:border-blue-500/50 cursor-pointer"
+                onValueChange={(val) => {
+                  if (val)
+                    setFormData({
+                      ...formData,
+                      priority: val as PriorityLevel,
+                    });
+                }}
               >
-                <option value={PriorityLevel.LOW}>Low</option>
-                <option value={PriorityLevel.MEDIUM}>Medium</option>
-                <option value={PriorityLevel.HIGH}>High</option>
-                <option value={PriorityLevel.URGENT}>Urgent</option>
-              </select>
+                <SelectTrigger className="w-full h-9 px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-xs text-white focus:outline-none focus:border-blue-500/50 cursor-pointer">
+                  <SelectValue placeholder="Select Priority" />
+                </SelectTrigger>
+                <SelectContent className="bg-slate-900 border border-slate-700 text-white">
+                  <SelectItem value={PriorityLevel.LOW}>Low</SelectItem>
+                  <SelectItem value={PriorityLevel.MEDIUM}>Medium</SelectItem>
+                  <SelectItem value={PriorityLevel.HIGH}>High</SelectItem>
+                  <SelectItem value={PriorityLevel.URGENT}>Urgent</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
