@@ -49,5 +49,9 @@ export const isOriginAllowed = (origin: string): boolean => {
   if (/^https:\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)*\.vercel\.app$/i.test(normalized)) {
     return true;
   }
+  // Allow Render deployment domains
+  if (/^https:\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)*\.onrender\.com$/i.test(normalized)) {
+    return true;
+  }
   return false;
 };

@@ -349,11 +349,17 @@ export default function AdminUsersPage() {
                         ? "Team Leader"
                         : "Sales Executive";
 
+                        const isAdmin = item.role === UserRole.ADMIN;
+
                   return (
                     <tr
                       key={item.id}
-                      onClick={()=> {
-                        router.push(`/admin/users/${item.id}?isActive=${item.isActive}`)
+                      onClick={() => {
+                        if (!isAdmin) {
+                          router.push(
+                            `/admin/users/${item.id}?isActive=${item.isActive}`,
+                          );
+                        }
                       }}
                       className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors cursor-pointer"
                     >

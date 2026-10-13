@@ -5,7 +5,7 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import compression from "compression";
 import { config } from "./config/env.js";
-import { getAllowedOrigins } from "./config/allowedOrigins.js";
+import { isOriginAllowed } from "./config/allowedOrigins.js";
 import apiRouter from "./routes/index.js";
 import { errorHandler, AppError } from "./middleware/errorHandler.js";
 import { getIO } from "./config/socket.js";
@@ -29,8 +29,6 @@ export const createApp = (): Application => {
   app.use(helmet());
 
   // CORS configuration — exact-origin allow-list with credentials (never "*").
-  const allowedOrigins = getAllowedOrigins();
-
   app.use(
     cors({
       origin: (origin, callback) => {
@@ -39,9 +37,7 @@ export const createApp = (): Application => {
           return callback(null, true);
         }
 
-        const normalizedOrigin = origin.replace(/\/+$/, "");
-
-        if (allowedOrigins.has(normalizedOrigin)) {
+        if (isOriginAllowed(origin)) {
           return callback(null, true);
         }
 

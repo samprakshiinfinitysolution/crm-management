@@ -6,9 +6,11 @@ function getSafeBackendUrl(): string {
   // Remove trailing /api and trailing slashes
   raw = raw.replace(/\/api\/?$/, "").replace(/\/+$/, "");
 
-  // Local fallback for CI/local builds
+  // Fallback for production or local builds
   if (!raw || raw === "undefined" || raw === "null") {
-    return "http://localhost:5000";
+    return process.env.NODE_ENV === "production"
+      ? "https://crm-management-hju6.onrender.com"
+      : "http://localhost:5000";
   }
 
   // Ensure protocol exists

@@ -22,7 +22,9 @@ function getBackendOrigin(): string {
   let raw = (process.env.BACKEND_URL || '').trim();
   raw = raw.replace(/\/api\/?$/, '').replace(/\/+$/, '');
   if (!raw || raw === 'undefined' || raw === 'null') {
-    return 'http://localhost:5000';
+    return process.env.NODE_ENV === 'production'
+      ? 'https://crm-management-hju6.onrender.com'
+      : 'http://localhost:5000';
   }
   if (!/^https?:\/\//.test(raw)) {
     raw = `https://${raw}`;

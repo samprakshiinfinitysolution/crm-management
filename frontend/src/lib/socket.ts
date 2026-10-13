@@ -61,7 +61,7 @@ export const getSocketUrl = (): string => {
     }
 
     // Production deployment (e.g. Vercel): point to Render production backend
-    return "https://crm-management-p7h3.onrender.com";
+    return "https://crm-management-hju6.onrender.com";
   }
 
   return "http://localhost:5000";
@@ -79,6 +79,9 @@ export const getSocket = (token?: string | null): Socket => {
     if (effectiveToken && effectiveToken !== registeredToken) {
       registeredToken = effectiveToken;
       socket.auth = { token: effectiveToken };
+      if (socket.io?.opts) {
+        (socket.io.opts.query as Record<string, string>) = { token: effectiveToken };
+      }
       if (!socket.connected) {
         socket.connect();
       }
@@ -91,11 +94,12 @@ export const getSocket = (token?: string | null): Socket => {
 
   socket = io(wsUrl, {
     auth: effectiveToken ? { token: effectiveToken } : undefined,
+    query: effectiveToken ? { token: effectiveToken } : undefined,
     withCredentials: true,
     autoConnect: true,
     reconnection: true,
-    reconnectionAttempts: 15,
-    reconnectionDelay: 1500,
+    reconnectionAttempts: 25,
+    reconnectionDelay: 1000,
     transports: ["websocket", "polling"],
   });
 
@@ -106,6 +110,9 @@ export const updateSocketToken = (token: string): void => {
   registeredToken = token;
   if (socket) {
     socket.auth = { token };
+    if (socket.io?.opts) {
+      (socket.io.opts.query as Record<string, string>) = { token };
+    }
     if (!socket.connected) {
       socket.connect();
     }

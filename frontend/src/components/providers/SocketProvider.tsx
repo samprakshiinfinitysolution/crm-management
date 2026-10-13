@@ -50,10 +50,21 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
   const isUserOnline = useCallback(
     (userId?: string | null): boolean => {
       if (!userId) return false;
+      if (user && user.id === userId && isConnected) return true;
       return onlineUserIds.includes(userId);
     },
-    [onlineUserIds],
+    [onlineUserIds, user, isConnected],
   );
+
+  const effectiveToken = useMemo(() => {
+    return (
+      token ||
+      user?.token ||
+      (typeof window !== "undefined"
+        ? localStorage.getItem("crm_auth_token")
+        : null)
+    );
+  }, [token, user?.token]);
 
   useEffect(() => {
     if (!user) {
@@ -61,16 +72,34 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
       return;
     }
 
-    const socket = getSocket(token);
+    const socket = getSocket(effectiveToken);
+
+    const requestOnlineList = () => {
+      socket.emit(
+        WS_EVENTS.USERS_GET_ONLINE,
+        {},
+        (list: string[]) => {
+          if (Array.isArray(list)) {
+            setRealtimeOnlineIds(list);
+          }
+        },
+      );
+    };
 
     const onConnect = () => {
       setIsConnected(true);
       console.log("🟢 Connected to CRM WebSocket server");
+      requestOnlineList();
     };
 
-    const onDisconnect = () => {
+    const onConnectError = (error: Error) => {
+      console.warn("⚠️ CRM WebSocket connection error:", error?.message || error);
       setIsConnected(false);
-      console.log("🔴 Disconnected from CRM WebSocket server");
+    };
+
+    const onDisconnect = (reason: string) => {
+      setIsConnected(false);
+      console.log("🔴 Disconnected from CRM WebSocket server:", reason);
     };
 
     const onUsersOnlineList = (list: string[]) => {
@@ -90,6 +119,25 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
         }
       });
     };
+
+    if (socket.connected) {
+      requestOnlineList();
+      setTimeout(() => {
+        setIsConnected(true);
+      }, 0);
+    }
+
+    const onVisibilityOrFocus = () => {
+      if (typeof document !== "undefined" && document.visibilityState === "visible") {
+        if (!socket.connected) {
+          socket.connect();
+        } else {
+          requestOnlineList();
+        }
+      }
+    };
+    window.addEventListener("focus", onVisibilityOrFocus);
+    document.addEventListener("visibilitychange", onVisibilityOrFocus);
 
     const onNewNotification = (data: { title?: string; message?: string }) => {
       toast.info(data.title || "New Notification", {
@@ -173,6 +221,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     socket.on(WS_EVENTS.CONNECT, onConnect);
+    socket.on("connect_error", onConnectError);
     socket.on(WS_EVENTS.DISCONNECT, onDisconnect);
     socket.on(WS_EVENTS.USERS_ONLINE_LIST, onUsersOnlineList);
     socket.on(WS_EVENTS.USER_STATUS_CHANGED, onUserStatusChanged);
@@ -187,7 +236,11 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
     socket.on(WS_EVENTS.MESSAGE_NEW, onIncomingChatMessage);
 
     return () => {
+      window.removeEventListener("focus", onVisibilityOrFocus);
+      document.removeEventListener("visibilitychange", onVisibilityOrFocus);
+
       socket.off(WS_EVENTS.CONNECT, onConnect);
+      socket.off("connect_error", onConnectError);
       socket.off(WS_EVENTS.DISCONNECT, onDisconnect);
       socket.off(WS_EVENTS.USERS_ONLINE_LIST, onUsersOnlineList);
       socket.off(WS_EVENTS.USER_STATUS_CHANGED, onUserStatusChanged);
@@ -201,9 +254,9 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
       socket.off(WS_EVENTS.MESSAGE, onIncomingChatMessage);
       socket.off(WS_EVENTS.MESSAGE_NEW, onIncomingChatMessage);
     };
-  }, [user, token, dispatch, initialOnlineData?.data]);
+  }, [user, effectiveToken, dispatch, initialOnlineData?.data]);
 
-  const socketInstance = user ? getSocket(token) : null;
+  const socketInstance = user ? getSocket(effectiveToken) : null;
 
   return (
     <SocketContext.Provider
