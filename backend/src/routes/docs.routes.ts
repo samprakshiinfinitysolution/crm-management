@@ -623,7 +623,8 @@ export const openApiSpec = {
                   },
                   password: {
                     type: "string",
-                    example: "Password@123",
+                    format: "password",
+                    example: "••••••••",
                   },
                   role: {
                     $ref: "#/components/schemas/UserRole",
@@ -690,7 +691,8 @@ export const openApiSpec = {
                   },
                   password: {
                     type: "string",
-                    example: "Password@123",
+                    format: "password",
+                    example: "••••••••",
                   },
                 },
               },
@@ -776,11 +778,13 @@ export const openApiSpec = {
                 properties: {
                   currentPassword: {
                     type: "string",
-                    example: "Password@123",
+                    format: "password",
+                    example: "••••••••",
                   },
                   newPassword: {
                     type: "string",
-                    example: "NewPassword@123",
+                    format: "password",
+                    example: "••••••••",
                   },
                 },
               },
@@ -4057,12 +4061,6 @@ const renderSwaggerDocs = (req: Request, res: Response) => {
           </div>
 
           <div class="auth-quick-actions">
-            <button type="button" class="btn-demo-auth btn-tl" title="Authenticate as Team Leader" onclick="loginDemo('teamleader@leadflow.io', 'Password@123', 'TEAM_LEADER', 'Marcus Sterling')">
-              ⚡ 1-Click Login (Team Leader)
-            </button>
-            <button type="button" class="btn-demo-auth btn-se" title="Authenticate as Sales Executive" onclick="loginDemo('alex.sales@leadflow.io', 'Password@123', 'SALES_EXECUTIVE', 'Alex Rivera')">
-              ⚡ 1-Click Login (Sales Executive)
-            </button>
             <button type="button" class="btn-demo-auth btn-toggle-form" onclick="toggleAuthForms()">
               📝 Register or Login Form
             </button>
@@ -4080,11 +4078,11 @@ const renderSwaggerDocs = (req: Request, res: Response) => {
               <div class="form-section-title">🔑 Direct User Login</div>
               <div class="form-row">
                 <label class="form-label">Email Address</label>
-                <input type="email" id="login-email" class="form-input" required value="teamleader@leadflow.io" />
+                <input type="email" id="login-email" class="form-input" required placeholder="you@company.com" />
               </div>
               <div class="form-row">
                 <label class="form-label">Password</label>
-                <input type="password" id="login-password" class="form-input" required value="Password@123" />
+                <input type="password" id="login-password" class="form-input" required />
               </div>
               <button type="submit" class="btn-form-submit" style="background-color: #2563eb;">Sign In & Authorize</button>
             </form>
@@ -4102,7 +4100,7 @@ const renderSwaggerDocs = (req: Request, res: Response) => {
               </div>
               <div class="form-row">
                 <label class="form-label">Password (Min 6, uppercase, lowercase, number, special char)</label>
-                <input type="password" id="reg-password" class="form-input" required value="Password@123" />
+                <input type="password" id="reg-password" class="form-input" required placeholder="Min 6 chars, mixed case, number, special char" />
               </div>
               <div class="form-row">
                 <label class="form-label">Role</label>
@@ -4183,41 +4181,6 @@ const renderSwaggerDocs = (req: Request, res: Response) => {
           toast.style.display = 'inline-block';
           toast.className = 'auth-feedback-toast toast-info';
           toast.innerText = 'Token cleared. Protected routes will now return 401 Unauthorized.';
-        }
-      }
-
-      async function loginDemo(email, password, role, name) {
-        const toast = document.getElementById('auth-feedback-toast');
-        if (toast) {
-          toast.style.display = 'inline-block';
-          toast.className = 'auth-feedback-toast toast-info';
-          toast.innerText = 'Authenticating as ' + name + '...';
-        }
-
-        try {
-          const res = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email, password: password })
-          });
-          const result = await res.json();
-          if (result.success && result.data && result.data.token) {
-            setSwaggerToken(result.data.token, role, name);
-            if (toast) {
-              toast.className = 'auth-feedback-toast toast-success';
-              toast.innerText = 'Authenticated as ' + name + ' [' + role + ']. Token active!';
-            }
-          } else {
-            if (toast) {
-              toast.className = 'auth-feedback-toast toast-error';
-              toast.innerText = 'Login failed: ' + (result.message || 'Unknown error');
-            }
-          }
-        } catch (err) {
-          if (toast) {
-            toast.className = 'auth-feedback-toast toast-error';
-            toast.innerText = 'Request failed: ' + err.message;
-          }
         }
       }
 

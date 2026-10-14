@@ -653,7 +653,18 @@ export class UserService {
       .toLowerCase()
       .trim();
     const adminName = config.admin?.name || "Admin";
-    const adminPassword = config.admin?.password || "Samprakshi@4562";
+    const adminPassword = config.admin?.password || "";
+
+    // Never fall back to a hardcoded password. If ADMIN_PASSWORD is not
+    // configured we cannot safely provision a superuser, so we skip bootstrap
+    // instead of creating an account with a guessable credential.
+    if (!adminPassword) {
+      console.warn(
+        "⚠️  [SuperUser Bootstrap] ADMIN_PASSWORD is not set — skipping superuser bootstrap. " +
+          "Set ADMIN_PASSWORD (and ADMIN_EMAIL) in the environment, then restart.",
+      );
+      return;
+    }
 
     try {
       const existingUser = await prisma.user.findUnique({

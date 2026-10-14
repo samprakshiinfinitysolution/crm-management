@@ -78,6 +78,30 @@ export const config = {
   admin: {
     name: process.env.ADMIN_NAME || "Admin",
     email: process.env.ADMIN_EMAIL || "admin@leadflow.io",
-    password: process.env.ADMIN_PASSWORD || "Samprakshi@4562",
+    // No hardcoded fallback: the superuser password must come from the
+    // environment. `user.service.ts` skips bootstrap when this is empty.
+    password: process.env.ADMIN_PASSWORD || "",
+  },
+
+  /**
+   * Interactive API documentation (Swagger UI) exposure.
+   *
+   * `docsEnabled` gates the whole `/api/docs` surface at the router level.
+   * Default is OFF in production so an unauthenticated deployment never serves
+   * the API contract or its login helpers. Set ENABLE_API_DOCS=true to opt in.
+   */
+  docs: {
+    enabled: resolveDocsEnabled(),
   },
 };
+
+function resolveDocsEnabled(): boolean {
+  const raw = (process.env.ENABLE_API_DOCS || "").trim().toLowerCase();
+
+  // Explicit opt-in always wins.
+  if (raw === "true" || raw === "1" || raw === "yes") return true;
+  if (raw === "false" || raw === "0" || raw === "no") return false;
+
+  // Unset: allow locally, block in production.
+  return nodeEnv !== "production";
+}

@@ -12,12 +12,27 @@ import exportRouter from './export.routes.js';
 import docsRouter from './docs.routes.js';
 import { UserRole } from '../types/index.js';
 import { authenticateUser, requireRole } from '../middleware/auth.middleware.js';
+import { config } from '../config/env.js';
 import conversationRouter from './conversation.routes.js';
 
 const apiRouter = Router();
 
 // Interactive API Documentation (Swagger / OpenAPI 3.0)
-apiRouter.use('/docs', docsRouter);
+//
+// Gated by config.docs.enabled (see config/env.ts): OFF by default in
+// production so the API contract and its embedded auth helpers are never served
+// unauthenticated. Opt in with ENABLE_API_DOCS=true.
+if (config.docs.enabled) {
+  apiRouter.use('/docs', docsRouter);
+} else {
+  apiRouter.use('/docs', (req: Request, res: Response) => {
+    res.status(404).json({
+      success: false,
+      message: 'API documentation is disabled in this environment.',
+      error: { code: 'NOT_FOUND' },
+    });
+  });
+}
 
 // Health Check
 apiRouter.use('/health', healthRouter);
