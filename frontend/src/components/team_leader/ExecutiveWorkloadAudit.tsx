@@ -61,7 +61,7 @@ export default function ExecutiveWorkloadAudit({
   return (
     <div className="bg-card dark:bg-slate-900 rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-xs overflow-hidden flex flex-col">
       {/* Header bar */}
-      <div className="p-5 md:p-6 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="p-3.5 sm:p-4.5 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
             <h2 className="text-base font-bold text-slate-900 dark:text-white">
@@ -71,7 +71,7 @@ export default function ExecutiveWorkloadAudit({
               {reps.length} Active Reps
             </span>
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-700 dark:text-slate-200 font-medium mt-0.5">
             Live pipeline quotas, response capacity, and overdue lead
             bottlenecks
           </p>
@@ -87,7 +87,7 @@ export default function ExecutiveWorkloadAudit({
       </div>
 
       {reps.length === 0 ? (
-        <div className="p-10 text-center text-xs text-slate-500 dark:text-slate-400">
+        <div className="p-10 text-center text-xs text-slate-600 dark:text-slate-300 font-medium">
           <Users className="w-8 h-8 text-slate-400 mx-auto mb-2 opacity-60" />
           <p className="font-bold text-sm text-slate-800 dark:text-slate-200">
             No sales executives found
@@ -100,7 +100,7 @@ export default function ExecutiveWorkloadAudit({
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/75 dark:bg-slate-800/40 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+              <tr className="border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/75 dark:bg-slate-800/40 text-[11px] font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
                 <th className="py-3 px-4 font-semibold">
                   Sales Representative
                 </th>

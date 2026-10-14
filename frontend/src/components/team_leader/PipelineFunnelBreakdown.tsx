@@ -108,21 +108,21 @@ export default function PipelineFunnelBreakdown({
   };
 
   return (
-    <section className="py-2">
-      <div className="bg-crm-card rounded-lg p-4 border border-crm-subtle shadow-xs">
+    <section className="py-1">
+      <div className="bg-crm-card rounded-lg p-3.5 sm:p-4 border border-crm-subtle shadow-xs">
         {/* Header */}
         <div className="flex items-center justify-between mb-3">
           <div>
             <h3 className="text-sm font-bold text-crm-primary">
               Funnel Breakdown
             </h3>
-            <span className="text-xs text-crm-muted">
+            <span className="text-xs text-slate-600 dark:text-slate-300 font-medium">
               {totalMapped} active leads mapped
             </span>
           </div>
           <button
             type="button"
-            onClick={() => router.push("/team_leader/reports")}
+            onClick={() => router.push("/dashboard/reports")}
             className="text-xs font-semibold text-crm-brand hover:underline flex items-center gap-1 cursor-pointer"
           >
             <span>View Reports</span>

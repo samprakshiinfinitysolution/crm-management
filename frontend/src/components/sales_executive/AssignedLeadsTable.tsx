@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Search, Phone, Calendar, Building } from "lucide-react";
+import { Search, Phone, Calendar, Building, RotateCcw } from "lucide-react";
 import { useGetLeadsQuery } from "@/store/api/leadApi";
 import type { LeadItem, LeadStatus } from "@/types/api.types";
 import ScheduleFollowUpModal from "./ScheduleFollowUpModal";
@@ -31,6 +31,14 @@ export default function AssignedLeadsTable({
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [page, setPage] = useState(1);
+
+  const hasActiveFilters = Boolean(search.trim() || statusFilter !== "ALL");
+
+  const handleReset = () => {
+    setSearch("");
+    setStatusFilter("ALL");
+    setPage(1);
+  };
 
   // Debounce search input by 400ms to avoid flooding backend requests
   const debouncedSearch = useDebounce(search, 400);
@@ -99,6 +107,19 @@ export default function AssignedLeadsTable({
               ))}
             </SelectContent>
           </Select>
+
+          {/* Reset Button */}
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={handleReset}
+              className="h-8 px-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs shrink-0"
+              title="Reset filters"
+            >
+              <RotateCcw className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
+              <span>Reset</span>
+            </button>
+          )}
         </div>
       </div>
 

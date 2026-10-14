@@ -34,12 +34,6 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { useAppSelector } from "@/store";
 import { useGetMeQuery } from "@/store/api/authApi";
 import { UserRole } from "@/types/api.types";
-import { Inter } from "next/font/google";
-// 1. Initialize the font and define a CSS variable
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
 
 // =========================================================================
 // Client Auth Synchronization
@@ -97,8 +91,9 @@ export default function HomePage() {
 
   return (
     <div
-      className={`${inter.variable} min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans selection:bg-blue-600 selection:text-white flex flex-col antialiased transition-colors`}
+      className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans selection:bg-blue-600 selection:text-white flex flex-col antialiased transition-colors"
     >
+      <main className="flex flex-col flex-1">
       {/* ========================================================================= */}
       {/* 1. TOP NAVBAR (Sticky Frosted Glass) */}
       {/* ========================================================================= */}
@@ -1645,6 +1640,7 @@ export default function HomePage() {
           with PostgreSQL ACID transactions &amp; row-level isolation.
         </div>
       </footer>
+      </main>
     </div>
   );
 }

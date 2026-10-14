@@ -10,7 +10,7 @@ import {
   useSendAttachmentMutation,
   useMarkConversationAsReadMutation,
 } from "@/store/api/userApi";
-import { UserRole, type ConversationMessage } from "@/types/api.types";
+import { UserRole, type AuthUser, type ConversationMessage } from "@/types/api.types";
 import { toast } from "sonner";
 import { useAppSelector, useAppDispatch } from "@/store";
 import { useDebounce } from "@/lib/useDebounce";
@@ -32,6 +32,22 @@ import {
 export function FloatingChatWidget() {
   const pathname = usePathname();
   const { user } = useAppSelector((state) => state.auth);
+
+  // Floating chat is exclusively for authenticated CRM members and should never
+  // mount or attach listeners on login/auth routes or unauthenticated states.
+  if (!user || pathname === "/login" || pathname === "/register" || pathname === "/forgot-password") {
+    return null;
+  }
+
+  return <FloatingChatWidgetInner key={pathname} user={user} pathname={pathname} />;
+}
+
+function FloatingChatWidgetInner({
+  user,
+}: {
+  user: AuthUser;
+  pathname: string;
+}) {
   const dispatch = useAppDispatch();
   const { socket } = useSocket();
 
@@ -45,16 +61,6 @@ export function FloatingChatWidget() {
   const [input, setInput] = useState("");
   const [conversations, setConversations] = useState<Record<string, ChatMessage[]>>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  // Automatically close the message box when the route changes.
-  // Adjusting state during render (guarded by a stored previous value) is the
-  // React-recommended alternative to calling setState inside an effect, which
-  // can trigger cascading renders.
-  const [prevPathname, setPrevPathname] = useState(pathname);
-  if (prevPathname !== pathname) {
-    setPrevPathname(pathname);
-    setIsOpen(false);
-  }
 
   // Automatically close message box when navigation menus or sidebars are opened
   useEffect(() => {

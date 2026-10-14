@@ -64,16 +64,16 @@ export const UserOverviewTab: React.FC<UserOverviewTabProps> = ({ user }) => {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5">
       {/* 1. Lead Pipeline Distribution */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs">
-        <div className="flex items-center justify-between mb-4">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3.5 sm:p-4 shadow-xs">
+        <div className="flex items-center justify-between mb-3.5">
           <div>
             <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
               <BarChart3 className="w-4 h-4 text-blue-600" />
               Lead Status Distribution
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-600 dark:text-slate-300 font-medium mt-0.5">
               Breakdown of {user.totalAssignedLeads || 0} assigned leads across lifecycle stages
             </p>
           </div>
@@ -84,7 +84,7 @@ export const UserOverviewTab: React.FC<UserOverviewTabProps> = ({ user }) => {
             No pipeline distribution data available.
           </div>
         ) : (
-          <div className="space-y-3.5 mt-4">
+          <div className="space-y-3 mt-3">
             {statusEntries.map(([status, count]) => {
               const colors = getStatusColor(status);
               const percentage = Math.round((count / totalInBreakdown) * 100);
@@ -95,7 +95,7 @@ export const UserOverviewTab: React.FC<UserOverviewTabProps> = ({ user }) => {
                     <span className="font-semibold text-slate-800 dark:text-slate-200">
                       {status}
                     </span>
-                    <span className="text-slate-500 dark:text-slate-400 font-medium">
+                    <span className="text-slate-600 dark:text-slate-300 font-medium">
                       {count} leads ({percentage}%)
                     </span>
                   </div>
@@ -113,19 +113,19 @@ export const UserOverviewTab: React.FC<UserOverviewTabProps> = ({ user }) => {
       </div>
 
       {/* 2. Executive Performance & Workload Summary */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs flex flex-col justify-between">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3.5 sm:p-4 shadow-xs flex flex-col justify-between">
         <div>
           <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2 mb-1">
             <Activity className="w-4 h-4 text-blue-600" />
             Performance & SLA Summary
           </h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mb-5">
+          <p className="text-xs text-slate-600 dark:text-slate-300 font-medium mb-3.5">
             Operational workload status and pipeline velocity metrics
           </p>
 
-          <div className="grid grid-cols-2 gap-3.5">
-            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3.5 border border-slate-100 dark:border-slate-800">
-              <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase">
+          <div className="grid grid-cols-2 gap-2.5">
+            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 border border-slate-100 dark:border-slate-800">
+              <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-200 uppercase">
                 Conversion Rate
               </span>
               <div className="mt-1 flex items-baseline gap-1.5">
@@ -138,8 +138,8 @@ export const UserOverviewTab: React.FC<UserOverviewTabProps> = ({ user }) => {
               </span>
             </div>
 
-            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3.5 border border-slate-100 dark:border-slate-800">
-              <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase">
+            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 border border-slate-100 dark:border-slate-800">
+              <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-200 uppercase">
                 Active Ratio
               </span>
               <div className="mt-1 flex items-baseline gap-1.5">
@@ -152,20 +152,20 @@ export const UserOverviewTab: React.FC<UserOverviewTabProps> = ({ user }) => {
                   %
                 </span>
               </div>
-              <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-1 inline-block">
+              <span className="text-[11px] text-slate-600 dark:text-slate-300 font-medium mt-1 inline-block">
                 {user.activeLeads || 0} active in pipeline
               </span>
             </div>
 
-            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3.5 border border-slate-100 dark:border-slate-800">
-              <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase">
+            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 border border-slate-100 dark:border-slate-800">
+              <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-200 uppercase">
                 Follow-ups Status
               </span>
               <div className="mt-1 flex items-baseline gap-1.5">
                 <span className="text-xl font-bold text-slate-900 dark:text-slate-100">
                   {user.followUpsPending || 0}
                 </span>
-                <span className="text-xs text-slate-400">pending</span>
+                <span className="text-xs text-slate-500 font-medium">pending</span>
               </div>
               <span
                 className={`text-[11px] font-medium mt-1 inline-block ${
@@ -178,8 +178,8 @@ export const UserOverviewTab: React.FC<UserOverviewTabProps> = ({ user }) => {
               </span>
             </div>
 
-            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3.5 border border-slate-100 dark:border-slate-800">
-              <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase">
+            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 border border-slate-100 dark:border-slate-800">
+              <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-200 uppercase">
                 Workload Load
               </span>
               <div className="mt-1 flex items-baseline gap-1.5">

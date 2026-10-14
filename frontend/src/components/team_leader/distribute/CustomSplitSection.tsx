@@ -112,13 +112,13 @@ export const CustomSplitSection: React.FC<CustomSplitSectionProps> = ({
   return (
     <div className="flex flex-col gap-5 w-full">
       {/* 1. EXECUTIVE SELECTED / TABLE (First in Step 2) */}
-      <div className="bg-card rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs">
+      <div className="bg-card rounded-xl border border-slate-200 dark:border-slate-800 p-3.5 sm:p-4 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
           <div>
             <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">
               Selected Sales Executives & Lead Quotas
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-700 dark:text-slate-200 font-medium mt-0.5">
               Specify exact lead quantities for each participating sales executive.
             </p>
           </div>
@@ -175,7 +175,7 @@ export const CustomSplitSection: React.FC<CustomSplitSectionProps> = ({
                     <p className="text-xs font-semibold text-slate-900 dark:text-slate-100">
                       {exec.name}
                     </p>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium">
                       {exec.totalAssignedLeads ?? exec.activeLeads ?? 0} currently assigned
                     </p>
                   </div>
@@ -229,24 +229,24 @@ export const CustomSplitSection: React.FC<CustomSplitSectionProps> = ({
       </div>
 
       {/* 2. LEAD QUANTITY & POOL (Then Lead) */}
-      <div className="bg-card rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs flex flex-col gap-4">
+      <div className="bg-card rounded-xl border border-slate-200 dark:border-slate-800 p-3.5 sm:p-4 shadow-xs flex flex-col gap-3">
         {/* Unassigned Pool Banner */}
         <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
           <div>
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
               Unassigned Leads Pool
             </span>
             <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100 font-mono tracking-tight mt-0.5">
               {totalUnassignedCount.toLocaleString()}
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-700 dark:text-slate-200 font-medium mt-0.5">
               Available for custom distribution
             </p>
           </div>
 
           {/* Allocation status meter */}
           <div className="flex flex-col items-end">
-            <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            <span className="text-xs font-medium text-slate-700 dark:text-slate-200">
               Allocation Balance
             </span>
             <div

@@ -9,7 +9,7 @@ export default function DistributionsOverviewPage() {
   return (
     <ProtectedRoute allowedRoles={[UserRole.TEAM_LEADER, UserRole.ADMIN]}>
       <DistributionsView
-        distributeHref="/dashboard/intake"
+        distributeHref="/dashboard/distributions/create"
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard" },
           { label: "Distributions" },

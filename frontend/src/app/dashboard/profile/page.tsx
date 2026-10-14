@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import {
-  UserCheck,
   Mail,
   Shield,
   Key,
@@ -16,6 +15,7 @@ import LogOutPopUp from "@/components/LogOutPopUp";
 import { ChangePasswordModal } from "@/components/profile/ChangePasswordModal";
 import { UserRole } from "@/types/api.types";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 export default function ProfilePage() {
   const { user } = useAppSelector((state) => state.auth);
@@ -46,22 +46,20 @@ export default function ProfilePage() {
     : "U";
 
   return (
-    <div className="mx-auto flex flex-col gap-6">
+    <div className="mx-auto flex flex-col gap-3.5">
       {/* Header */}
-      <div>
-        <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <UserCheck className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-          <span>User Profile & Security</span>
-        </h1>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-          Review authenticated identity, security credentials, and role
-          privileges
-        </p>
-      </div>
+      <PageHeader
+        breadcrumbs={[
+          { label: "Dashboard", href: "/dashboard" },
+          { label: "Profile & Security" },
+        ]}
+        title="User Profile & Security"
+        description="Review authenticated identity, security credentials, and role privileges."
+      />
 
       {/* Main Profile Card */}
-      <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-xs p-6 flex flex-col gap-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-800">
+      <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-xs p-4 sm:p-5 flex flex-col gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-xl shadow-md">
               {initials}

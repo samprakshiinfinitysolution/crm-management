@@ -107,9 +107,9 @@ export const DistributionStepSummary: React.FC<
   };
 
   return (
-    <div className="flex flex-col gap-6 w-full">
+    <div className="flex flex-col gap-3.5 w-full">
       {/* Overview Banner */}
-      <div className="bg-card dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-card dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3.5 sm:p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -117,7 +117,7 @@ export const DistributionStepSummary: React.FC<
               Review & Confirm Distribution
             </h2>
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-xs text-slate-600 dark:text-slate-300 font-medium mt-1">
             Review your Step 1 team selection and Step 2 allocation details
             before executing.
           </p>
@@ -134,9 +134,9 @@ export const DistributionStepSummary: React.FC<
       </div>
 
       {/* Grid: Step 1 Summary & Step 2 Summary */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5">
         {/* STEP 1 SUMMARY: Selected Sales Executives */}
-        <div className="bg-card dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs flex flex-col justify-between">
+        <div className="bg-card dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3.5 sm:p-4 shadow-xs flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-2">
@@ -207,9 +207,9 @@ export const DistributionStepSummary: React.FC<
             </div>
 
             {/* Metrics cards */}
-            <div className="grid grid-cols-2 gap-3 pt-3 pb-3">
+            <div className="grid grid-cols-2 gap-2.5 pt-2.5 pb-2.5">
               <div className="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-lg p-3">
-                <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                <span className="text-[11px] text-slate-700 dark:text-slate-200 font-semibold">
                   Total Allocated
                 </span>
                 <p className="text-xl font-bold font-mono text-slate-900 dark:text-slate-100 mt-0.5">
@@ -218,7 +218,7 @@ export const DistributionStepSummary: React.FC<
               </div>
 
               <div className="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-lg p-3">
-                <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                <span className="text-[11px] text-slate-700 dark:text-slate-200 font-semibold">
                   Remaining in Pool
                 </span>
                 <p className="text-xl font-bold font-mono text-slate-900 dark:text-slate-100 mt-0.5">

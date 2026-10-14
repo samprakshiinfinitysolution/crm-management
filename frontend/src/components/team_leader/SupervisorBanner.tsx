@@ -31,12 +31,12 @@ export default function SupervisorBanner({
   const unassignedCount = supervisor?.quickCounts?.unassignedCount ?? 0;
 
   return (
-    <section className="pt-2">
-      <div className="bg-card rounded-lg p-5 sm:p-6 border border-slate-200/80 shadow-xs flex flex-col gap-4">
+    <section className="pt-1.5 pb-2">
+      <div className="bg-card rounded-lg p-3.5 sm:p-4.5 border border-slate-200/80 shadow-xs flex flex-col gap-3">
         {/* Supervisor Profile Summary */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3.5 min-w-0">
-            <div className="w-12 h-12 rounded-lg bg-blue-600 text-white font-bold text-base flex items-center justify-center shrink-0 shadow-xs">
+            <div className="w-11 h-11 rounded-lg bg-blue-600 text-white font-bold text-base flex items-center justify-center shrink-0 shadow-xs">
               {name
                 .split(" ")
                 .map((n) => n[0])
@@ -53,20 +53,20 @@ export default function SupervisorBanner({
                   Team Leader
                 </span>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-700 dark:text-slate-200 font-medium mt-0.5">
                 Overseeing sales pipeline, lead allocation, and team follow-ups
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 self-start sm:self-auto bg-slate-50 border border-slate-200/70 px-3 py-1.5 rounded-lg text-slate-600 text-xs font-medium">
-            <Calendar className="w-3.5 h-3.5 text-slate-400" />
+          <div className="flex items-center gap-1.5 self-start sm:self-auto bg-slate-50 border border-slate-200/70 px-3 py-1.5 rounded-lg text-slate-700 text-xs font-semibold">
+            <Calendar className="w-3.5 h-3.5 text-slate-500" />
             <span>{currentDate}</span>
           </div>
         </div>
 
         {/* Quick Operational Actions */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-100">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2 border-t border-slate-100 dark:border-slate-800">
           <button
             type="button"
             onClick={
@@ -102,12 +102,12 @@ export default function SupervisorBanner({
                 <span className="text-xs font-semibold block leading-tight">
                   Import Leads
                 </span>
-                <span className="text-[11px] text-slate-400">
+                <span className="text-[11px] text-slate-600 dark:text-slate-300 font-medium">
                   Excel / CSV batch
                 </span>
               </div>
             </div>
-            <span className="text-xs font-medium text-slate-500">Upload</span>
+            <span className="text-xs font-semibold text-slate-700 dark:text-slate-200">Upload</span>
           </button>
 
           <button
@@ -121,12 +121,12 @@ export default function SupervisorBanner({
                 <span className="text-xs font-semibold block leading-tight">
                   View Reports
                 </span>
-                <span className="text-[11px] text-slate-400">
+                <span className="text-[11px] text-slate-600 dark:text-slate-300 font-medium">
                   Team performance
                 </span>
               </div>
             </div>
-            <span className="text-xs font-medium text-slate-500">View</span>
+            <span className="text-xs font-semibold text-slate-700 dark:text-slate-200">View</span>
           </button>
         </div>
       </div>

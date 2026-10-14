@@ -10,6 +10,7 @@ import {
   Phone,
   Mail,
   IndianRupee,
+  RotateCcw,
 } from "lucide-react";
 import { LeadItem, PriorityLevel } from "@/types/api.types";
 import {
@@ -213,28 +214,28 @@ export const UnassignedLeadsTable: React.FC<UnassignedLeadsTableProps> = ({
   return (
     <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-xs overflow-hidden flex flex-col">
       {/* Header & Quick Action Selection Bar */}
-      <div className="p-4 md:p-5 border-b border-slate-100 dark:border-slate-800 space-y-3.5">
+      <div className="p-3.5 sm:p-4 border-b border-slate-100 dark:border-slate-800 space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">
                 Unassigned Lead Inventory
               </h2>
-              <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+              <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
                 {isServerPagination && serverTotalCount !== undefined
                   ? serverTotalCount
                   : filteredLeads.length}{" "}
                 leads
               </span>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-slate-700 dark:text-slate-200 font-medium">
               Filter and select specific leads or choose batch sizes below
             </p>
           </div>
 
           {/* Quick Batch Selection Buttons */}
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-[11px] font-semibold text-slate-400 mr-1 hidden sm:inline">
+            <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-200 mr-1 hidden sm:inline">
               Quick Select:
             </span>
             <button
@@ -269,51 +270,84 @@ export const UnassignedLeadsTable: React.FC<UnassignedLeadsTableProps> = ({
         </div>
 
         {/* Filter Controls Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
-          {/* Search Input */}
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Search by code, customer, mobile, city..."
-              value={activeSearchTerm}
-              onChange={(e) => handleSearchChange(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-xs rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all"
-            />
-          </div>
+        {(() => {
+          const hasActiveFilters = Boolean(
+            activeSearchTerm.trim() ||
+            (activePriorityFilter && activePriorityFilter !== "ALL") ||
+            (activeSourceFilter && activeSourceFilter !== "ALL")
+          );
 
-          {/* Priority Filter */}
-          <Select
-            value={activePriorityFilter}
-            onValueChange={handlePriorityChange}
-          >
-            <SelectTrigger className="w-full text-xs h-9 rounded-lg bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">
-              <SelectValue placeholder="Priority (All)" />
-            </SelectTrigger>
-            <SelectContent className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
-              <SelectItem value="ALL">All Priorities</SelectItem>
-              <SelectItem value="URGENT">Urgent Priority</SelectItem>
-              <SelectItem value="HIGH">High Priority</SelectItem>
-              <SelectItem value="MEDIUM">Medium Priority</SelectItem>
-              <SelectItem value="LOW">Low Priority</SelectItem>
-            </SelectContent>
-          </Select>
+          const handleResetFilters = () => {
+            handleSearchChange("");
+            handlePriorityChange("ALL");
+            handleSourceChange("ALL");
+          };
 
-          {/* Source Filter */}
-          <Select value={activeSourceFilter} onValueChange={handleSourceChange}>
-            <SelectTrigger className="w-full text-xs h-9 rounded-lg bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">
-              <SelectValue placeholder="Source (All)" />
-            </SelectTrigger>
-            <SelectContent className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
-              <SelectItem value="ALL">All Sources</SelectItem>
-              <SelectItem value="WEBSITE">Website Organic</SelectItem>
-              <SelectItem value="CAMPAIGN">Marketing Campaign</SelectItem>
-              <SelectItem value="EXCEL_IMPORT">Excel Ingestion</SelectItem>
-              <SelectItem value="REFERRAL">Partner Referral</SelectItem>
-              <SelectItem value="MANUAL_ENTRY">Manual Entry</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+          return (
+            <div className="flex flex-col sm:flex-row items-center gap-2.5 pt-1">
+              {/* Search Input */}
+              <div className="relative flex-1 w-full">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Search by code, customer, mobile, city..."
+                  value={activeSearchTerm}
+                  onChange={(e) => handleSearchChange(e.target.value)}
+                  className="w-full pl-9 pr-3 py-2 text-xs rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all"
+                />
+              </div>
+
+              {/* Priority Filter */}
+              <div className="w-full sm:w-44">
+                <Select
+                  value={activePriorityFilter}
+                  onValueChange={handlePriorityChange}
+                >
+                  <SelectTrigger className="w-full text-xs h-9 rounded-lg bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">
+                    <SelectValue placeholder="Priority (All)" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                    <SelectItem value="ALL">All Priorities</SelectItem>
+                    <SelectItem value="URGENT">Urgent Priority</SelectItem>
+                    <SelectItem value="HIGH">High Priority</SelectItem>
+                    <SelectItem value="MEDIUM">Medium Priority</SelectItem>
+                    <SelectItem value="LOW">Low Priority</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Source Filter */}
+              <div className="w-full sm:w-44">
+                <Select value={activeSourceFilter} onValueChange={handleSourceChange}>
+                  <SelectTrigger className="w-full text-xs h-9 rounded-lg bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">
+                    <SelectValue placeholder="Source (All)" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                    <SelectItem value="ALL">All Sources</SelectItem>
+                    <SelectItem value="WEBSITE">Website Organic</SelectItem>
+                    <SelectItem value="CAMPAIGN">Marketing Campaign</SelectItem>
+                    <SelectItem value="EXCEL_IMPORT">Excel Ingestion</SelectItem>
+                    <SelectItem value="REFERRAL">Partner Referral</SelectItem>
+                    <SelectItem value="MANUAL_ENTRY">Manual Entry</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Reset Button */}
+              {hasActiveFilters && (
+                <button
+                  type="button"
+                  onClick={handleResetFilters}
+                  className="h-9 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs shrink-0 w-full sm:w-auto"
+                  title="Reset all filters"
+                >
+                  <RotateCcw className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
+                  <span>Reset</span>
+                </button>
+              )}
+            </div>
+          );
+        })()}
       </div>
 
       {/* Selected Leads Sticky Pill */}

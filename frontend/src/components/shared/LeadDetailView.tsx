@@ -44,6 +44,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { PageHeader } from "./PageHeader";
 
 export interface ExtendedLeadDetail extends Omit<LeadItem, "notes"> {
   notes?: LeadNoteItem[] | string | null;
@@ -176,91 +177,91 @@ export function LeadDetailView({ leadId: propLeadId, backHref }: LeadDetailViewP
   }
 
   return (
-    <div className="max-w-6xl mx-auto flex flex-col gap-6">
+    <div className="max-w-6xl mx-auto flex flex-col gap-3.5">
       {/* Top Header & Navigation */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <Link
-            href={resolvedBackHref}
-            className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all shadow-2xs"
-          >
-            <ArrowLeft className="w-4 h-4" />
-          </Link>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-mono text-sm font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2.5 py-0.5 rounded-md border border-blue-200 dark:border-blue-800">
-                {lead.leadCode}
-              </span>
-              <span className="text-lg font-bold text-slate-900 dark:text-slate-100">
-                {lead.customerName}
-              </span>
-            </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Created on {new Date(lead.createdAt).toLocaleDateString()} ·
-              Registered via {lead.leadSource || "Direct"}
-            </p>
+      <PageHeader
+        breadcrumbs={[
+          {
+            label: resolvedBackHref.includes("admin")
+              ? "Admin"
+              : isManager
+              ? "Dashboard"
+              : "My Leads",
+            href: resolvedBackHref,
+          },
+          { label: "Leads", href: resolvedBackHref },
+          { label: `${lead.leadCode} (${lead.customerName})` },
+        ]}
+        title={`${lead.customerName}`}
+        description={`Lead Code: ${lead.leadCode} · Registered via ${lead.leadSource || "Direct"} · Created on ${new Date(lead.createdAt).toLocaleDateString()}`}
+        actions={
+          <div className="flex flex-wrap items-center gap-2">
+            <Link
+              href={resolvedBackHref}
+              className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all shadow-2xs"
+              title="Back to Leads"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </Link>
+
+            {isManager && (
+              <button
+                type="button"
+                onClick={() => setIsReassignModalOpen(true)}
+                className="px-3.5 py-2 rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/60 dark:hover:bg-blue-900/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
+              >
+                <UserCheck className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                <span>Reassign</span>
+              </button>
+            )}
+
+            {isManager && (lead?.assignedTo || lead?.status !== "NEW") && (
+              <button
+                type="button"
+                onClick={() => setIsRecallModalOpen(true)}
+                className="px-3.5 py-2 rounded-lg bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/60 dark:hover:bg-rose-900/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
+              >
+                <RotateCcw className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
+                <span>Recall to Pool</span>
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedStatus(lead.status);
+                setIsStatusModalOpen(true);
+              }}
+              className="px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
+            >
+              <Tag className="w-3.5 h-3.5" />
+              <span>Update Status</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsScheduleModalOpen(true)}
+              className="px-3.5 py-2 rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
+            >
+              <CalendarPlus className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <span>Schedule Follow-up</span>
+            </button>
           </div>
-        </div>
-
-        {/* Action Controls */}
-        <div className="flex flex-wrap items-center gap-2">
-          {isManager && (
-            <button
-              type="button"
-              onClick={() => setIsReassignModalOpen(true)}
-              className="px-3.5 py-2 rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/60 dark:hover:bg-blue-900/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
-            >
-              <UserCheck className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-              <span>Reassign</span>
-            </button>
-          )}
-
-          {isManager && (lead?.assignedTo || lead?.status !== "NEW") && (
-            <button
-              type="button"
-              onClick={() => setIsRecallModalOpen(true)}
-              className="px-3.5 py-2 rounded-lg bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/60 dark:hover:bg-rose-900/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
-            >
-              <RotateCcw className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
-              <span>Recall to Pool</span>
-            </button>
-          )}
-
-          <button
-            type="button"
-            onClick={() => {
-              setSelectedStatus(lead.status);
-              setIsStatusModalOpen(true);
-            }}
-            className="px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
-          >
-            <Tag className="w-3.5 h-3.5" />
-            <span>Update Status</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setIsScheduleModalOpen(true)}
-            className="px-3.5 py-2 rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
-          >
-            <CalendarPlus className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-            <span>Schedule Follow-up</span>
-          </button>
-        </div>
-      </div>
+        }
+      />
 
       {/* Main Grid: Left details + Right Timeline */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3.5">
         {/* Left Column: Profile & Details */}
-        <div className="lg:col-span-2 flex flex-col gap-6">
+        <div className="lg:col-span-2 flex flex-col gap-3.5">
           {/* Customer Profile Card */}
-          <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-xs p-5 flex flex-col gap-4">
+          <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-xs p-3.5 sm:p-4 flex flex-col gap-3">
             <h2 className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider pb-2 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
               <User className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               <span>Customer Contact Details</span>
             </h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
                 <Phone className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
                 <div className="flex flex-col min-w-0">
@@ -341,14 +342,14 @@ export function LeadDetailView({ leadId: propLeadId, backHref }: LeadDetailViewP
           </div>
 
           {/* Deal Requirement Card */}
-          <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-xs p-5 flex flex-col gap-4">
+          <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-xs p-3.5 sm:p-4 flex flex-col gap-3">
             <h2 className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider pb-2 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
               <FileText className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               <span>Deal Requirements & Offerings</span>
             </h2>
 
-            <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-              <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase block mb-1">
+            <div className="p-3.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase block mb-1">
                 Detailed Requirement
               </span>
               <p className="text-xs text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap">
@@ -356,9 +357,9 @@ export function LeadDetailView({ leadId: propLeadId, backHref }: LeadDetailViewP
               </p>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
               <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-                <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase block">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase block">
                   Budget
                 </span>
                 <span className="text-sm font-bold text-slate-900 dark:text-slate-100">
@@ -369,7 +370,7 @@ export function LeadDetailView({ leadId: propLeadId, backHref }: LeadDetailViewP
               </div>
 
               <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-                <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase block">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase block">
                   Product / Service
                 </span>
                 <span className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate block">
@@ -378,7 +379,7 @@ export function LeadDetailView({ leadId: propLeadId, backHref }: LeadDetailViewP
               </div>
 
               <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-                <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase block">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase block">
                   Priority
                 </span>
                 <span className="text-xs font-bold text-blue-700 dark:text-blue-300">
@@ -389,7 +390,7 @@ export function LeadDetailView({ leadId: propLeadId, backHref }: LeadDetailViewP
           </div>
 
           {/* Follow-up Tasks */}
-          <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-xs p-5 flex flex-col gap-4">
+          <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-xs p-3.5 sm:p-4 flex flex-col gap-3">
             <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
               <h2 className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400" />
@@ -446,7 +447,7 @@ export function LeadDetailView({ leadId: propLeadId, backHref }: LeadDetailViewP
           </div>
 
           {/* Notes & Team Discussion Card */}
-          <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-xs p-5 flex flex-col gap-4">
+          <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-xs p-3.5 sm:p-4 flex flex-col gap-3">
             <h2 className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider pb-2 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
               <MessageSquare className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               <span>Notes & Observations</span>
@@ -517,15 +518,15 @@ export function LeadDetailView({ leadId: propLeadId, backHref }: LeadDetailViewP
         </div>
 
         {/* Right Column: Status Card & Activity Stream */}
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-3.5">
           {/* Status & Assignment Info Card */}
-          <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-xs p-5 flex flex-col gap-4">
+          <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-xs p-3.5 sm:p-4 flex flex-col gap-3">
             <h2 className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider pb-2 border-b border-slate-100 dark:border-slate-800">
               Pipeline Stage & Ownership
             </h2>
 
             <div className="flex items-center justify-between">
-              <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+              <span className="text-xs text-slate-700 dark:text-slate-200 font-medium">
                 Current Status
               </span>
               <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
@@ -534,7 +535,7 @@ export function LeadDetailView({ leadId: propLeadId, backHref }: LeadDetailViewP
             </div>
 
             <div className="flex items-center justify-between">
-              <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+              <span className="text-xs text-slate-700 dark:text-slate-200 font-medium">
                 Assigned Representative
               </span>
               <div className="flex items-center gap-1.5">
@@ -568,7 +569,7 @@ export function LeadDetailView({ leadId: propLeadId, backHref }: LeadDetailViewP
 
             {lead?.assignedAt && (
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                <span className="text-xs text-slate-700 dark:text-slate-200 font-medium">
                   Assigned On
                 </span>
                 <span className="text-xs text-slate-600 dark:text-slate-300">
@@ -579,7 +580,7 @@ export function LeadDetailView({ leadId: propLeadId, backHref }: LeadDetailViewP
           </div>
 
           {/* Activity Timeline Card */}
-          <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-xs p-5 flex flex-col gap-4">
+          <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-xs p-3.5 sm:p-4 flex flex-col gap-3">
             <h2 className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider pb-2 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
               <Activity className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               <span>Activity History</span>

@@ -78,7 +78,7 @@ export function LeadsDirectoryTable({
     <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-xs overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs text-slate-600 dark:text-slate-400">
-          <thead className="bg-slate-50 dark:bg-slate-800/70 border-b border-slate-200/80 dark:border-slate-800 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+          <thead className="bg-slate-50 dark:bg-slate-800/70 border-b border-slate-200/80 dark:border-slate-800 text-[11px] font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
             <tr>
               <th className="py-3 px-4 w-10 text-center">
                 <button

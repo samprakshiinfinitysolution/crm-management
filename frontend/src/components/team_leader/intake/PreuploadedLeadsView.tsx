@@ -13,6 +13,7 @@ import {
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
+  RotateCcw,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { LeadItem, LeadStatus } from "@/types/api.types";
@@ -57,6 +58,19 @@ export const PreuploadedLeadsView: React.FC<PreuploadedLeadsViewProps> = ({
   const [sortBy, setSortBy] = useState("createdAt:desc");
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
+
+  const hasActiveFilters = Boolean(
+    searchTerm.trim() ||
+    selectedSource !== "ALL" ||
+    selectedStatus !== "ALL"
+  );
+
+  const handleResetFilters = () => {
+    setSearchTerm("");
+    setSelectedSource("ALL");
+    setSelectedStatus("ALL");
+    setCurrentPage(1);
+  };
 
   // Debounce search input by 400ms to avoid flooding backend requests
   const debouncedSearch = useDebounce(searchTerm, 400);
@@ -145,38 +159,38 @@ export const PreuploadedLeadsView: React.FC<PreuploadedLeadsViewProps> = ({
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-3.5">
       {/* KPI Stats Strip */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <Card className="p-4 rounded-lg bg-card/3 border border-white/10">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+        <Card className="p-3.5 rounded-lg bg-card/3 border border-white/10">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-200">
             Total In Repository
           </span>
           <div className="text-xl font-bold text-accent-foreground mt-1">
             {totalInRepo}
           </div>
         </Card>
-        <Card className="p-4 rounded-lg bg-card/3 border border-white/10">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-blue-400">
+        <Card className="p-3.5 rounded-lg bg-card/3 border border-white/10">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">
             Unassigned Pool
           </span>
-          <div className="text-xl font-bold text-blue-400 mt-1">
+          <div className="text-xl font-bold text-blue-600 dark:text-blue-400 mt-1">
             {unassignedCount}
           </div>
         </Card>
-        <Card className="p-4 rounded-lg bg-card/3 border border-white/10">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-purple-400">
+        <Card className="p-3.5 rounded-lg bg-card/3 border border-white/10">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-purple-600 dark:text-purple-400">
             Assigned to Sales
           </span>
-          <div className="text-xl font-bold text-purple-400 mt-1">
+          <div className="text-xl font-bold text-purple-600 dark:text-purple-400 mt-1">
             {assignedCount}
           </div>
         </Card>
-        <Card className="p-4 rounded-lg bg-card/3 border border-white/10">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-emerald-400">
+        <Card className="p-3.5 rounded-lg bg-card/3 border border-white/10">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
             Closed Won
           </span>
-          <div className="text-xl font-bold text-emerald-400 mt-1">
+          <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">
             {wonCount}
           </div>
         </Card>
@@ -277,6 +291,19 @@ export const PreuploadedLeadsView: React.FC<PreuploadedLeadsViewProps> = ({
                 </Select>
               </div>
             </div>
+
+            {/* Reset Button */}
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className="h-8 px-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs shrink-0 self-start sm:self-auto"
+                title="Reset repository filters"
+              >
+                <RotateCcw className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
+                <span>Reset</span>
+              </button>
+            )}
           </div>
 
           <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0">
@@ -294,7 +321,7 @@ export const PreuploadedLeadsView: React.FC<PreuploadedLeadsViewProps> = ({
 
             <button
               type="button"
-              onClick={() => router.push("/team_leader/distribute")}
+              onClick={() => router.push("/dashboard/distributions/create")}
               className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-md shadow-blue-500/20 transition-all flex-1 sm:flex-initial"
             >
               <span>Distribute Leads</span>

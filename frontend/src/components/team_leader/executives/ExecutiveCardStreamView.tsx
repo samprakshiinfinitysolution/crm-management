@@ -135,7 +135,7 @@ export const ExecutiveCardStreamView: React.FC<
           <h3 className="text-sm font-bold text-slate-900 dark:text-white">
             No Sales Executives Match Criteria
           </h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm">
+          <p className="text-xs text-slate-700 dark:text-slate-200 font-medium mt-1 max-w-sm">
             Try adjusting your search query, status, or capacity filter
             settings.
           </p>
@@ -151,7 +151,7 @@ export const ExecutiveCardStreamView: React.FC<
         <h3 className="font-bold text-slate-900 dark:text-white">
           Representative Roster Stream ({totalItems} Staff)
         </h3>
-        <span className="text-[11px] font-bold text-slate-400">
+        <span className="text-[11px] font-bold text-slate-700 dark:text-slate-200">
           Click card to inspect full lead dossier & activities
         </span>
       </div>
@@ -178,7 +178,7 @@ export const ExecutiveCardStreamView: React.FC<
             <div
               key={exec.id}
               onClick={() => dispatch(setSelectedExecutiveId(exec.id))}
-              className="flex flex-col lg:flex-row lg:items-center justify-between p-4 rounded-lg border border-slate-200/90 dark:border-slate-800 bg-card dark:bg-slate-900 hover:border-blue-400 dark:hover:border-blue-700 hover:shadow-xs transition-all cursor-pointer group gap-4"
+              className="flex flex-col lg:flex-row lg:items-center justify-between p-3.5 sm:p-4 rounded-lg border border-slate-200/90 dark:border-slate-800 bg-card dark:bg-slate-900 hover:border-blue-400 dark:hover:border-blue-700 hover:shadow-xs transition-all cursor-pointer group gap-4"
             >
               {/* Executive Details & Avatar */}
               <div className="flex items-start sm:items-center gap-3.5 min-w-0">

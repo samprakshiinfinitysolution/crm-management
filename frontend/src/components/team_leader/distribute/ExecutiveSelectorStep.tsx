@@ -65,7 +65,7 @@ export const ExecutiveSelectorStep: React.FC<ExecutiveSelectorStepProps> = ({
   return (
     <div className="bg-card dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden flex flex-col">
       {/* 1. Header & Actions Toolbar */}
-      <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="p-3.5 sm:p-4 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
             <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">
@@ -75,7 +75,7 @@ export const ExecutiveSelectorStep: React.FC<ExecutiveSelectorStepProps> = ({
               {selectedExecutiveIds.length} of {executives.length} Selected
             </span>
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-700 dark:text-slate-200 font-medium mt-0.5">
             Choose representatives who will receive leads in this distribution
             round.
           </p>
@@ -114,7 +114,7 @@ export const ExecutiveSelectorStep: React.FC<ExecutiveSelectorStepProps> = ({
       </div>
 
       {/* 2. Search & Filter Bar */}
-      <div className="px-5 py-3.5 bg-slate-50/70 dark:bg-slate-900/50 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+      <div className="px-3.5 sm:px-4 py-2.5 bg-slate-50/70 dark:bg-slate-900/50 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         {/* Search Box */}
         <div className="relative flex-1 max-w-sm">
           <Search className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />

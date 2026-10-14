@@ -145,7 +145,7 @@ export const LeadCardStream: React.FC<LeadCardStreamProps> = ({
             <div
               key={lead.id}
               onClick={() => onToggleLead(lead.id)}
-              className={`flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg border transition-all cursor-pointer ${
+              className={`flex flex-col sm:flex-row sm:items-center justify-between p-3.5 sm:p-4 rounded-lg border transition-all cursor-pointer ${
                 isSelected
                   ? "bg-blue-50/40 dark:bg-blue-950/20 border-blue-400 dark:border-blue-800 shadow-xs"
                   : "bg-white dark:bg-slate-900 border-slate-200/90 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
@@ -205,7 +205,7 @@ export const LeadCardStream: React.FC<LeadCardStreamProps> = ({
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                  <p className="text-xs text-slate-700 dark:text-slate-200 font-medium">
                     {[
                       lead.companyName,
                       [lead.city, lead.state].filter(Boolean).join(", "),
@@ -213,9 +213,9 @@ export const LeadCardStream: React.FC<LeadCardStreamProps> = ({
                       .filter(Boolean)
                       .join(" · ") || "No company/location provided"}
                   </p>
-                  <div className="flex items-center gap-3 text-[11px] text-slate-400 pt-1">
+                  <div className="flex items-center gap-3 text-[11px] text-slate-600 dark:text-slate-300 font-medium pt-1">
                     {(lead.leadSource || lead.source) && (
-                      <span className="flex items-center gap-1 font-medium text-slate-600 dark:text-slate-400">
+                      <span className="flex items-center gap-1 font-semibold text-slate-700 dark:text-slate-200">
                         <Globe className="w-3 h-3" />
                         {lead.leadSource || lead.source}
                       </span>
@@ -239,7 +239,7 @@ export const LeadCardStream: React.FC<LeadCardStreamProps> = ({
                       : String(lead.budget)
                     : "—"}
                 </div>
-                <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold">
+                <span className="text-[11px] uppercase tracking-wider text-slate-700 dark:text-slate-200 font-semibold">
                   Budget
                 </span>
               </div>

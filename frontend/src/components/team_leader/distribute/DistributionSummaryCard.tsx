@@ -54,14 +54,14 @@ export const DistributionSummaryCard: React.FC<
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-xl p-6 md:p-7 shadow-xs border border-slate-200/90 dark:border-slate-800 flex flex-col justify-between gap-6 transition-all">
+    <div className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-xl p-4 sm:p-5 shadow-xs border border-slate-200/90 dark:border-slate-800 flex flex-col justify-between gap-3.5 transition-all">
       {/* Top Title & Badge */}
       <div className="flex items-center justify-between gap-3">
         <div>
           <h3 className="text-base md:text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100">
             Distribution Engine Summary
           </h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-600 dark:text-slate-300 font-medium mt-0.5">
             Deterministic allocation calculation before atomic database commit
           </p>
         </div>
@@ -72,9 +72,9 @@ export const DistributionSummaryCard: React.FC<
       </div>
 
       {/* Numerical Metrics Matrix */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
-        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-lg p-4.5 space-y-1 shadow-2xs">
-          <span className="text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-lg p-3.5 space-y-1 shadow-2xs">
+          <span className="text-[11px] uppercase tracking-wider text-slate-700 dark:text-slate-200 font-semibold">
             Total Leads
           </span>
           <div className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-100">
@@ -82,8 +82,8 @@ export const DistributionSummaryCard: React.FC<
           </div>
         </div>
 
-        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-lg p-4.5 space-y-1 shadow-2xs">
-          <span className="text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
+        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-lg p-3.5 space-y-1 shadow-2xs">
+          <span className="text-[11px] uppercase tracking-wider text-slate-700 dark:text-slate-200 font-semibold">
             Active Targets
           </span>
           <div className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-100">
@@ -91,8 +91,8 @@ export const DistributionSummaryCard: React.FC<
           </div>
         </div>
 
-        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-lg p-4.5 space-y-1 shadow-2xs">
-          <span className="text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
+        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-lg p-3.5 space-y-1 shadow-2xs">
+          <span className="text-[11px] uppercase tracking-wider text-slate-700 dark:text-slate-200 font-semibold">
             Will Allocate
           </span>
           <div className="text-2xl md:text-3xl font-bold text-emerald-600 dark:text-emerald-400">
@@ -100,8 +100,8 @@ export const DistributionSummaryCard: React.FC<
           </div>
         </div>
 
-        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-lg p-4.5 space-y-1 shadow-2xs">
-          <span className="text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
+        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-lg p-3.5 space-y-1 shadow-2xs">
+          <span className="text-[11px] uppercase tracking-wider text-slate-700 dark:text-slate-200 font-semibold">
             Pool Remainder
           </span>
           <div className="text-2xl md:text-3xl font-bold text-amber-600 dark:text-amber-400">

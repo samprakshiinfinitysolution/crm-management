@@ -6,8 +6,6 @@ import { DistributionTabMode } from "./DistributeModeSelector";
 import { AllocationSummaryItem } from "./DistributionSuccessModal";
 import {
   LeadStatus,
-  UserRole,
-  SalesExecutiveSummary,
 } from "@/types/api.types";
 import {
   useDistributeLeadsMutation,
@@ -19,81 +17,6 @@ import {
 } from "@/store";
 import { handleApiError } from "@/lib/errorHandler";
 import { useDebounce } from "@/lib/useDebounce";
-
-const DEMO_EXECUTIVES: SalesExecutiveSummary[] = [
-  {
-    id: "exec-1",
-    name: "Rahul Sharma",
-    email: "rahul@leadflow.com",
-    role: UserRole.SALES_EXECUTIVE,
-    isActive: true,
-    createdAt: new Date().toISOString(),
-    totalAssignedLeads: 24,
-    activeLeads: 24,
-    convertedLeads: 8,
-    lostLeads: 2,
-    followUpsPending: 4,
-    followUpsOverdue: 0,
-    conversionRate: 28,
-    capacityPercentage: 60,
-    totalPipelineValue: 450000,
-    workloadStatus: "OPTIMAL",
-  },
-  {
-    id: "exec-2",
-    name: "Priya Mehta",
-    email: "priya@leadflow.com",
-    role: UserRole.SALES_EXECUTIVE,
-    isActive: true,
-    createdAt: new Date().toISOString(),
-    totalAssignedLeads: 18,
-    activeLeads: 18,
-    convertedLeads: 6,
-    lostLeads: 1,
-    followUpsPending: 3,
-    followUpsOverdue: 0,
-    conversionRate: 31,
-    capacityPercentage: 45,
-    totalPipelineValue: 320000,
-    workloadStatus: "OPTIMAL",
-  },
-  {
-    id: "exec-3",
-    name: "Arjun Verma",
-    email: "arjun@leadflow.com",
-    role: UserRole.SALES_EXECUTIVE,
-    isActive: true,
-    createdAt: new Date().toISOString(),
-    totalAssignedLeads: 21,
-    activeLeads: 21,
-    convertedLeads: 5,
-    lostLeads: 3,
-    followUpsPending: 2,
-    followUpsOverdue: 1,
-    conversionRate: 22,
-    capacityPercentage: 55,
-    totalPipelineValue: 390000,
-    workloadStatus: "OPTIMAL",
-  },
-  {
-    id: "exec-4",
-    name: "Sneha Patel",
-    email: "sneha@leadflow.com",
-    role: UserRole.SALES_EXECUTIVE,
-    isActive: true,
-    createdAt: new Date().toISOString(),
-    totalAssignedLeads: 15,
-    activeLeads: 15,
-    convertedLeads: 7,
-    lostLeads: 1,
-    followUpsPending: 1,
-    followUpsOverdue: 0,
-    conversionRate: 35,
-    capacityPercentage: 40,
-    totalPipelineValue: 280000,
-    workloadStatus: "OPTIMAL",
-  },
-];
 
 export function useLeadDistribution() {
   // Tab / distribution strategy mode
@@ -242,7 +165,7 @@ export function useLeadDistribution() {
     if (salesExecutive?.data && salesExecutive.data.length > 0) {
       return salesExecutive.data;
     }
-    return DEMO_EXECUTIVES;
+    return [];
   }, [salesExecutive]);
 
   // Total unassigned pool count
@@ -281,8 +204,8 @@ export function useLeadDistribution() {
     if (userSelectedExecutiveIds !== null) {
       return userSelectedExecutiveIds;
     }
-    return executives.slice(0, 3).map((e) => e.id);
-  }, [userSelectedExecutiveIds, executives]);
+    return [];
+  }, [userSelectedExecutiveIds]);
 
   // Derived quotas for each executive in Custom Split mode (strictly capped at totalUnassignedCount)
   const quotas = useMemo<Record<string, number>>(() => {

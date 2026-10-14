@@ -9,6 +9,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Layers,
+  RotateCcw,
 } from "lucide-react";
 import { useDebounce } from "@/lib/useDebounce";
 import { StagedLeadRow } from "./SheetUploadZone";
@@ -135,6 +136,21 @@ export const SheetPreviewTable: React.FC<SheetPreviewTableProps> = ({
               className="pl-8 pr-3 py-1.5 bg-card/5 border border-crm-brand/10 rounded-lg text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-crm-brand w-44 sm:w-56"
             />
           </div>
+
+          {searchTerm && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearchTerm("");
+                setCurrentPage(1);
+              }}
+              className="h-8 px-2 rounded-lg bg-card/10 hover:bg-card/20 text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer shadow-2xs shrink-0"
+              title="Reset search"
+            >
+              <RotateCcw className="w-3.5 h-3.5 text-slate-400" />
+              <span>Reset</span>
+            </button>
+          )}
 
           <button
             type="button"

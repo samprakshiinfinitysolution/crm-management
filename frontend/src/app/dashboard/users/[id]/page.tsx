@@ -12,6 +12,8 @@ import {
   useGetSalesExecutiveByIdQuery,
   useToggleExecutiveStatusMutation,
 } from "@/store";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { TableSkeletonRows } from "@/components/ui/TableSkeletonRows";
 
 export default function UserDetailPage() {
   const params = useParams();
@@ -46,14 +48,69 @@ export default function UserDetailPage() {
   if (isLoading) {
     return (
       <ProtectedRoute allowedRoles={[UserRole.TEAM_LEADER, UserRole.ADMIN]}>
-        <div className="py-16 text-center text-slate-400">
-          Loading user profile...
+        <div className="space-y-3.5 animate-pulse select-none">
+          {/* Header Skeleton */}
+          <div className="pb-3.5 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="space-y-2">
+              <div className="flex items-center gap-1.5">
+                <div className="h-3 w-16 bg-slate-200 dark:bg-slate-800 rounded" />
+                <div className="h-3 w-3 bg-slate-200 dark:bg-slate-800 rounded" />
+                <div className="h-3 w-12 bg-slate-200 dark:bg-slate-800 rounded" />
+                <div className="h-3 w-3 bg-slate-200 dark:bg-slate-800 rounded" />
+                <div className="h-3 w-20 bg-slate-200 dark:bg-slate-800 rounded" />
+              </div>
+              <div className="h-6 w-48 bg-slate-200 dark:bg-slate-800 rounded-md" />
+              <div className="h-3.5 w-64 bg-slate-200 dark:bg-slate-800 rounded" />
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-8 bg-slate-200 dark:bg-slate-800 rounded-lg" />
+              <div className="h-8 w-32 bg-slate-200 dark:bg-slate-800 rounded-lg" />
+            </div>
+          </div>
+
+          {/* Metrics Overview Grid Skeleton */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            {[1, 2, 3, 4].map((i) => (
+              <div
+                key={i}
+                className="bg-white dark:bg-slate-900 p-3.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs space-y-2"
+              >
+                <div className="h-3 w-24 bg-slate-200 dark:bg-slate-800 rounded" />
+                <div className="h-7 w-16 bg-slate-200 dark:bg-slate-800 rounded" />
+              </div>
+            ))}
+          </div>
+
+          {/* Assigned Leads Table Card Skeleton */}
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-xs overflow-hidden">
+            <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <div className="h-4 w-36 bg-slate-200 dark:bg-slate-800 rounded" />
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="p-4 space-y-3">
+                {/* Table Header Row Skeleton */}
+                <thead>
+                  <tr className="grid grid-cols-5 gap-4 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <th className="h-3 w-16 bg-slate-200 dark:bg-slate-800 rounded" />
+                    <th className="h-3 w-24 bg-slate-200 dark:bg-slate-800 rounded" />
+                    <th className="h-3 w-20 bg-slate-200 dark:bg-slate-800 rounded" />
+                    <th className="h-3 w-14 bg-slate-200 dark:bg-slate-800 rounded" />
+                    <th className="h-3 w-12 bg-slate-200 dark:bg-slate-800 rounded ml-auto" />
+                  </tr>
+                </thead>
+                <tbody>
+                  <TableSkeletonRows rows={5} columns={5} />
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </ProtectedRoute>
     );
   }
 
-  if (isError || !user) {
+  if (isError || !user ) {
     return (
       <ProtectedRoute allowedRoles={[UserRole.TEAM_LEADER, UserRole.ADMIN]}>
         <div className="p-8 text-center bg-rose-50 border border-rose-200 rounded-lg text-rose-700">
@@ -76,68 +133,58 @@ export default function UserDetailPage() {
 
   return (
     <ProtectedRoute allowedRoles={[UserRole.TEAM_LEADER, UserRole.ADMIN]}>
-      <div className="space-y-6">
+      <div className="space-y-3.5">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <Link
-              href="/dashboard/users"
-              className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors shadow-2xs"
-            >
-              <ArrowLeft className="w-4 h-4" />
-            </Link>
-            <div>
-              <div className="flex items-center gap-2.5">
-                <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-                  {user.name}
-                </h1>
-                <span
-                  className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                    user.isActive
-                      ? "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
-                      : "bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800"
-                  }`}
-                >
-                  {user.isActive ? "Active" : "Inactive"}
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5">
-                {user.email} · {user.role}
-              </p>
+        <PageHeader
+          breadcrumbs={[
+            { label: "Dashboard", href: "/dashboard" },
+            { label: "Users", href: "/dashboard/users" },
+            { label: user.name },
+          ]}
+          title={user.name}
+          description={`${user.email} · ${user.role} · ${user.isActive ? "Active Account" : "Inactive Account"}`}
+          actions={
+            <div className="flex items-center gap-2">
+              <Link
+                href="/dashboard/users"
+                className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors shadow-2xs"
+                title="Back to Users"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </Link>
+              <button
+                type="button"
+                onClick={handleToggleActive}
+                disabled={isToggling}
+                className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all shadow-xs cursor-pointer ${
+                  user.isActive
+                    ? "bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 hover:bg-rose-100 dark:hover:bg-rose-900/60"
+                    : "bg-emerald-600 text-white hover:bg-emerald-700"
+                }`}
+              >
+                {isToggling ? (
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin mx-auto" />
+                ) : user.isActive ? (
+                  "Deactivate Account"
+                ) : (
+                  "Activate Account"
+                )}
+              </button>
             </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleToggleActive}
-            disabled={isToggling}
-            className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all shadow-xs cursor-pointer ${
-              user.isActive
-                ? "bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 hover:bg-rose-100 dark:hover:bg-rose-900/60"
-                : "bg-emerald-600 text-white hover:bg-emerald-700"
-            }`}
-          >
-            {isToggling ? (
-              <RefreshCw className="w-3.5 h-3.5 animate-spin mx-auto" />
-            ) : user.isActive ? (
-              "Deactivate Account"
-            ) : (
-              "Activate Account"
-            )}
-          </button>
-        </div>
+          }
+        />
 
         {/* Metrics Overview Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div className="bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
-            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          <div className="bg-white dark:bg-slate-900 p-3.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
+            <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
               Assigned Leads
             </p>
             <p className="text-2xl font-bold text-slate-900 dark:text-slate-100 mt-1">
               {user.activeLeads ?? 0}
             </p>
           </div>
-          <div className="bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
+          <div className="bg-white dark:bg-slate-900 p-3.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
             <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
               Won Deals
             </p>
@@ -145,7 +192,7 @@ export default function UserDetailPage() {
               {user.convertedLeads ?? 0}
             </p>
           </div>
-          <div className="bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
+          <div className="bg-white dark:bg-slate-900 p-3.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
             <p className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
               Conversion Rate
             </p>
@@ -153,7 +200,7 @@ export default function UserDetailPage() {
               {(user.conversionRate ?? 0).toFixed(1)}%
             </p>
           </div>
-          <div className="bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
+          <div className="bg-white dark:bg-slate-900 p-3.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
             <p className="text-xs font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
               Workload Status
             </p>

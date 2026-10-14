@@ -34,14 +34,14 @@ export const ExecutivePerformanceMatrix: React.FC<
   );
 
   return (
-    <Card className="p-5 sm:p-6 rounded-xl bg-card dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs h-full flex flex-col justify-between overflow-hidden">
+    <Card className="p-3.5 sm:p-4.5 rounded-xl bg-card dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs h-full flex flex-col justify-between overflow-hidden">
       <div className="flex flex-col min-w-0">
         <div className="flex items-center justify-between mb-4 pb-2 border-b border-slate-100 dark:border-slate-800/80">
           <div>
             <h3 className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white">
               Sales Executive Scorecard Matrix
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-slate-700 dark:text-slate-200 font-medium">
               Staff throughput, conversion efficiency, response velocity, and
               SLA adherence
             </p>
@@ -54,7 +54,7 @@ export const ExecutivePerformanceMatrix: React.FC<
         <div className="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700">
           <table className="w-full text-left border-collapse min-w-[760px]">
             <thead className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
-              <tr className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              <tr className="text-[11px] font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-200">
                 <th className="py-3 px-3 pl-3 text-left whitespace-nowrap min-w-[170px]">
                   Executive
                 </th>

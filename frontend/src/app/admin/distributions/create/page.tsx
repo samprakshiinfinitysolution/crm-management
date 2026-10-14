@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   DistributeStepperHeader,
@@ -16,6 +15,7 @@ import {
   ExecutiveSelectorStep,
   useLeadDistribution,
 } from "@/components/team_leader/distribute";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 export default function AdminCreateDistributionPage() {
   const router = useRouter();
@@ -91,6 +91,11 @@ export default function AdminCreateDistributionPage() {
     totalUnassignedCount,
   ]);
 
+  // Step 2: only selected executives show
+  const selectedExecutives = useMemo(() => {
+    return executives.filter((e) => selectedExecutiveIds.includes(e.id));
+  }, [executives, selectedExecutiveIds]);
+
   // Validation for proceeding from Step 2 to Step 3
   const isStep2Valid = useMemo(() => {
     if (selectedExecutiveIds.length === 0) return false;
@@ -144,15 +149,17 @@ export default function AdminCreateDistributionPage() {
   ]);
 
   return (
-    <div className="flex flex-col gap-6 pb-12 max-w-7xl mx-auto w-full animate-in fade-in duration-200">
-      {/* Breadcrumb Bar */}
-      <div className="flex items-center gap-2 text-xs text-slate-500 pb-2 border-b border-slate-200 dark:border-slate-800">
-        <Link href="/admin" className="hover:underline">Admin</Link>
-        <span>/</span>
-        <Link href="/admin/distributions" className="hover:underline">Distributions</Link>
-        <span>/</span>
-        <span className="text-blue-600 dark:text-blue-400 font-semibold">Wizard</span>
-      </div>
+    <div className="flex flex-col gap-3.5 pb-8 max-w-7xl mx-auto w-full animate-in fade-in duration-200">
+      {/* Page Header */}
+      <PageHeader
+        breadcrumbs={[
+          { label: "Admin", href: "/admin" },
+          { label: "Distributions", href: "/admin/distributions" },
+          { label: "Wizard" },
+        ]}
+        title="Lead Distribution Engine"
+        description="Allocate unassigned intake inventory or rebalance leads among sales executives."
+      />
 
       {/* Three-Step Stepper Header */}
       <DistributeStepperHeader
@@ -183,7 +190,7 @@ export default function AdminCreateDistributionPage() {
 
       {/* STEP 2: Distribute Leads */}
       {currentStep === 2 && (
-        <div className="space-y-6">
+        <div className="space-y-3.5">
           <DistributeModeSelector
             activeMode={activeMode}
             onSelectMode={handleSelectMode}
@@ -192,7 +199,7 @@ export default function AdminCreateDistributionPage() {
 
           {activeMode === "EQUAL_SPLIT" && (
             <EqualSplitSection
-              executives={executives}
+              executives={selectedExecutives}
               selectedExecutiveIds={selectedExecutiveIds}
               onToggleExecutive={handleToggleExecutiveSelection}
               onSelectAllExecutives={handleSelectAllExecutives}
@@ -205,7 +212,7 @@ export default function AdminCreateDistributionPage() {
 
           {activeMode === "FIXED_QUOTA" && (
             <CustomSplitSection
-              executives={executives}
+              executives={selectedExecutives}
               selectedExecutiveIds={selectedExecutiveIds}
               onToggleExecutive={handleToggleExecutiveSelection}
               onSelectAllExecutives={handleSelectAllExecutives}
@@ -220,7 +227,7 @@ export default function AdminCreateDistributionPage() {
 
           {activeMode === "MANUAL_PICK" && (
             <ManualSplitSection
-              executives={executives}
+              executives={selectedExecutives}
               leads={unassignedLeads}
               selectedLeadIds={selectedLeadIds}
               onToggleLead={handleToggleLead}
@@ -248,7 +255,7 @@ export default function AdminCreateDistributionPage() {
 
           {activeMode === "REASSIGN_RECALL" && (
             <ReassignRecallConsole
-              executives={executives}
+              executives={selectedExecutives}
               assignedLeads={assignedLeads}
               onReassignLeads={handleReassignLeads}
               onRecallLeads={handleRecallLeads}

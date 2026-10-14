@@ -49,7 +49,7 @@ export default function TLBottomNav({
       id: "distribute",
       label: "Distribute",
       description: "Lead allocation & quota engine",
-      link: "/team_leader/distribute",
+      link: "/dashboard/distributions/create",
       icon: GitFork,
       badge: "Action",
     },
@@ -57,7 +57,7 @@ export default function TLBottomNav({
       id: "intake",
       label: "Intake",
       description: "Staged Excel import & ingestion",
-      link: "/team_leader/intake",
+      link: "/dashboard/imports",
       icon: Upload,
     },
     {
@@ -71,7 +71,7 @@ export default function TLBottomNav({
       id: "reports",
       label: "Reports",
       description: "Analytics & conversion matrix",
-      link: "/team_leader/reports",
+      link: "/dashboard/reports",
       icon: BarChart3,
     },
   ];

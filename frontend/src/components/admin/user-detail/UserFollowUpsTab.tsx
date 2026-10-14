@@ -13,6 +13,7 @@ import {
   ExternalLink,
   MessageSquare,
   ListTodo,
+  RotateCcw,
 } from "lucide-react";
 import { format, isPast } from "date-fns";
 import { SalesExecutiveFollowUpItem } from "@/types/api.types";
@@ -99,22 +100,36 @@ export const UserFollowUpsTab: React.FC<UserFollowUpsTabProps> = ({
           </p>
         </div>
 
-        <Select
-          value={statusFilter}
-          onValueChange={(val) => {
-            if (val) setStatusFilter(val);
-          }}
-        >
-          <SelectTrigger className="h-8 text-xs px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer">
-            <SelectValue placeholder="All Follow-ups" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="ALL">All Follow-ups</SelectItem>
-            <SelectItem value="PENDING">Pending</SelectItem>
-            <SelectItem value="MISSED">Missed / Overdue</SelectItem>
-            <SelectItem value="COMPLETED">Completed</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="flex items-center gap-2">
+          <Select
+            value={statusFilter}
+            onValueChange={(val) => {
+              if (val) setStatusFilter(val);
+            }}
+          >
+            <SelectTrigger className="h-8 text-xs px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer">
+              <SelectValue placeholder="All Follow-ups" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">All Follow-ups</SelectItem>
+              <SelectItem value="PENDING">Pending</SelectItem>
+              <SelectItem value="MISSED">Missed / Overdue</SelectItem>
+              <SelectItem value="COMPLETED">Completed</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {statusFilter !== "ALL" && (
+            <button
+              type="button"
+              onClick={() => setStatusFilter("ALL")}
+              className="h-8 px-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs shrink-0"
+              title="Reset status filter"
+            >
+              <RotateCcw className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
+              <span>Reset</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Follow-up Cards */}

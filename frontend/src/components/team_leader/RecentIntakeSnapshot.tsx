@@ -25,16 +25,16 @@ export default function RecentIntakeSnapshot({
 
   if (isLoading) {
     return (
-      <section className="pt-2 pb-6">
-        <div className="bg-crm-card rounded-lg p-4 border border-crm-subtle h-28 animate-pulse"></div>
+      <section className="py-1">
+        <div className="bg-crm-card rounded-lg p-3.5 border border-crm-subtle h-24 animate-pulse"></div>
       </section>
     );
   }
 
   if (!intake) {
     return (
-      <section className="pt-2 pb-6">
-        <div className="bg-crm-card rounded-lg p-4 border border-crm-subtle shadow-xs flex items-center justify-between">
+      <section className="py-1">
+        <div className="bg-crm-card rounded-lg p-3.5 border border-crm-subtle shadow-xs flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-crm-brand-subtle text-crm-brand flex items-center justify-center shrink-0">
               <FileSpreadsheet className="w-4 h-4" />
@@ -43,14 +43,14 @@ export default function RecentIntakeSnapshot({
               <div className="text-sm font-bold text-crm-primary">
                 No Recent Intakes
               </div>
-              <p className="text-xs text-crm-muted">
+              <p className="text-xs text-slate-600 dark:text-slate-300 font-medium">
                 Upload an Excel/CSV file to ingest leads into the pool.
               </p>
             </div>
           </div>
           <button
             type="button"
-            onClick={() => router.push("/team_leader/intake")}
+            onClick={() => router.push("/dashboard/imports")}
             className="px-3 py-1.5 rounded-lg bg-crm-brand hover:bg-crm-brand/90 text-white text-xs font-semibold flex items-center gap-1 cursor-pointer transition-all shadow-xs"
           >
             <Upload className="w-3.5 h-3.5" />
@@ -71,10 +71,10 @@ export default function RecentIntakeSnapshot({
     : "Recently";
 
   return (
-    <section className="pt-2 pb-6">
-      <div className="bg-crm-card rounded-lg p-4 border border-crm-subtle shadow-xs">
+    <section className="py-1">
+      <div className="bg-crm-card rounded-lg p-3.5 border border-crm-subtle shadow-xs">
         <div className="flex items-center justify-between text-crm-muted mb-2">
-          <div className="flex items-center gap-1.5 text-[10px] font-bold tracking-wider uppercase text-crm-muted">
+          <div className="flex items-center gap-1.5 text-[10px] font-bold tracking-wider uppercase text-slate-700 dark:text-slate-200">
             <FileSpreadsheet className="w-3.5 h-3.5 text-crm-brand" />
             <span>RECENT INTAKE LOG</span>
           </div>
@@ -89,12 +89,12 @@ export default function RecentIntakeSnapshot({
             {intake.batchCode ||
               `Batch #${intake.batchId.slice(0, 8).toUpperCase()}`}
           </span>
-          <span className="text-xs font-normal text-crm-muted">
+          <span className="text-xs font-medium text-slate-600 dark:text-slate-300">
             {intake.fileName}
           </span>
         </div>
 
-        <p className="text-xs text-crm-secondary mt-1 leading-relaxed">
+        <p className="text-xs text-slate-700 dark:text-slate-200 font-medium mt-1 leading-relaxed">
           {intake.importedCount} records committed • {intake.duplicateCount}{" "}
           duplicates deduplicated • Uploaded by{" "}
           <span className="font-semibold text-crm-primary">

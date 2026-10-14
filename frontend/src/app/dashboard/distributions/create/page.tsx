@@ -19,7 +19,7 @@ import {
 
 export default function CreateDistributionPage() {
   // Step 2 is the active distribution step requested
-  const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(2);
+  const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
 
   const {
     activeMode,
@@ -91,6 +91,11 @@ export default function CreateDistributionPage() {
     totalUnassignedCount,
   ]);
 
+  // Step 2: only selected executives show
+  const selectedExecutives = useMemo(() => {
+    return executives.filter((e) => selectedExecutiveIds.includes(e.id));
+  }, [executives, selectedExecutiveIds]);
+
   // Validation for proceeding from Step 2 to Step 3
   const isStep2Valid = useMemo(() => {
     if (selectedExecutiveIds.length === 0) return false;
@@ -145,7 +150,7 @@ export default function CreateDistributionPage() {
 
   return (
     <ProtectedRoute allowedRoles={[UserRole.TEAM_LEADER, UserRole.ADMIN]}>
-      <div className="flex flex-col gap-6 pb-12 max-w-7xl mx-auto w-full">
+      <div className="flex flex-col gap-3.5 pb-8 max-w-7xl mx-auto w-full">
         {/* Three-Step Stepper Header */}
         <DistributeStepperHeader
           currentStep={currentStep}
@@ -175,7 +180,7 @@ export default function CreateDistributionPage() {
 
         {/* STEP 2: Distribute Leads */}
         {currentStep === 2 && (
-          <div className="space-y-6">
+          <div className="space-y-3.5">
             {/* Mode Selector Tabs: [ Equal Split ] [ Custom Split ] [ Manual Split ] */}
             <DistributeModeSelector
               activeMode={activeMode}
@@ -186,7 +191,7 @@ export default function CreateDistributionPage() {
             {/* Equal Split Section: Executive table/selection first, then Lead pool & presets */}
             {activeMode === "EQUAL_SPLIT" && (
               <EqualSplitSection
-                executives={executives}
+                executives={selectedExecutives}
                 selectedExecutiveIds={selectedExecutiveIds}
                 onToggleExecutive={handleToggleExecutiveSelection}
                 onSelectAllExecutives={handleSelectAllExecutives}
@@ -200,7 +205,7 @@ export default function CreateDistributionPage() {
             {/* Custom Split Section: Executive table & quota inputs first, then Target leads & balance */}
             {activeMode === "FIXED_QUOTA" && (
               <CustomSplitSection
-                executives={executives}
+                executives={selectedExecutives}
                 selectedExecutiveIds={selectedExecutiveIds}
                 onToggleExecutive={handleToggleExecutiveSelection}
                 onSelectAllExecutives={handleSelectAllExecutives}
@@ -216,7 +221,7 @@ export default function CreateDistributionPage() {
             {/* Manual Split Section: Target Executive panel first, then Unassigned Lead Table */}
             {activeMode === "MANUAL_PICK" && (
               <ManualSplitSection
-                executives={executives}
+                executives={selectedExecutives}
                 leads={unassignedLeads}
                 selectedLeadIds={selectedLeadIds}
                 onToggleLead={handleToggleLead}
@@ -245,7 +250,7 @@ export default function CreateDistributionPage() {
             {/* Reassign / Recall Console */}
             {activeMode === "REASSIGN_RECALL" && (
               <ReassignRecallConsole
-                executives={executives}
+                executives={selectedExecutives}
                 assignedLeads={assignedLeads}
                 onReassignLeads={handleReassignLeads}
                 handleSelectAllExecutives={handleSelectAllExecutives}

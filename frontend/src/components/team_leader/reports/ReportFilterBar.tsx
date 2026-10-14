@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Calendar, Users, Globe, Download, RefreshCw } from "lucide-react";
+import { Calendar, Users, Globe, Download, RefreshCw, RotateCcw } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -20,6 +20,7 @@ interface ReportFilterBarProps {
   executivesList?: Array<{ id: string; name: string }>;
   onExport?: () => void;
   isExporting?: boolean;
+  onReset?: () => void;
 }
 
 export const ReportFilterBar: React.FC<ReportFilterBarProps> = ({
@@ -32,7 +33,13 @@ export const ReportFilterBar: React.FC<ReportFilterBarProps> = ({
   executivesList = [],
   onExport,
   isExporting = false,
+  onReset,
 }) => {
+  const hasActiveFilters = Boolean(
+    timeRange !== "7d" ||
+    selectedExecutive !== "ALL" ||
+    selectedSource !== "ALL"
+  );
   const timePresets = [
     { label: "Today", value: "today" },
     { label: "Last 7 Days", value: "7d" },
@@ -121,6 +128,19 @@ export const ReportFilterBar: React.FC<ReportFilterBarProps> = ({
             </SelectContent>
           </Select>
         </div>
+
+        {/* Reset Filters */}
+        {hasActiveFilters && onReset && (
+          <button
+            type="button"
+            onClick={onReset}
+            className="px-3.5 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs shrink-0"
+            title="Reset filters to default"
+          >
+            <RotateCcw className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
+            <span>Reset</span>
+          </button>
+        )}
 
         {/* Export Trigger */}
         {onExport && (

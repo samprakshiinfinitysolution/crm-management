@@ -21,7 +21,7 @@ export default function ExecutiveStatsCards({
 }: ExecutiveStatsCardsProps) {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
         {[...Array(5)].map((_, i) => (
           <div
             key={i}
@@ -104,14 +104,14 @@ export default function ExecutiveStatsCards({
   ];
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
       {stats.map((stat, idx) => (
         <div
           key={idx}
-          className="bg-white dark:bg-slate-900 p-3.5 sm:p-4 rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-xs flex flex-col justify-between transition-all hover:border-slate-300 dark:hover:border-slate-700"
+          className="bg-white dark:bg-slate-900 p-3 sm:p-3.5 rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-xs flex flex-col justify-between transition-all hover:border-slate-300 dark:hover:border-slate-700"
         >
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
               {stat.label}
             </span>
             <div
@@ -124,7 +124,7 @@ export default function ExecutiveStatsCards({
             <div className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
               {stat.value}
             </div>
-            <div className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+            <div className="text-xs font-medium text-slate-600 dark:text-slate-300 mt-0.5 truncate">
               {stat.subtext}
             </div>
           </div>

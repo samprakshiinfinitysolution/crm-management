@@ -10,6 +10,7 @@ import {
   MapPin,
   ExternalLink,
   Layers,
+  RotateCcw,
 } from "lucide-react";
 import { format } from "date-fns";
 import { LeadItem } from "@/types/api.types";
@@ -246,17 +247,20 @@ export const UserLeadsTab: React.FC<UserLeadsTabProps> = ({ leads = [] }) => {
             </SelectContent>
           </Select>
 
-          {(search || statusFilter !== "ALL" || priorityFilter !== "ALL") && (
+          {(search.trim() || statusFilter !== "ALL" || priorityFilter !== "ALL") && (
             <button
+              type="button"
               onClick={() => {
                 setSearch("");
                 setStatusFilter("ALL");
                 setPriorityFilter("ALL");
                 setCurrentPage(1);
               }}
-              className="text-xs text-blue-600 dark:text-blue-400 hover:underline px-2 py-1"
+              className="h-8 px-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs shrink-0"
+              title="Reset all filters"
             >
-              Reset
+              <RotateCcw className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
+              <span>Reset</span>
             </button>
           )}
         </div>

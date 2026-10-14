@@ -1,20 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { getAuthErrorMessage } from "@/lib/authService";
 import { useRegisterMutation, useLoginMutation } from "@/store/api/authApi";
-import {
-  Mail,
-  Lock,
-  Eye,
-  EyeOff,
-  User,
-  Phone,
-  Loader2,
-  ArrowLeft,
-} from "lucide-react";
-import { registerSchema, loginSchema } from "@/lib/utils";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { registerSchema, loginSchema, cn } from "@/lib/utils";
 import { resetSessionGuard } from "@/lib/sessionGuard";
 import { UserRole, AuthResponse } from "@/types/api.types";
 import {
@@ -25,7 +16,26 @@ import {
 } from "@/store";
 import { crmApi } from "@/store/api/baseApi";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+
+function LeadFlowLogo({ className = "w-12 h-12" }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        "relative rounded-2xl overflow-hidden shadow-lg shadow-blue-600/25 flex items-center justify-center mx-auto transition-transform hover:scale-105 ring-2 ring-blue-500/20",
+        className,
+      )}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/favicon.ico"
+        alt="LeadFlow CRM Logo"
+        width={52}
+        height={52}
+        className="w-full h-full object-contain"
+      />
+    </div>
+  );
+}
 
 export default function AuthForm() {
   const dispatch = useAppDispatch();
@@ -39,6 +49,7 @@ export default function AuthForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
 
   // RTK Query Mutations
@@ -48,8 +59,24 @@ export default function AuthForm() {
 
   const isLoading = isRegisterLoading || isLoginLoading;
 
-  const handleAuthSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Restore remembered email on mount
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      try {
+        const savedEmail = localStorage.getItem("crm_remember_email");
+        if (savedEmail) {
+          setEmail(savedEmail);
+          setRememberMe(true);
+        }
+      } catch {
+        // Ignore storage access errors
+      }
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleAuthSubmit = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
 
     const roleEnum =
       selectedRole === "tl" ? UserRole.TEAM_LEADER : UserRole.SALES_EXECUTIVE;
@@ -100,6 +127,19 @@ export default function AuthForm() {
       }
 
       try {
+        // Persist or remove remembered email
+        if (typeof window !== "undefined") {
+          try {
+            if (rememberMe) {
+              localStorage.setItem("crm_remember_email", email.trim());
+            } else {
+              localStorage.removeItem("crm_remember_email");
+            }
+          } catch {
+            // Ignore storage access issues
+          }
+        }
+
         const res = await loginUser({
           email: result.data.email,
           password: result.data.password,
@@ -115,11 +155,7 @@ export default function AuthForm() {
 
   const redirectTo = (res: AuthResponse) => {
     if (res.data?.user) {
-      // Re-arm the 401 guard so a future genuine session expiry is handled
-      // instead of being suppressed by the persisted guard from a prior logout.
       resetSessionGuard();
-      // Clear any cached data from a previous user BEFORE loading the new
-      // session, preventing cross-user data leakage on a shared browser.
       dispatch(crmApi.util.resetApiState());
       dispatch(
         setCredentials({
@@ -146,142 +182,201 @@ export default function AuthForm() {
     }
   };
 
+  const handleForgotPassword = () => {
+    toast.info("Please contact your CRM administrator to reset your password.");
+  };
+
   return (
-    <div className="w-full max-w-sm sm:max-w-md mx-auto flex flex-col">
+    <div
+      className={cn(
+        "w-full mx-auto flex flex-col justify-center transition-all duration-200",
+        authMode === "register" ? "max-w-xl sm:max-w-2xl" : "max-w-105",
+      )}
+    >
       {/* ------------------------------------------------------------- */}
-      {/* Clean Heading */}
+      {/* Brand Icon & Heading */}
       {/* ------------------------------------------------------------- */}
-      <div className="mb-6">
-        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-          {authMode === "register" ? "Create Account" : "Sign In"}
-        </h2>
-        <p className="text-slate-400 dark:text-slate-500 text-sm mt-1">
+      <div className="text-center mb-8">
+        <LeadFlowLogo className="w-13 h-13 mb-6" />
+
+        <h1 className="text-2xl sm:text-[28px] font-bold text-slate-900 dark:text-white tracking-tight leading-tight">
           {authMode === "register"
-            ? "Get started quickly. Create your account to join the platform."  
-            : "Welcome back. Enter your workspace credentials to continue."}
+            ? "Welcome to LeadFlow"
+            : "Welcome Back to LeadFlow"}
+        </h1>
+
+        <p className="text-slate-700 dark:text-slate-300 text-sm mt-2 font-normal">
+          {authMode === "register"
+            ? "Enter your details to create your workspace account."
+            : "Enter your username and password to continue."}
         </p>
       </div>
 
       {/* ------------------------------------------------------------- */}
       {/* Form Fields */}
       {/* ------------------------------------------------------------- */}
-      <form
-        onSubmit={handleAuthSubmit}
-        noValidate
-        className="flex flex-col gap-3.5"
-      >
-        {/* Name Field (Register Mode) */}
-        {authMode === "register" && (
-          <div className="relative flex items-center">
-            <User className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 pointer-events-none" />
-            <input
-              id="name-input"
-              type="text"
-              required
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              placeholder="Name"
-              className="w-full h-11 pl-10 pr-3.5 rounded-lg bg-slate-50/90 dark:bg-slate-800/80 border border-black/10 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 text-sm focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all"
-            />
-          </div>
-        )}
+      <form onSubmit={handleAuthSubmit} noValidate className="flex flex-col">
+        <div
+          className={cn(
+            authMode === "register"
+              ? "grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5"
+              : "flex flex-col gap-4 mb-5",
+          )}
+        >
+          {/* Register: Full Name */}
+          {authMode === "register" && (
+            <div>
+              <label
+                htmlFor="name-input"
+                className="block text-sm font-medium text-slate-800 dark:text-slate-200 mb-1.5"
+              >
+                Full Name
+              </label>
+              <input
+                id="name-input"
+                type="text"
+                required
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                placeholder="Enter your full name"
+                className="w-full h-11 px-3.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 dark:focus:ring-white dark:focus:border-white transition-all"
+              />
+            </div>
+          )}
 
-        {/* Email Field */}
-        <div className="relative flex items-center">
-          <Mail className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 pointer-events-none" />
-          <input
-            id="email-input"
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            className="w-full h-11 pl-10 pr-3.5 rounded-lg bg-slate-50/90 dark:bg-slate-800/80 border border-black/10 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 text-sm focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all"
-          />
-        </div>
-
-        {/* Inline Two Columns: Phone Number + Role Dropdown (Register Mode) */}
-        {authMode === "register" && (
-          <div className="relative flex items-center">
-            <Phone className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 pointer-events-none" />
-            <input
-              id="phone-input"
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="Phone Number"
-              className="w-full h-11 pl-10 pr-3.5 rounded-lg bg-slate-50/90 dark:bg-slate-800/80 border border-black/10 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 text-sm focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all"
-            />
-          </div>
-        )}
-
-        {/* Password Field */}
-        <div className="relative flex items-center">
-          <Lock className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 pointer-events-none" />
-          <input
-            id="password-input"
-            type={showPassword ? "text" : "password"}
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            className="w-full h-11 pl-10 pr-10 rounded-lg bg-slate-50/90 dark:bg-slate-800/80 border border-black/10 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 text-sm focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all"
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-1 cursor-pointer transition-colors"
-            title={showPassword ? "Hide password" : "Show password"}
-          >
-            {showPassword ? (
-              <EyeOff className="w-4 h-4" />
-            ) : (
-              <Eye className="w-4 h-4" />
-            )}
-          </button>
-        </div>
-
-        {/* Confirm Password Field (Register Mode) */}
-        {authMode === "register" && (
-          <div className="relative flex items-center">
-            <Lock className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 pointer-events-none" />
-            <input
-              id="confirm-password-input"
-              type={showPassword ? "text" : "password"}
-              required
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm Password"
-              className="w-full h-11 pl-10 pr-10 rounded-lg bg-slate-50/90 dark:bg-slate-800/80 border border-black/10 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 text-sm focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all"
-            />
-          </div>
-        )}
-
-        {/* Forgot Password (Login Mode) */}
-        {authMode === "login" && (
-          <div className="flex justify-end -mt-1">
-            <button
-              type="button"
-              onClick={() =>
-                toast.info(
-                  "Please contact your CRM administrator to reset your password.",
-                )
-              }
-              className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 hover:underline cursor-pointer font-medium"
+          {/* Email Field */}
+          <div>
+            <label
+              htmlFor="email-input"
+              className="block text-sm font-medium text-slate-800 dark:text-slate-200 mb-1.5"
             >
-              Forgot password?
-            </button>
+              Email
+            </label>
+            <input
+              id="email-input"
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email address"
+              className="w-full h-11 px-3.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 dark:focus:ring-white dark:focus:border-white transition-all"
+            />
           </div>
-        )}
+
+          {/* Register: Phone Number */}
+          {authMode === "register" && (
+            <div className="sm:col-span-2">
+              <label
+                htmlFor="phone-input"
+                className="block text-sm font-medium text-slate-800 dark:text-slate-200 mb-1.5"
+              >
+                Phone Number
+              </label>
+              <input
+                id="phone-input"
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Enter your phone number (optional)"
+                className="w-full h-11 px-3.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 dark:focus:ring-white dark:focus:border-white transition-all"
+              />
+            </div>
+          )}
+
+          {/* Password Field */}
+          <div>
+            <label
+              htmlFor="password-input"
+              className="block text-sm font-medium text-slate-800 dark:text-slate-200 mb-1.5"
+            >
+              Password
+            </label>
+            <div className="relative flex items-center">
+              <input
+                id="password-input"
+                type={showPassword ? "text" : "password"}
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                className="w-full h-11 pl-3.5 pr-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 dark:focus:ring-white dark:focus:border-white transition-all"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-1 cursor-pointer transition-colors"
+                title={showPassword ? "Hide password" : "Show password"}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? (
+                  <EyeOff className="w-4 h-4" />
+                ) : (
+                  <Eye className="w-4 h-4" />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Register: Confirm Password */}
+          {authMode === "register" && (
+            <div>
+              <label
+                htmlFor="confirm-password-input"
+                className="block text-sm font-medium text-slate-800 dark:text-slate-200 mb-1.5"
+              >
+                Confirm Password
+              </label>
+              <div className="relative flex items-center">
+                <input
+                  id="confirm-password-input"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirm your password"
+                  className="w-full h-11 pl-3.5 pr-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 dark:focus:ring-white dark:focus:border-white transition-all"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Remember me & Forgot password Row (Login Mode) */}
+          {authMode === "login" && (
+            <div className="flex items-center justify-between mt-1 mb-1">
+              <label
+                htmlFor="remember-me"
+                className="flex items-center gap-2 cursor-pointer select-none"
+              >
+                <input
+                  id="remember-me"
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="w-4 h-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900 dark:border-slate-700 dark:bg-slate-800 cursor-pointer"
+                />
+                <span className="text-sm text-slate-600 dark:text-slate-400 font-normal">
+                  Remember me
+                </span>
+              </label>
+
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                className="text-sm font-medium text-slate-900 dark:text-slate-200 hover:underline cursor-pointer"
+              >
+                Forgot password
+              </button>
+            </div>
+          )}
+        </div>
 
         {/* ------------------------------------------------------------- */}
-        {/* Solid Blue Action Button (No Gradients, Minimalist) */}
+        {/* Solid Dark Sign In Button (matching image) */}
         {/* ------------------------------------------------------------- */}
         <button
-          type="button"
-          onClick={handleAuthSubmit}
+          type="submit"
           disabled={isLoading || isRedirecting}
-          className="w-full h-11 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-lg text-sm font-semibold shadow-xs transition-all flex items-center justify-center gap-2 mt-2 cursor-pointer disabled:opacity-75"
+          className="w-full h-11 bg-[#1A202C] hover:bg-[#2D3748] active:bg-[#111620] text-white rounded-lg text-sm font-medium transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed"
         >
           {isLoading || isRedirecting ? (
             <div className="flex items-center gap-2">
@@ -295,40 +390,38 @@ export default function AuthForm() {
               </span>
             </div>
           ) : (
-            <span>{authMode === "register" ? "Next" : "Next"}</span>
+            <span>{authMode === "register" ? "Register" : "Sign In"}</span>
           )}
         </button>
 
         {/* ------------------------------------------------------------- */}
-        {/* Bottom Minimalist Link */}
+        {/* Switch Between Login and Register */}
         {/* ------------------------------------------------------------- */}
-        <div className="text-center pt-2">
+        <div className="text-center mt-6 text-sm text-sm text-brand-hover">
           {authMode === "register" ? (
-            <button
-              type="button"
-              onClick={() => dispatch(setAuthMode("login"))}
-              className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-semibold hover:underline cursor-pointer transition-colors"
-            >
-              Already have an account?
-            </button>
+            <p className="">
+              Already have an account?{" "}
+              <button
+                type="button"
+                onClick={() => dispatch(setAuthMode("login"))}
+                className="font-semibold text-slate-900 dark:text-white hover:underline cursor-pointer transition-colors"
+              >
+                Sign In
+              </button>
+            </p>
           ) : (
-            <button
-              type="button"
-              onClick={() => dispatch(setAuthMode("register"))}
-              className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-semibold hover:underline cursor-pointer transition-colors"
-            >
-              Don&apos;t have an account? Create one
-            </button>
+            <p className="">
+              Don&apos;t have an account?{" "}
+              <button
+                type="button"
+                onClick={() => dispatch(setAuthMode("register"))}
+                className="font-semibold text-slate-900 dark:text-white hover:underline cursor-pointer transition-colors"
+              >
+                Register
+              </button>
+            </p>
           )}
         </div>
-
-        <Link
-          href={"/"}
-          className="w-fit mx-auto text-xs flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 font-medium hover:underline transition-colors mt-1"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Home
-        </Link>
       </form>
     </div>
   );

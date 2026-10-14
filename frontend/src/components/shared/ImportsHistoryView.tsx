@@ -189,7 +189,7 @@ export const ImportsHistoryView: React.FC<ImportsHistoryViewProps> = ({
   );
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-200">
+    <div className="space-y-3.5 animate-in fade-in duration-200">
       {/* Page Header */}
       <PageHeader
         title={title}

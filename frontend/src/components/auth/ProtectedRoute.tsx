@@ -17,16 +17,30 @@ interface ProtectedRouteProps {
 export function FullPageLoader({
   title = "Verifying your session…",
   subtitle = "Checking authorization with LeadFlow CRM",
+  variant = "fullscreen",
 }: {
   title?: string;
   subtitle?: string;
+  variant?: "fullscreen" | "outlet";
 }) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-50/95 dark:bg-slate-950/95 backdrop-blur-md select-none transition-colors">
-      {/* Background ambient gradient glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent dark:from-blue-600/15 pointer-events-none" />
+  const isOutlet = variant === "outlet";
 
-      <div className="relative flex flex-col items-center max-w-sm w-full mx-4 p-8 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 shadow-2xl shadow-blue-500/5 text-center">
+  return (
+    <div
+      className={
+        isOutlet
+          ? "flex-1 w-full min-h-[calc(100vh-12rem)] flex items-center justify-center p-6 select-none transition-colors"
+          : "fixed inset-0 z-50 flex items-center justify-center bg-slate-50/95 dark:bg-slate-950/95 backdrop-blur-md select-none transition-colors"
+      }
+    >
+      {/* Background ambient gradient glow */}
+      {!isOutlet && (
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent dark:from-blue-600/15 pointer-events-none" />
+      )}
+
+      <div
+        className={`relative flex flex-col items-center max-w-sm w-full mx-4 p-8 rounded-xl text-center ${isOutlet ? "" : "bg-white/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 shadow-2xl shadow-blue-500/5"}`}
+      >
         {/* Animated Brand Emblem / Spinner */}
         <div className="relative flex items-center justify-center mb-5">
           <div className="size-14 rounded-xl bg-blue-50 dark:bg-blue-950/60 flex items-center justify-center border border-blue-100 dark:border-blue-900/60 shadow-inner">
@@ -46,12 +60,18 @@ export function FullPageLoader({
         )}
 
         {/* Shimmer loading bar */}
-        <div className="w-36 h-1 bg-slate-100 dark:bg-slate-800 rounded-full mt-5 overflow-hidden">
-          <div className="h-full w-1/2 bg-blue-600 rounded-full animate-pulse" />
-        </div>
+        {!isOutlet && (
+          <div className="w-36 h-1 bg-slate-100 dark:bg-slate-800 rounded-full mt-5 overflow-hidden">
+            <div className="h-full w-1/2 bg-blue-600 rounded-full animate-pulse" />
+          </div>
+        )}
       </div>
     </div>
   );
+}
+
+export function OutletLoader(props: { title?: string; subtitle?: string }) {
+  return <FullPageLoader {...props} variant="outlet" />;
 }
 
 /** Client-side UX guard. The server proxy and API remain authoritative for access. */

@@ -11,7 +11,7 @@ export const IntakeHeader: React.FC<IntakeHeaderProps> = ({
   onDownloadSample,
 }) => {
   return (
-    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-5 bg-card dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-lg shadow-xs">
+    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 p-3.5 sm:p-4 bg-card dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-lg shadow-xs">
       <div>
         <div className="flex items-center gap-3">
           <div className="p-2.5 bg-blue-50 dark:bg-blue-950/50 border border-blue-100 dark:border-blue-800/60 rounded-lg text-blue-600 dark:text-blue-400">
@@ -21,7 +21,7 @@ export const IntakeHeader: React.FC<IntakeHeaderProps> = ({
             <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
               Lead Bulk Intake & Ingestion
             </h1>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-700 dark:text-slate-200 font-medium mt-0.5">
               Upload Excel or CSV sheets to stage, validate, and preview leads
               before ingesting into the CRM pipeline.
             </p>

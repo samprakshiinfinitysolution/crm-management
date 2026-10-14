@@ -61,63 +61,63 @@ export const UserMetricCards: React.FC<UserMetricCardsProps> = ({ metrics }) => 
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 mb-4">
       {/* 1. Total Assigned & Active Leads */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4.5 shadow-xs relative overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3.5 sm:p-4 shadow-xs relative overflow-hidden">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+          <span className="text-xs font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
             Assigned Leads
           </span>
           <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/50">
             <Users className="w-4 h-4" />
           </div>
         </div>
-        <div className="mt-3 flex items-baseline gap-2">
+        <div className="mt-2.5 flex items-baseline gap-2">
           <span className="text-2xl font-bold text-slate-900 dark:text-slate-100">
             {metrics.totalAssignedLeads || 0}
           </span>
-          <span className="text-xs text-slate-500 dark:text-slate-400">
+          <span className="text-xs text-slate-600 dark:text-slate-300 font-medium">
             ({metrics.activeLeads || 0} active)
           </span>
         </div>
-        <div className="mt-2 text-xs text-slate-500 dark:text-slate-400 flex items-center justify-between">
+        <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-300 font-medium flex items-center justify-between">
           <span>Converted: {metrics.convertedLeads || 0}</span>
           <span>Lost: {metrics.lostLeads || 0}</span>
         </div>
       </div>
 
       {/* 2. Total Pipeline Value */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4.5 shadow-xs relative overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3.5 sm:p-4 shadow-xs relative overflow-hidden">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+          <span className="text-xs font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
             Pipeline Value
           </span>
           <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/50">
             <IndianRupee className="w-4 h-4" />
           </div>
         </div>
-        <div className="mt-3">
+        <div className="mt-2.5">
           <span className="text-2xl font-bold text-slate-900 dark:text-slate-100">
             {formatCurrency(metrics.totalPipelineValue)}
           </span>
         </div>
-        <div className="mt-2 text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+        <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-300 font-medium flex items-center gap-1.5">
           <TrendingUp className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-          <span>Conversion Rate: <strong className="text-slate-800 dark:text-slate-200">{metrics.conversionRate}%</strong></span>
+          <span>Conversion Rate: <strong className="text-slate-900 dark:text-slate-100 font-bold">{metrics.conversionRate}%</strong></span>
         </div>
       </div>
 
       {/* 3. Follow-ups Queue */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4.5 shadow-xs relative overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3.5 sm:p-4 shadow-xs relative overflow-hidden">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+          <span className="text-xs font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
             Pending Follow-ups
           </span>
           <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/50">
             <Clock className="w-4 h-4" />
           </div>
         </div>
-        <div className="mt-3 flex items-baseline gap-2">
+        <div className="mt-2.5 flex items-baseline gap-2">
           <span className="text-2xl font-bold text-slate-900 dark:text-slate-100">
             {metrics.followUpsPending || 0}
           </span>
@@ -128,7 +128,7 @@ export const UserMetricCards: React.FC<UserMetricCardsProps> = ({ metrics }) => 
             </span>
           )}
         </div>
-        <div className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+        <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-300 font-medium">
           {metrics.followUpsOverdue > 0
             ? "Requires urgent follow-up action"
             : "All scheduled follow-ups on track"}
@@ -136,16 +136,16 @@ export const UserMetricCards: React.FC<UserMetricCardsProps> = ({ metrics }) => 
       </div>
 
       {/* 4. Capacity & Workload Status */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4.5 shadow-xs relative overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3.5 sm:p-4 shadow-xs relative overflow-hidden">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+          <span className="text-xs font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
             Workload Capacity
           </span>
           <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/50">
             <Activity className="w-4 h-4" />
           </div>
         </div>
-        <div className="mt-3 flex items-center justify-between">
+        <div className="mt-2.5 flex items-center justify-between">
           <span className="text-2xl font-bold text-slate-900 dark:text-slate-100">
             {metrics.capacityPercentage || 0}%
           </span>

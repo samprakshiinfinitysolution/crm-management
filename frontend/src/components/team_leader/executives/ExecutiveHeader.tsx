@@ -20,7 +20,7 @@ export const ExecutiveHeader: React.FC<ExecutiveHeaderProps> = ({
   onRefresh,
 }) => {
   return (
-    <div className="flex flex-col gap-4 pb-2">
+    <div className="flex flex-col gap-3 pb-1.5">
       {/* Top Title Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
@@ -52,7 +52,7 @@ export const ExecutiveHeader: React.FC<ExecutiveHeaderProps> = ({
           </button>
 
           <Link
-            href="/team_leader/distribute"
+            href="/dashboard/distributions/create"
             className="h-9 px-3.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-xs active:scale-95"
           >
             <Send className="w-3.5 h-3.5" />
@@ -62,7 +62,7 @@ export const ExecutiveHeader: React.FC<ExecutiveHeaderProps> = ({
       </div>
 
       {/* Sub-header Context Card */}
-      <div className="bg-card dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-lg p-4 shadow-xs">
+      <div className="bg-card dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-lg p-3.5 sm:p-4 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <Link
@@ -82,7 +82,7 @@ export const ExecutiveHeader: React.FC<ExecutiveHeaderProps> = ({
                   {activeStaff} of {totalStaff} Active
                 </span>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-700 dark:text-slate-200 font-medium mt-0.5">
                 Monitor individual workload quotas, conversion funnels, response
                 SLAs, and assigned customer pipelines.
               </p>
@@ -90,7 +90,7 @@ export const ExecutiveHeader: React.FC<ExecutiveHeaderProps> = ({
           </div>
 
           <div className="flex items-center gap-2 self-start sm:self-center">
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+            <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-200">
               Benchmark:{" "}
               <span className="font-bold text-slate-900 dark:text-white">
                 30 Leads / Rep

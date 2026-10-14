@@ -12,23 +12,23 @@ export interface BreadcrumbItem {
 export interface PageHeaderProps {
   title: string;
   description?: string;
-  icon?: React.ReactNode;
   breadcrumbs?: BreadcrumbItem[];
   actions?: React.ReactNode;
+  icon?: React.ReactNode;
   className?: string;
 }
 
 export const PageHeader: React.FC<PageHeaderProps> = ({
   title,
   description,
-  icon,
   breadcrumbs,
   actions,
+  icon,
   className = "",
 }) => {
   return (
     <div
-      className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-200 dark:border-slate-800 ${className}`}
+      className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-slate-200 dark:border-slate-800 ${className}`}
     >
       <div className="min-w-0">
         {/* Breadcrumbs */}
@@ -67,13 +67,13 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
 
         {/* Title with Icon */}
         <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          {icon && <span className="shrink-0 text-blue-600 dark:text-blue-400">{icon}</span>}
+          {icon && <span className="shrink-0">{icon}</span>}
           <span className="truncate">{title}</span>
         </h1>
 
         {/* Subtitle / Description */}
         {description && (
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-3xl">
+          <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 mt-1 font-medium max-w-3xl">
             {description}
           </p>
         )}

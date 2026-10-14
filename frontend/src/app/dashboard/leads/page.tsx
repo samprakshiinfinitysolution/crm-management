@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Users, Plus, GitFork, UploadCloud, Download, Tag } from "lucide-react";
+import { Plus, GitFork, UploadCloud, Download, Tag } from "lucide-react";
 import { toast } from "sonner";
 import { useGetLeadsQuery, useAppSelector } from "@/store";
 import { UserRole, LeadStatus, type LeadItem } from "@/types/api.types";
@@ -14,7 +14,7 @@ import {
   LeadsDirectoryTable,
   StatusChangeModal,
 } from "@/components/leads";
-
+import { PageHeader } from "@/components/shared/PageHeader";
 import { useDebounce } from "@/lib/useDebounce";
 
 export default function LeadsListPage() {
@@ -33,6 +33,13 @@ export default function LeadsListPage() {
 
   const handleSearchChange = (val: string) => {
     setSearch(val);
+    setPage(1);
+  };
+
+  const handleResetFilters = () => {
+    setSearch("");
+    setStatusFilter("ALL");
+    setSourceFilter("ALL");
     setPage(1);
   };
 
@@ -156,74 +163,74 @@ export default function LeadsListPage() {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-3.5">
       {/* Header & Quick Action Buttons */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-            <Users className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-            <span>Lead Directory</span>
-          </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            {isTL
-              ? "Complete overview of unassigned pool, active pipelines, and converted leads"
-              : "Review your assigned customer inquiries and track deal progress"}
-          </p>
-        </div>
+      <PageHeader
+        breadcrumbs={[
+          { label: "Dashboard", href: "/dashboard" },
+          { label: "Lead Directory" },
+        ]}
+        title="Lead Directory"
+        description={
+          isTL
+            ? "Complete overview of unassigned pool, active pipelines, and converted leads"
+            : "Review your assigned customer inquiries and track deal progress"
+        }
+        actions={
+          <div className="flex flex-wrap items-center gap-2 [&>a]:hover:cursor-pointer [&>a]:hover:active:scale-95">
+            {isTL && (
+              <>
+                <Link
+                  href="/dashboard/leads/create"
+                  className="px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Create Lead</span>
+                </Link>
 
-        <div className="flex flex-wrap items-center gap-2 [&>a]:hover:cursor-pointer [&>a]:hover:active:scale-95">
-          {isTL && (
-            <>
-              <Link
-                href="/dashboard/leads/create"
-                className="px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
-              >
-                <Plus className="w-4 h-4" />
-                <span>Create Lead</span>
-              </Link>
+                <Link
+                  href="/dashboard/distributions/create"
+                  className="px-3.5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-800 dark:hover:bg-slate-700 dark:border dark:border-slate-700 text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
+                >
+                  <GitFork className="w-4 h-4" />
+                  <span>Distribute</span>
+                </Link>
 
-              <Link
-                href="/dashboard/distributions/create"
-                className="px-3.5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-800 dark:hover:bg-slate-700 dark:border dark:border-slate-700 text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
-              >
-                <GitFork className="w-4 h-4" />
-                <span>Distribute</span>
-              </Link>
+                <Link
+                  href="/dashboard/imports/upload"
+                  className="px-3.5 py-2 rounded-lg bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
+                >
+                  <UploadCloud className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+                  <span>Import Sheet</span>
+                </Link>
+              </>
+            )}
 
-              <Link
-                href="/dashboard/imports/upload"
-                className="px-3.5 py-2 rounded-lg bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
-              >
-                <UploadCloud className="w-4 h-4 text-slate-500 dark:text-slate-400" />
-                <span>Import Sheet</span>
-              </Link>
-            </>
-          )}
+            <button
+              type="button"
+              onClick={handleStatusChange}
+              className="px-3.5 py-2 rounded-lg bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
+              title="Update pipeline status for selected leads"
+            >
+              <Tag className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <span>
+                Update Status
+                {selectedLeadIds.length > 0 ? ` (${selectedLeadIds.length})` : ""}
+              </span>
+            </button>
 
-          <button
-            type="button"
-            onClick={handleStatusChange}
-            className="px-3.5 py-2 rounded-lg bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
-            title="Update pipeline status for selected leads"
-          >
-            <Tag className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-            <span>
-              Update Status
-              {selectedLeadIds.length > 0 ? ` (${selectedLeadIds.length})` : ""}
-            </span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setIsExportModalOpen(true)}
-            className="px-3.5 py-2 rounded-lg bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
-            title="Export Leads to Excel or CSV"
-          >
-            <Download className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-            <span>Export</span>
-          </button>
-        </div>
-      </div>
+            <button
+              type="button"
+              onClick={() => setIsExportModalOpen(true)}
+              className="px-3.5 py-2 rounded-lg bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
+              title="Export Leads to Excel or CSV"
+            >
+              <Download className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <span>Export</span>
+            </button>
+          </div>
+        }
+      />
 
       {/* Filter and Search Bar Component */}
       <LeadFiltersToolbar
@@ -239,6 +246,7 @@ export default function LeadsListPage() {
           setSourceFilter(val);
           setPage(1);
         }}
+        onReset={handleResetFilters}
       />
 
       {/* Leads Directory Table Component */}

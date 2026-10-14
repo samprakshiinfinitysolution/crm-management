@@ -18,6 +18,7 @@ import {
   Loader2,
   AlertCircle,
   ExternalLink,
+  RotateCcw,
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -239,7 +240,7 @@ export default function ExecutiveDetailDrawer() {
 
           <div className="flex items-center gap-2 shrink-0">
             <Link
-              href="/team_leader/distribute"
+              href="/dashboard/distributions/create"
               className="h-9 px-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold hidden sm:flex items-center gap-1.5 transition-all shadow-xs"
             >
               <ExternalLink className="w-3.5 h-3.5" />
@@ -439,6 +440,22 @@ export default function ExecutiveDetailDrawer() {
                           ))}
                         </SelectContent>
                       </Select>
+
+                      {(Boolean(leadSearchQuery.trim() || leadStatusFilter !== "ALL")) && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            dispatch(setLeadSearchQuery(""));
+                            dispatch(setLeadStatusFilter("ALL"));
+                            setLeadPage(1);
+                          }}
+                          className="h-9 px-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs shrink-0"
+                          title="Reset lead filters"
+                        >
+                          <RotateCcw className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
+                          <span>Reset</span>
+                        </button>
+                      )}
                     </div>
                   </div>
 

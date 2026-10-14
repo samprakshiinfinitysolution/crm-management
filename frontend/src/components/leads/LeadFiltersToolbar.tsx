@@ -1,6 +1,6 @@
 "use client";
 
-import { Search } from "lucide-react";
+import { Search, RotateCcw } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -16,6 +16,7 @@ interface LeadFiltersToolbarProps {
   onStatusFilterChange: (val: string) => void;
   sourceFilter: string;
   onSourceFilterChange: (val: string) => void;
+  onReset?: () => void;
 }
 
 export function LeadFiltersToolbar({
@@ -25,9 +26,16 @@ export function LeadFiltersToolbar({
   onStatusFilterChange,
   sourceFilter,
   onSourceFilterChange,
+  onReset,
 }: LeadFiltersToolbarProps) {
+  const hasActiveFilters = Boolean(
+    search.trim() ||
+    (statusFilter && statusFilter !== "ALL") ||
+    (sourceFilter && sourceFilter !== "ALL")
+  );
+
   return (
-    <div className="bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-col md:flex-row items-center gap-3">
+    <div className="bg-white dark:bg-slate-900 p-3 sm:p-3.5 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-col md:flex-row items-center gap-3">
       {/* Search Input */}
       <div className="relative flex-1 w-full">
         <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -161,6 +169,19 @@ export function LeadFiltersToolbar({
             </SelectItem>
           </SelectContent>
         </Select>
+
+        {/* Reset Button */}
+        {hasActiveFilters && onReset && (
+          <button
+            type="button"
+            onClick={onReset}
+            className="h-10 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs shrink-0"
+            title="Reset all filters"
+          >
+            <RotateCcw className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
+            <span>Reset</span>
+          </button>
+        )}
       </div>
     </div>
   );

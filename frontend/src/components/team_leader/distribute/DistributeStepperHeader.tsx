@@ -16,7 +16,7 @@ export const DistributeStepperHeader: React.FC<
   DistributeStepperHeaderProps
 > = ({ currentStep = 1, onSelectStep }) => {
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex flex-col gap-3 w-full">
       {/* 1. Horizontal Stepper Card */}
 
       {/* 2. Page Structure Header */}
@@ -29,7 +29,7 @@ export const DistributeStepperHeader: React.FC<
           {currentStep === 2 && "Distribute Leads"}
           {currentStep === 3 && "Review & Confirm Distribution"}
         </h1>
-        <p className="text-sm text-slate-600 dark:text-slate-400">
+        <p className="text-sm text-slate-700 dark:text-slate-200 font-medium">
           {currentStep === 1 &&
             "Choose which sales executives will participate in this lead distribution."}
           {currentStep === 2 &&

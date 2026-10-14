@@ -66,7 +66,7 @@ export default function FollowUpStatsCards({
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
       {cards.map((card) => {
         const isActive = activeScope === card.key;
         return (
@@ -74,15 +74,15 @@ export default function FollowUpStatsCards({
             key={card.key}
             type="button"
             onClick={() => onScopeSelect?.(card.key)}
-            className={`text-left p-4 rounded-xl bg-white dark:bg-slate-900 border transition-all duration-150 flex flex-col justify-between shadow-xs cursor-pointer ${
+            className={`text-left p-3.5 rounded-xl bg-white dark:bg-slate-900 border transition-all duration-150 flex flex-col justify-between shadow-xs cursor-pointer ${
               isActive
                 ? "border-blue-600 ring-2 ring-blue-500/20 bg-blue-50/20 dark:bg-slate-800/80"
                 : "border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
             }`}
           >
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between mb-2">
               <div
-                className={`w-9 h-9 rounded-lg ${card.iconBox} flex items-center justify-center shadow-2xs`}
+                className={`w-8 h-8 rounded-lg ${card.iconBox} flex items-center justify-center shadow-2xs`}
               >
                 {card.icon}
               </div>
@@ -100,7 +100,7 @@ export default function FollowUpStatsCards({
                   card.count
                 )}
               </div>
-              <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              <div className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-200">
                 {card.label}
               </div>
             </div>

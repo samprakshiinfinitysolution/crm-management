@@ -28,7 +28,7 @@ export const ChartCard: React.FC<ChartCardProps> = ({
   return (
     <div
       className={cn(
-        "group relative flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-xs transition-all duration-200 hover:border-slate-300",
+        "group relative flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4.5 shadow-xs transition-all duration-200 hover:border-slate-300",
         "dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700",
         className
       )}
@@ -51,7 +51,7 @@ export const ChartCard: React.FC<ChartCardProps> = ({
               {title}
             </h3>
             {subtitle && (
-              <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-0.5">
+              <p className="text-[11px] font-medium text-slate-600 dark:text-slate-300 mt-0.5">
                 {subtitle}
               </p>
             )}

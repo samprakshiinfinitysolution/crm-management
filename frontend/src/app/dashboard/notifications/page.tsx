@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Bell,
   CheckCircle2,
   Clock,
   CheckCheck,
@@ -24,6 +23,7 @@ import {
   getNotificationMeta,
 } from "@/lib/notificationUtils";
 import { NotificationSkeleton } from "@/components/ui/NotificationSkelation";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 export default function NotificationsCenterPage() {
   const router = useRouter();
@@ -74,45 +74,42 @@ export default function NotificationsCenterPage() {
   };
 
   return (
-    <div className="w-full flex flex-col gap-6">
+    <div className="w-full flex flex-col gap-3.5">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-            <Bell className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-            <span>Notification Alerts</span>
-          </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Real-time feed of lead assignments, upcoming follow-up deadlines,
-            and pipeline updates
-          </p>
-        </div>
+      <PageHeader
+        breadcrumbs={[
+          { label: "Dashboard", href: "/dashboard" },
+          { label: "Notifications" },
+        ]}
+        title="Notification Alerts"
+        description="Real-time feed of lead assignments, upcoming follow-up deadlines, and pipeline updates."
+        actions={
+          <div className="flex items-center gap-2">
+            {unreadCount > 0 && (
+              <button
+                type="button"
+                onClick={handleMarkAll}
+                disabled={isMarkingAll}
+                className="px-3.5 py-2 rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all disabled:opacity-50 cursor-pointer"
+              >
+                <CheckCheck className="w-4 h-4" />
+                <span>Mark All as Read ({unreadCount})</span>
+              </button>
+            )}
 
-        <div className="flex items-center gap-2">
-          {unreadCount > 0 && (
             <button
               type="button"
-              onClick={handleMarkAll}
-              disabled={isMarkingAll}
-              className="px-3.5 py-2 rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all disabled:opacity-50 cursor-pointer"
+              onClick={() => refetch()}
+              className="p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-700 shadow-2xs transition-all cursor-pointer"
+              title="Refresh alerts"
             >
-              <CheckCheck className="w-4 h-4" />
-              <span>Mark All as Read ({unreadCount})</span>
+              <RefreshCw
+                className={`w-4 h-4 ${isFetching ? "animate-spin text-blue-600 dark:text-blue-400" : ""}`}
+              />
             </button>
-          )}
-
-          <button
-            type="button"
-            onClick={() => refetch()}
-            className="p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-700 shadow-2xs transition-all cursor-pointer"
-            title="Refresh alerts"
-          >
-            <RefreshCw
-              className={`w-4 h-4 ${isFetching ? "animate-spin text-blue-600 dark:text-blue-400" : ""}`}
-            />
-          </button>
-        </div>
-      </div>
+          </div>
+        }
+      />
 
       {/* Filter Tabs */}
       <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">

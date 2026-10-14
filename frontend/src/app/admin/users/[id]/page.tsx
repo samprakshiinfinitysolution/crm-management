@@ -46,7 +46,7 @@ export default function UserDetailPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 p-6">
-        <div className="max-w-7xl mx-auto space-y-6">
+        <div className="max-w-7xl mx-auto space-y-3.5">
           {/* Header Skeleton */}
           <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 animate-pulse">
             <div className="flex items-center gap-4">
@@ -147,7 +147,7 @@ export default function UserDetailPage() {
 
   return (
     <div className="bg-slate-50/50 dark:bg-slate-950 p-4 sm:p-6 lg:p-0">
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="max-w-7xl mx-auto space-y-3.5">
         {/* Reusable Header */}
         <UserHeader
           user={{

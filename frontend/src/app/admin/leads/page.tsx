@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Users, Plus, GitFork, UploadCloud, Download, Tag } from "lucide-react";
+import { Plus, GitFork, UploadCloud, Download, Tag } from "lucide-react";
 import { toast } from "sonner";
 import { useGetLeadsQuery } from "@/store";
 import { LeadStatus, type LeadItem } from "@/types/api.types";
@@ -14,6 +14,7 @@ import {
   LeadsDirectoryTable,
   StatusChangeModal,
 } from "@/components/leads";
+import { PageHeader } from "@/components/shared/PageHeader";
 import { useDebounce } from "@/lib/useDebounce";
 
 export default function AdminLeadsPage() {
@@ -29,6 +30,13 @@ export default function AdminLeadsPage() {
 
   const handleSearchChange = (val: string) => {
     setSearch(val);
+    setPage(1);
+  };
+
+  const handleResetFilters = () => {
+    setSearch("");
+    setStatusFilter("ALL");
+    setSourceFilter("ALL");
     setPage(1);
   };
 
@@ -139,79 +147,64 @@ export default function AdminLeadsPage() {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-200">
-      {/* 1. Header with Breadcrumb & Admin Actions (Strictly starting with /admin/...) */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <Link
-              href="/admin"
-              className="text-xs font-semibold text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+    <div className="space-y-3.5 animate-in fade-in duration-200">
+      {/* 1. Header with Breadcrumb & Admin Actions */}
+      <PageHeader
+        breadcrumbs={[
+          { label: "Admin Panel", href: "/admin" },
+          { label: "Lead Management" },
+        ]}
+        title="Lead Inventory & Directory"
+        description="Unrestricted administrator view of intake leads, active pipeline deals, and terminal states."
+        actions={
+          <>
+            <button
+              type="button"
+              onClick={handleStatusChange}
+              className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-xs transition-colors"
             >
-              Admin Panel
+              <Tag className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <span>
+                Update Status
+                {selectedLeadIds.length > 0 ? ` (${selectedLeadIds.length})` : ""}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsExportModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-xs transition-colors"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Export</span>
+            </button>
+
+            <Link
+              href="/admin/imports"
+              className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-xs transition-colors"
+            >
+              <UploadCloud className="w-3.5 h-3.5" />
+              <span>Imports</span>
             </Link>
-            <span className="text-slate-400">/</span>
-            <span className="text-xs font-semibold text-blue-600 dark:text-blue-400">
-              Lead Management
-            </span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 flex items-center gap-2">
-            <Users className="w-7 h-7 text-blue-600 dark:text-blue-400" />
-            <span>Lead Inventory & Directory</span>
-          </h1>
-          <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-            Unrestricted administrator view of intake leads, active pipeline deals, and terminal states.
-          </p>
-        </div>
 
-        {/* Action Buttons (All pointing to /admin/...) */}
-        <div className="flex items-center gap-2.5 flex-wrap">
-          <button
-            type="button"
-            onClick={handleStatusChange}
-            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-xs transition-colors"
-          >
-            <Tag className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-            <span>
-              Update Status
-              {selectedLeadIds.length > 0 ? ` (${selectedLeadIds.length})` : ""}
-            </span>
-          </button>
+            <Link
+              href="/admin/distributions/create"
+              className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-xs transition-colors"
+            >
+              <GitFork className="w-3.5 h-3.5" />
+              <span>Distribute</span>
+            </Link>
 
-          <button
-            type="button"
-            onClick={() => setIsExportModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-xs transition-colors"
-          >
-            <Download className="w-3.5 h-3.5" />
-            <span>Export</span>
-          </button>
-
-          <Link
-            href="/admin/imports"
-            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-xs transition-colors"
-          >
-            <UploadCloud className="w-3.5 h-3.5" />
-            <span>Imports</span>
-          </Link>
-
-          <Link
-            href="/admin/distributions/create"
-            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-xs transition-colors"
-          >
-            <GitFork className="w-3.5 h-3.5" />
-            <span>Distribute</span>
-          </Link>
-
-          <Link
-            href="/admin/leads/create"
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white shadow-xs transition-colors"
-          >
-            <Plus className="w-4 h-4" />
-            <span>+ Create Lead</span>
-          </Link>
-        </div>
-      </div>
+            <Link
+              href="/admin/leads/create"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white shadow-xs transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              <span>+ Create Lead</span>
+            </Link>
+          </>
+        }
+      />
 
       {/* 2. Lead Filters Toolbar */}
       <LeadFiltersToolbar
@@ -227,6 +220,7 @@ export default function AdminLeadsPage() {
           setSourceFilter(val);
           setPage(1);
         }}
+        onReset={handleResetFilters}
       />
 
       {/* 3. Bulk Action Bar */}

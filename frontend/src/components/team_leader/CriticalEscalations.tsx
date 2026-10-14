@@ -24,7 +24,7 @@ export default function CriticalEscalations({
   };
 
   const handleReassign = () => {
-    router.push("/team_leader/distribute");
+    router.push("/dashboard/distributions/create");
   };
 
   if (isLoading) {
@@ -39,8 +39,8 @@ export default function CriticalEscalations({
 
   if (items.length === 0) {
     return (
-      <section className="py-2">
-        <div className="bg-crm-card rounded-lg p-4 border border-crm-subtle shadow-xs">
+      <section className="py-1">
+        <div className="bg-crm-card rounded-lg p-3.5 sm:p-4 border border-crm-subtle shadow-xs">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <div className="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center">
@@ -50,7 +50,7 @@ export default function CriticalEscalations({
                 <h3 className="text-sm font-bold text-crm-primary">
                   Critical Escalations
                 </h3>
-                <p className="text-xs text-crm-muted">
+                <p className="text-xs text-slate-600 dark:text-slate-300 font-medium">
                   Zero SLA breaches detected. All follow-ups are on schedule.
                 </p>
               </div>
@@ -65,8 +65,8 @@ export default function CriticalEscalations({
   }
 
   return (
-    <section className="py-2">
-      <div className="bg-crm-card rounded-lg p-4 border border-crm-subtle shadow-xs">
+    <section className="py-1">
+      <div className="bg-crm-card rounded-lg p-3.5 sm:p-4 border border-crm-subtle shadow-xs">
         {/* Section Header */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">

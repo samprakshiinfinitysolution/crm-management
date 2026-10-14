@@ -96,7 +96,7 @@ export const DistributeModeSelector: React.FC<DistributeModeSelectorProps> = ({
                     <span className="w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-blue-400" />
                   )}
                 </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                <p className="text-xs text-slate-700 dark:text-slate-200 font-medium truncate mt-0.5">
                   {tab.description}
                 </p>
               </div>

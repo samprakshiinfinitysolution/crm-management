@@ -5,7 +5,6 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import {
   ArrowLeft,
-  FileSpreadsheet,
   AlertTriangle,
   ShieldAlert,
   Download,
@@ -16,6 +15,7 @@ import { Pagination } from "@/components/ui/Pagination";
 import { useGetImportBatchByIdQuery } from "@/store";
 import { downloadImportErrors } from "@/lib/exportUtils";
 import { TableSkeletonRows } from "@/components/ui/TableSkeletonRows";
+import { PageHeader } from "./PageHeader";
 
 export interface ImportErrorRow {
   id?: string;
@@ -53,7 +53,7 @@ export function ImportBatchDetailView({
   if (isLoading) {
     return (
       <ProtectedRoute allowedRoles={[UserRole.TEAM_LEADER, UserRole.ADMIN]}>
-        <div className="space-y-6 animate-pulse">
+        <div className="space-y-3.5 animate-pulse">
           {/* Header Skeleton */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -67,7 +67,7 @@ export function ImportBatchDetailView({
           </div>
 
           {/* Overview Stats Skeleton */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
             {Array.from({ length: 4 }).map((_, i) => (
               <div
                 key={i}
@@ -139,54 +139,56 @@ export function ImportBatchDetailView({
 
   return (
     <ProtectedRoute allowedRoles={[UserRole.TEAM_LEADER, UserRole.ADMIN]}>
-      <div className="space-y-6">
+      <div className="space-y-3.5">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <Link
-              href={backHref}
-              className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer shadow-2xs"
-            >
-              <ArrowLeft className="w-4 h-4" />
-            </Link>
-            <div>
-              <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight flex items-center gap-2">
-                <FileSpreadsheet className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                {batch.fileName}
-              </h1>
-              <p className="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5">
-                Batch Code: {batch.batchCode || batch.id} · Uploaded{" "}
-                {new Date(batch.createdAt).toLocaleString()}
-              </p>
+        <PageHeader
+          breadcrumbs={[
+            {
+              label: backHref.includes("admin") ? "Admin" : "Dashboard",
+              href: backHref.includes("admin") ? "/admin" : "/dashboard",
+            },
+            { label: "Imports", href: backHref },
+            { label: batch.fileName },
+          ]}
+          title={batch.fileName}
+          description={`Batch Code: ${batch.batchCode || batch.id} · Uploaded ${new Date(batch.createdAt).toLocaleString()}`}
+          actions={
+            <div className="flex items-center gap-2">
+              <Link
+                href={backHref}
+                className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer shadow-2xs"
+                title="Back to Imports"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </Link>
+              {rawErrors.length > 0 && (
+                <button
+                  type="button"
+                  onClick={handleDownloadErrors}
+                  disabled={isExporting}
+                  className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-rose-200 dark:border-rose-900 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/60 text-rose-700 dark:text-rose-400 text-xs font-semibold shadow-2xs transition-colors cursor-pointer disabled:opacity-50"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>
+                    {isExporting ? "Generating..." : "Download Error Logs (.xlsx)"}
+                  </span>
+                </button>
+              )}
             </div>
-          </div>
-
-          {rawErrors.length > 0 && (
-            <button
-              type="button"
-              onClick={handleDownloadErrors}
-              disabled={isExporting}
-              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-rose-200 dark:border-rose-900 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/60 text-rose-700 dark:text-rose-400 text-xs font-semibold shadow-2xs transition-colors cursor-pointer disabled:opacity-50"
-            >
-              <Download className="w-4 h-4" />
-              <span>
-                {isExporting ? "Generating..." : "Download Error Logs (.xlsx)"}
-              </span>
-            </button>
-          )}
-        </div>
+          }
+        />
 
         {/* Overview Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div className="bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
-            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          <div className="bg-white dark:bg-slate-900 p-3.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
+            <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
               Total Rows
             </p>
             <p className="text-2xl font-bold text-slate-900 dark:text-slate-100 mt-1">
               {batch.totalRows}
             </p>
           </div>
-          <div className="bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
+          <div className="bg-white dark:bg-slate-900 p-3.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
             <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
               Imported
             </p>
@@ -194,7 +196,7 @@ export function ImportBatchDetailView({
               {batch.importedCount}
             </p>
           </div>
-          <div className="bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
+          <div className="bg-white dark:bg-slate-900 p-3.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
             <p className="text-xs font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
               Duplicates
             </p>
@@ -202,7 +204,7 @@ export function ImportBatchDetailView({
               {batch.duplicateCount}
             </p>
           </div>
-          <div className="bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
+          <div className="bg-white dark:bg-slate-900 p-3.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
             <p className="text-xs font-semibold text-rose-600 dark:text-rose-400 uppercase tracking-wider">
               Failed Rows
             </p>

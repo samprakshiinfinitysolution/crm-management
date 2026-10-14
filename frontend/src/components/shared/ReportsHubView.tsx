@@ -36,6 +36,12 @@ export const ReportsHubView: React.FC<ReportsHubViewProps> = ({
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
 
+  const handleResetFilters = () => {
+    setTimeRange("7d");
+    setSelectedExecutive("ALL");
+    setSelectedSource("ALL");
+  };
+
   const handleExport = async () => {
     setIsExporting(true);
     try {
@@ -65,7 +71,7 @@ export const ReportsHubView: React.FC<ReportsHubViewProps> = ({
   const reportData = reportsRes?.data;
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-200">
+    <div className="space-y-3.5 animate-in fade-in duration-200">
       {/* Page Header */}
       <PageHeader
         title={title}
@@ -87,11 +93,11 @@ export const ReportsHubView: React.FC<ReportsHubViewProps> = ({
 
       {/* Quick Navigation Cards */}
       {(leadReportHref || performanceReportHref) && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
           {leadReportHref && (
             <Link
               href={leadReportHref}
-              className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-500/50 hover:shadow-md transition-all group flex items-center justify-between"
+              className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-500/50 hover:shadow-md transition-all group flex items-center justify-between"
             >
               <div className="flex items-center gap-3.5">
                 <div className="p-2.5 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
@@ -102,7 +108,7 @@ export const ReportsHubView: React.FC<ReportsHubViewProps> = ({
                     Detailed Leads Report
                     <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
                   </h4>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 font-medium">
                     Lead statuses, sources, conversions & distributions
                   </p>
                 </div>
@@ -113,7 +119,7 @@ export const ReportsHubView: React.FC<ReportsHubViewProps> = ({
           {performanceReportHref && (
             <Link
               href={performanceReportHref}
-              className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-500/50 hover:shadow-md transition-all group flex items-center justify-between"
+              className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-500/50 hover:shadow-md transition-all group flex items-center justify-between"
             >
               <div className="flex items-center gap-3.5">
                 <div className="p-2.5 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
@@ -124,7 +130,7 @@ export const ReportsHubView: React.FC<ReportsHubViewProps> = ({
                     Executive Scorecards
                     <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
                   </h4>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 font-medium">
                     Individual conversion rates, workloads & response SLAs
                   </p>
                 </div>
@@ -145,6 +151,7 @@ export const ReportsHubView: React.FC<ReportsHubViewProps> = ({
         executivesList={executivesList}
         onExport={handleExport}
         isExporting={isExporting}
+        onReset={handleResetFilters}
       />
 
       {/* KPI Cards */}

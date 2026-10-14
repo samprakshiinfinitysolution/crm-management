@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, UploadCloud, Download } from "lucide-react";
+import { ArrowLeft, Download } from "lucide-react";
 import { toast } from "sonner";
 import {
   IntakeStatsCards,
@@ -14,6 +14,7 @@ import {
 import { useCommitImportMutation, useGetLeadsQuery } from "@/store";
 import { handleApiError } from "@/lib/errorHandler";
 import { downloadImportTemplate } from "@/lib/exportUtils";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 export default function AdminImportUploadPage() {
   const router = useRouter();
@@ -60,40 +61,36 @@ export default function AdminImportUploadPage() {
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto w-full animate-in fade-in duration-200">
+    <div className="space-y-3.5 max-w-7xl mx-auto w-full animate-in fade-in duration-200">
       {/* Top Header & Breadcrumb */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
-        <div className="flex items-center gap-3">
-          <Link
-            href="/admin/imports"
-            className="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-          </Link>
-          <div>
-            <div className="flex items-center gap-2 text-xs text-slate-500 mb-0.5">
-              <Link href="/admin" className="hover:underline">Admin</Link>
-              <span>/</span>
-              <Link href="/admin/imports" className="hover:underline">Imports</Link>
-              <span>/</span>
-              <span className="text-blue-600 dark:text-blue-400 font-semibold">Upload</span>
-            </div>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-              <UploadCloud className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-              <span>Spreadsheet Ingestion & Validation</span>
-            </h1>
+      <PageHeader
+        breadcrumbs={[
+          { label: "Admin", href: "/admin" },
+          { label: "Imports", href: "/admin/imports" },
+          { label: "Upload" },
+        ]}
+        title="Spreadsheet Ingestion & Validation"
+        description="Drag-and-drop your .xlsx / .csv file for instant schema validation and duplicate detection."
+        actions={
+          <div className="flex items-center gap-2">
+            <Link
+              href="/admin/imports"
+              className="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800 transition-colors"
+              title="Back to Imports"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </Link>
+            <button
+              type="button"
+              onClick={handleDownloadSample}
+              className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 shadow-xs transition-colors self-start sm:self-auto"
+            >
+              <Download className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <span>Download Clean Template</span>
+            </button>
           </div>
-        </div>
-
-        <button
-          type="button"
-          onClick={handleDownloadSample}
-          className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 shadow-xs transition-colors self-start sm:self-auto"
-        >
-          <Download className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-          <span>Download Clean Template</span>
-        </button>
-      </div>
+        }
+      />
 
       {/* Upload Zone */}
       <SheetUploadZone
@@ -103,7 +100,7 @@ export default function AdminImportUploadPage() {
 
       {/* Staged Data Preview & Verification */}
       {stagedRows.length > 0 && (
-        <div className="space-y-6">
+        <div className="space-y-3.5">
           <IntakeStatsCards
             total={total}
             valid={valid}

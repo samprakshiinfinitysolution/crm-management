@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -6,6 +6,13 @@ import QueryProvider from "@/components/providers/query-provider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { cn } from "@/lib/utils";
 import { FloatingChatWidget } from "@/components/shared/FloatingChatWidget";
+import {
+  SITE_URL,
+  SITE_NAME,
+  SITE_TITLE,
+  SITE_DESCRIPTION,
+  BRAND_COLOR,
+} from "@/lib/seo";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -13,8 +20,33 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "LeadFlow CRM | Lead Management & Sales Distribution",
-  description: "Enterprise Lead Management, Distribution Engine & Sales Pipeline CRM",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_TITLE,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    locale: "en_US",
+    url: SITE_URL,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
@@ -26,7 +58,40 @@ export const metadata: Metadata = {
   },
   manifest: "/site.webmanifest",
   appleWebApp: {
-    title: "LeadFlow CRM",
+    title: SITE_NAME,
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: BRAND_COLOR },
+    { media: "(prefers-color-scheme: dark)", color: "#020617" },
+  ],
+  colorScheme: "light dark",
+};
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: SITE_NAME,
+  url: SITE_URL,
+  logo: `${SITE_URL}/web-app-manifest-512x512.png`,
+};
+
+const softwareJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: SITE_NAME,
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  url: SITE_URL,
+  description: SITE_DESCRIPTION,
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
   },
 };
 
@@ -48,7 +113,18 @@ export default function RootLayout({
       )}
     >
       <head>
+        <script
+          key="org-ld"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          key="software-ld"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
+        />
         <Script
+          key="theme-init"
           id="theme-init"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{

@@ -165,22 +165,22 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({
           </span>
         ),
       },
-      {
-        id: "entity",
-        header: "Entity",
-        cell: ({ row }) => (
-          <div className="flex items-center gap-1.5">
-            <span className="font-medium text-slate-800 dark:text-slate-200">
-              {row.entityType}
-            </span>
-            {row.entityId && (
-              <span className="text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-1.5 py-0.2 rounded">
-                {row.entityId}
-              </span>
-            )}
-          </div>
-        ),
-      },
+      //{
+      //  id: "entity",
+      //  header: "Entity",
+      //  cell: ({ row }) => (
+      //    <div className="flex items-center gap-1.5">
+      //      <span className="font-medium text-slate-800 dark:text-slate-200">
+      //        {row.entityType}
+      //      </span>
+      //      {/*{row.entityId && (
+      //        <span className="text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-1.5 py-0.2 rounded">
+      //          {row.entityId}
+      //        </span>
+      //      )}*/}
+      //    </div>
+      //  ),
+      //},
       {
         id: "ipAddress",
         header: "IP Address",
@@ -207,7 +207,7 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3.5">
       {/* Reusable Page Header */}
       <PageHeader
         title={title}

@@ -5,7 +5,6 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import {
   ArrowLeft,
-  CalendarClock,
   Phone,
   CheckCircle2,
   AlertCircle,
@@ -13,6 +12,7 @@ import {
 import { useGetFollowUpsQuery } from "@/store/api/followUpApi";
 import CompleteFollowUpModal from "@/components/sales_executive/CompleteFollowUpModal";
 import RescheduleFollowUpModal from "@/components/sales_executive/RescheduleFollowUpModal";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 export default function FollowUpDetailPage() {
   const params = useParams();
@@ -59,45 +59,46 @@ export default function FollowUpDetailPage() {
   return (
     <div className=" mx-auto flex flex-col gap-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Link
-            href="/dashboard/follow-ups"
-            className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all shadow-2xs"
-          >
-            <ArrowLeft className="w-4 h-4" />
-          </Link>
-          <div>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-              <CalendarClock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-              <span>{followUp.type} Follow-up Details</span>
-            </h1>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Scheduled for {new Date(followUp.scheduledAt).toLocaleString()}
-            </p>
-          </div>
-        </div>
-
-        {!isCompleted && (
+      <PageHeader
+        breadcrumbs={[
+          { label: "Dashboard", href: "/dashboard" },
+          { label: "Follow-Ups", href: "/dashboard/follow-ups" },
+          { label: `${followUp.type} Details` },
+        ]}
+        title={`${followUp.type} Follow-up Details`}
+        description={`Scheduled for ${new Date(followUp.scheduledAt).toLocaleString()}`}
+        actions={
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setIsRescheduleOpen(true)}
-              className="px-3.5 py-2 rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 text-xs font-semibold transition-all cursor-pointer"
+            <Link
+              href="/dashboard/follow-ups"
+              className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all shadow-2xs"
+              title="Back to Follow-ups"
             >
-              Reschedule
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsCompleteOpen(true)}
-              className="px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-xs cursor-pointer"
-            >
-              <CheckCircle2 className="w-4 h-4" />
-              <span>Mark Complete</span>
-            </button>
+              <ArrowLeft className="w-4 h-4" />
+            </Link>
+
+            {!isCompleted && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setIsRescheduleOpen(true)}
+                  className="px-3.5 py-2 rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 text-xs font-semibold transition-all cursor-pointer"
+                >
+                  Reschedule
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsCompleteOpen(true)}
+                  className="px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-xs cursor-pointer"
+                >
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>Mark Complete</span>
+                </button>
+              </>
+            )}
           </div>
-        )}
-      </div>
+        }
+      />
 
       {/* Main Info Card */}
       <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-xs p-6 flex flex-col gap-6">

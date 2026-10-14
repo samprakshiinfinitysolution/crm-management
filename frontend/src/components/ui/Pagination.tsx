@@ -110,7 +110,7 @@ export const Pagination: React.FC<PaginationProps> = ({
       {/* Left: Total Items Summary & Page Size Selector */}
       <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 w-full sm:w-auto">
         {showTotalInfo && totalItems !== undefined && (
-          <p className="font-medium text-slate-600 dark:text-slate-400 text-center sm:text-left">
+          <p className="font-medium text-slate-700 dark:text-slate-200 text-center sm:text-left">
             Showing{" "}
             <span className="font-semibold text-slate-900 dark:text-slate-100">
               {startItem}
@@ -129,7 +129,7 @@ export const Pagination: React.FC<PaginationProps> = ({
 
         {showPageSizeSelector && onPageSizeChange && (
           <div className="flex items-center gap-1.5">
-            <span className="text-slate-500 dark:text-slate-400 text-xs">
+            <span className="text-slate-700 dark:text-slate-200 font-semibold text-xs">
               Rows:
             </span>
 

@@ -2,7 +2,7 @@
 
 import React, { useCallback } from "react";
 import Link from "next/link";
-import { GitFork, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { LeadStatus } from "@/types/api.types";
 import {
@@ -26,7 +26,7 @@ export interface DistributionsViewProps {
 export const DistributionsView: React.FC<DistributionsViewProps> = ({
   title = "Lead Rebalancing & Reassignment Console",
   description = "Govern active lead assignments, execute cross-executive workload rebalancing, and recall leads to the intake pool.",
-  distributeHref = "/dashboard/intake",
+  distributeHref = "/dashboard/distributions/create",
   breadcrumbs,
 }) => {
   // 1. Unassigned leads query (for refetch sync)
@@ -104,12 +104,11 @@ export const DistributionsView: React.FC<DistributionsViewProps> = ({
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-200">
+    <div className="space-y-3.5 animate-in fade-in duration-200">
       {/* Page Header */}
       <PageHeader
         title={title}
         description={description}
-        icon={<GitFork className="w-6 h-6 text-blue-600 dark:text-blue-400" />}
         breadcrumbs={breadcrumbs}
         actions={
           distributeHref ? (

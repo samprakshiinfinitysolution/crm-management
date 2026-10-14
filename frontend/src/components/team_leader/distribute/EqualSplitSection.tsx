@@ -117,7 +117,7 @@ export const EqualSplitSection: React.FC<EqualSplitSectionProps> = ({
             <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">
               Selected Sales Executives
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-700 dark:text-slate-200 font-medium mt-0.5">
               Executives who will receive an equal portion of the leads.
             </p>
           </div>
@@ -178,7 +178,7 @@ export const EqualSplitSection: React.FC<EqualSplitSectionProps> = ({
                   <p className="text-xs font-semibold text-slate-900 dark:text-slate-100 truncate">
                     {exec.name}
                   </p>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium">
                     {exec.totalAssignedLeads ?? exec.activeLeads ?? 0} currently assigned
                   </p>
                 </div>
@@ -189,17 +189,17 @@ export const EqualSplitSection: React.FC<EqualSplitSectionProps> = ({
       </div>
 
       {/* 2. LEAD QUANTITY & POOL (Then Lead) */}
-      <div className="bg-card rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs flex flex-col gap-4">
+      <div className="bg-card rounded-xl border border-slate-200 dark:border-slate-800 p-3.5 sm:p-4 shadow-xs flex flex-col gap-3">
         {/* Unassigned Leads Pool Summary */}
         <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
           <div>
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
               Unassigned Leads Pool
             </span>
             <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100 font-mono tracking-tight mt-0.5">
               {totalUnassignedCount.toLocaleString()}
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-700 dark:text-slate-200 font-medium mt-0.5">
               Available for equal split distribution
             </p>
           </div>

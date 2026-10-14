@@ -176,7 +176,7 @@ export function DataTable<T>({
                     key={column.id || `col-header-${colIdx}`}
                     style={{ width: column.width, minWidth: column.minWidth }}
                     className={cn(
-                      "py-3 px-4 font-semibold text-xs tracking-wider text-slate-600 dark:text-slate-300 uppercase",
+                      "py-3 px-4 font-semibold text-xs tracking-wider text-slate-700 dark:text-slate-200 uppercase",
                       alignmentClass,
                       column.headerClassName,
                     )}
@@ -204,7 +204,7 @@ export function DataTable<T>({
                     <h3 className="text-sm font-semibold text-rose-900 dark:text-rose-200 mb-1">
                       Data Loading Failed
                     </h3>
-                    <p className="text-xs text-rose-600 dark:text-rose-400 mb-4 max-w-sm">
+                    <p className="text-xs text-rose-700 dark:text-rose-300 font-medium mb-4 max-w-sm">
                       {displayErrorMessage}
                     </p>
                     {onRetry && (
@@ -233,7 +233,7 @@ export function DataTable<T>({
                     <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1">
                       {emptyTitle}
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
+                    <p className="text-xs text-slate-700 dark:text-slate-200 font-medium mb-4">
                       {emptyDescription}
                     </p>
                     {emptyAction}

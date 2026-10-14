@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { ArrowLeft, PieChart as PieChartIcon, TrendingUp, BarChart3, Layers } from "lucide-react";
+import { ArrowLeft, TrendingUp, BarChart3, Layers } from "lucide-react";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { UserRole } from "@/types/api.types";
 import { useGetReportsSummaryQuery } from "@/store/api/leadApi";
@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 export default function LeadsReportPage() {
   const [timeRange, setTimeRange] = useState("30d");
@@ -59,48 +60,46 @@ export default function LeadsReportPage() {
 
   return (
     <ProtectedRoute allowedRoles={[UserRole.TEAM_LEADER, UserRole.ADMIN]}>
-      <div className="mx-auto flex flex-col gap-6 text-slate-800 dark:text-slate-200">
+      <div className="mx-auto flex flex-col gap-3.5 text-slate-800 dark:text-slate-200">
         {/* Header Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <Link
-              href="/dashboard/reports"
-              className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all shadow-2xs cursor-pointer"
-            >
-              <ArrowLeft className="w-4 h-4" />
-            </Link>
-            <div>
-              <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                <PieChartIcon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                <span>Lead Pipeline & Funnel Breakdown</span>
-              </h1>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                End-to-end sales lifecycle stage throughput and conversion drop-offs
-              </p>
+        <PageHeader
+          breadcrumbs={[
+            { label: "Dashboard", href: "/dashboard" },
+            { label: "Reports", href: "/dashboard/reports" },
+            { label: "Pipeline Funnel" },
+          ]}
+          title="Lead Pipeline & Funnel Breakdown"
+          description="End-to-end sales lifecycle stage throughput and conversion drop-offs."
+          actions={
+            <div className="flex items-center gap-2">
+              <Link
+                href="/dashboard/reports"
+                className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all shadow-2xs cursor-pointer"
+                title="Back to Reports"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </Link>
+              <Select
+                value={timeRange}
+                onValueChange={(val) => {
+                  if (val) setTimeRange(val);
+                }}
+              >
+                <SelectTrigger className="h-9 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 cursor-pointer shadow-2xs">
+                  <SelectValue placeholder="Select Range" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="7d">Last 7 Days</SelectItem>
+                  <SelectItem value="30d">Last 30 Days</SelectItem>
+                  <SelectItem value="90d">Last Quarter</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Select
-              value={timeRange}
-              onValueChange={(val) => {
-                if (val) setTimeRange(val);
-              }}
-            >
-              <SelectTrigger className="h-9 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 cursor-pointer shadow-2xs">
-                <SelectValue placeholder="Select Range" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="7d">Last 7 Days</SelectItem>
-                <SelectItem value="30d">Last 30 Days</SelectItem>
-                <SelectItem value="90d">Last Quarter</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
+          }
+        />
 
         {/* Top Grid: Funnel Chart (Left) + Source Share Pie Chart (Right) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
           <div className="lg:col-span-7">
             <FunnelAnalyticsCard stages={stages} isLoading={isLoading} />
           </div>
@@ -124,7 +123,7 @@ export default function LeadsReportPage() {
         </div>
 
         {/* Bottom Grid: Stage Volume Bar Chart (Left) + Inflow Velocity Area Chart (Right) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
           <div className="lg:col-span-6">
             <ChartCard
               title="Stage Volume Distribution"

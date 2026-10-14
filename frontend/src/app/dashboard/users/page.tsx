@@ -3,11 +3,12 @@
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Users, UserPlus, RefreshCw, Eye } from "lucide-react";
+import { UserPlus, RefreshCw, Eye, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { UserRole } from "@/types/api.types";
 import { Pagination } from "@/components/ui/Pagination";
+import { PageHeader } from "@/components/shared/PageHeader";
 import {
   useAppSelector,
   useGetUsersQuery,
@@ -36,6 +37,19 @@ export default function UsersManagementPage() {
   >("all");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+
+  const hasActiveFilters = Boolean(
+    search.trim() ||
+    roleFilter !== "all" ||
+    statusFilter !== "all"
+  );
+
+  const handleResetFilters = () => {
+    setSearch("");
+    setRoleFilter("all");
+    setStatusFilter("all");
+    setPage(1);
+  };
 
   const { user } = useAppSelector((state) => state.auth);
   const isSE = user?.role;
@@ -84,41 +98,38 @@ export default function UsersManagementPage() {
 
   return (
     <ProtectedRoute allowedRoles={[UserRole.TEAM_LEADER, UserRole.ADMIN]}>
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-3.5">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-              <Users className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-              <span>Team Leaders & Sales Staff Directory</span>
-            </h1>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              Manage team leaders, executive accounts, quota availability, and monitor
-              performance
-            </p>
-          </div>
+        <PageHeader
+          breadcrumbs={[
+            { label: "Dashboard", href: "/dashboard" },
+            { label: "Staff Directory" },
+          ]}
+          title="Team Leaders & Sales Staff Directory"
+          description="Manage team leaders, executive accounts, quota availability, and monitor performance."
+          actions={
+            <>
+              <button
+                type="button"
+                onClick={handleRefetchAll}
+                className="p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-700 shadow-2xs transition-all cursor-pointer"
+                title="Refresh"
+              >
+                <RefreshCw
+                  className={`w-4 h-4 ${isFetching ? "animate-spin text-blue-600 dark:text-blue-400" : ""}`}
+                />
+              </button>
 
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={handleRefetchAll}
-              className="p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-700 shadow-2xs transition-all cursor-pointer"
-              title="Refresh"
-            >
-              <RefreshCw
-                className={`w-4 h-4 ${isFetching ? "animate-spin text-blue-600 dark:text-blue-400" : ""}`}
-              />
-            </button>
-
-            <Link
-              href="/dashboard/users/create"
-              className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all"
-            >
-              <UserPlus className="w-4 h-4" />
-              <span>Add Staff Member</span>
-            </Link>
-          </div>
-        </div>
+              <Link
+                href="/dashboard/users/create"
+                className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all"
+              >
+                <UserPlus className="w-4 h-4" />
+                <span>Add Staff Member</span>
+              </Link>
+            </>
+          }
+        />
 
         {/* Stats */}
         <ExecutiveStatsCards executives={staffList} isLoading={isLoading} />
@@ -171,6 +182,19 @@ export default function UsersManagementPage() {
                   <SelectItem value="inactive">Inactive</SelectItem>
                 </SelectContent>
               </Select>
+
+              {/* Reset Filters */}
+              {hasActiveFilters && (
+                <button
+                  type="button"
+                  onClick={handleResetFilters}
+                  className="h-9 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs shrink-0"
+                  title="Reset all filters"
+                >
+                  <RotateCcw className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
+                  <span>Reset</span>
+                </button>
+              )}
             </div>
           </div>
 

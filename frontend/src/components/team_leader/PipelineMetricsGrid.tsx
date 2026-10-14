@@ -38,11 +38,11 @@ export default function PipelineMetricsGrid({
           <div className="h-4 w-36 bg-card/70 dark:bg-slate-800 animate-pulse rounded-md" />
           <div className="h-3 w-16 bg-card/70 dark:bg-slate-800 animate-pulse rounded-md" />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
           {[1, 2, 3, 4].map((i) => (
             <div
               key={i}
-              className="bg-card dark:bg-slate-900 p-5 rounded-lg border border-slate-200/90 dark:border-slate-800 h-32 animate-pulse flex flex-col justify-between shadow-xs"
+              className="bg-card dark:bg-slate-900 p-3.5 sm:p-4 rounded-lg border border-slate-200/90 dark:border-slate-800 h-28 animate-pulse flex flex-col justify-between shadow-xs"
             >
               <div className="h-3 w-20 bg-card/70 dark:bg-slate-800 rounded" />
               <div className="h-7 w-24 bg-card/70 dark:bg-slate-800 rounded" />
@@ -108,15 +108,15 @@ export default function PipelineMetricsGrid({
         </span>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 w-full">
         {metrics.map((item, idx) => (
           <div
             key={idx}
-            className="bg-card dark:bg-slate-900 p-5 rounded-lg border border-slate-200/90 dark:border-slate-800 shadow-xs flex flex-col justify-between hover:border-slate-300 dark:hover:border-slate-700 transition-all group"
+            className="bg-card dark:bg-slate-900 p-3.5 sm:p-4 rounded-lg border border-slate-200/90 dark:border-slate-800 shadow-xs flex flex-col justify-between hover:border-slate-300 dark:hover:border-slate-700 transition-all group"
           >
             {/* Top row: Label & Icon */}
             <div className="flex items-center justify-between gap-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-200">
                 {item.label}
               </span>
               <div className="p-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 border border-blue-100 dark:border-blue-900/40">
@@ -132,7 +132,7 @@ export default function PipelineMetricsGrid({
             </div>
 
             {/* Bottom: Trend / Subtext / Badge */}
-            <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 flex-wrap pt-1 border-t border-slate-100 dark:border-slate-800/60">
+            <div className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-300 font-medium flex-wrap pt-1 border-t border-slate-100 dark:border-slate-800/60">
               {item.change && (
                 <span
                   className={`font-semibold inline-flex items-center gap-0.5 ${

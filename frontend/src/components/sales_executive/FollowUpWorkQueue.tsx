@@ -105,11 +105,11 @@ export default function FollowUpWorkQueue({
         <div className="w-full sm:w-auto">
           <h3 className="text-sm font-bold text-crm-primary flex items-center gap-2 flex-wrap">
             <span>Follow-Up Work Queue</span>
-            <span className="text-xs font-normal text-crm-muted">
+            <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
               ({pagination?.total ?? followUps.length} items)
             </span>
           </h3>
-          <p className="text-[11px] text-crm-muted mt-0.5">
+          <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 font-medium">
             Action items requiring client touchpoint and conversation logging
           </p>
         </div>
@@ -166,7 +166,7 @@ export default function FollowUpWorkQueue({
                 ? "No overdue follow-ups!"
                 : "No follow-up items found"}
           </h4>
-          <p className="text-xs text-crm-muted max-w-sm">
+          <p className="text-xs text-slate-600 dark:text-slate-300 max-w-sm font-medium">
             {scope === "today"
               ? "You have completed or cleared all follow-ups scheduled for today."
               : scope === "overdue"
