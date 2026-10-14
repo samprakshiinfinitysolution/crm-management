@@ -2,7 +2,7 @@
 
 import React, { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import { CloudinaryAdaptiveImage } from "@/components/ui/CloudinaryAdaptiveImage";
 import { CLOUDINARY_IMAGES } from "@/lib/cloudinaryImages";
 import { getToken } from "@/lib/utils";
 import { decodeJwt, DecodedTokenPayload } from "@/lib/jwt";
@@ -400,12 +400,12 @@ export default function HomePage() {
             {/* Console Preview Container */}
             <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 sm:p-3 shadow-xl overflow-hidden transition-all hover:shadow-2xl">
               <div className="relative w-full overflow-hidden rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-950">
-                <Image
+                <CloudinaryAdaptiveImage
                   src={CLOUDINARY_IMAGES.heroImage}
                   alt="LeadFlow CRM Console Dashboard Preview"
-                  priority
                   width={1792}
                   height={856}
+                  sizes="(max-width: 1200px) 100vw, 1200px"
                   className="block w-full h-auto object-contain"
                 />
               </div>
@@ -813,11 +813,12 @@ export default function HomePage() {
             {/* Pipeline Mockup Showcase */}
             <div className="mt-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 sm:p-3 shadow-md overflow-hidden">
               <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-lg overflow-hidden border border-slate-100 dark:border-slate-800 bg-slate-950">
-                <Image
+                <CloudinaryAdaptiveImage
                   src={CLOUDINARY_IMAGES.pipelineFlowMockup}
                   alt="End-to-End Lead Pipeline Flow Architecture"
                   fill
                   sizes="(max-width: 1200px) 100vw, 1100px"
+                  objectFit="cover"
                   className="object-cover"
                 />
               </div>
@@ -1430,14 +1431,15 @@ export default function HomePage() {
 
               <div className="pt-2">
                 <div className="relative w-full h-44 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 shadow-2xs group bg-slate-950">
-                  <Image
+                  <CloudinaryAdaptiveImage
                     src={CLOUDINARY_IMAGES.teamLeaderWorkspace}
                     alt="Team Leader Operations Console"
                     fill
                     sizes="(max-width: 768px) 100vw, 500px"
+                    objectFit="cover"
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-3">
+                  <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-3 pointer-events-none z-10">
                     <span className="text-[11px] font-semibold text-white drop-shadow-xs">
                       Team Leader Distribution Console
                     </span>
@@ -1484,14 +1486,15 @@ export default function HomePage() {
 
               <div className="pt-2">
                 <div className="relative w-full h-44 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 shadow-2xs group bg-slate-950">
-                  <Image
+                  <CloudinaryAdaptiveImage
                     src={CLOUDINARY_IMAGES.salesExecutiveWorkspace}
                     alt="Sales Executive Lead Workspace"
                     fill
                     sizes="(max-width: 768px) 100vw, 500px"
+                    objectFit="cover"
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-3">
+                  <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-3 pointer-events-none z-10">
                     <span className="text-[11px] font-semibold text-white drop-shadow-xs">
                       Sales Executive Focused Queue
                     </span>

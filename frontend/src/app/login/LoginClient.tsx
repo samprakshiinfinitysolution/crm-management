@@ -49,7 +49,8 @@ export default function LoginClient() {
         width={1920}
         height={1080}
         className="object-cover absolute inset-0 w-screen h-screen"
-        priority
+        loading="lazy"
+        decoding="async"
       />
       <div className="absolute inset-0 w-screen h-screen bg-card/10 backdrop-blur-[2px]" />
       {/* ------------------------------------------------------------- */}
