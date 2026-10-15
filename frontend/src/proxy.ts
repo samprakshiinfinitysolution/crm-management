@@ -6,7 +6,10 @@ import { UserRole } from "@/types/api.types";
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const tokenKey = process.env.AUTH_COOKIE_NAME || "CRM_Management";
-  const token = request.cookies.get(tokenKey)?.value;
+  const token =
+    request.cookies.get(tokenKey)?.value ||
+    request.cookies.get("CRM_Management")?.value ||
+    request.cookies.get("refreshToken")?.value;
 
   const decoded = token ? decodeJwt(token) : null;
   const isDashboardRoute =

@@ -110,16 +110,19 @@ export default function RootLayout({
         className="min-h-full flex flex-col font-sans bg-crm-canvas text-crm-primary antialiased selection:bg-blue-600 selection:text-white"
       >
         <script
+          key="organization-jsonld"
           id="organization-jsonld"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
         <script
+          key="software-jsonld"
           id="software-jsonld"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
         />
         <Script
+          key="theme-init"
           id="theme-init"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{

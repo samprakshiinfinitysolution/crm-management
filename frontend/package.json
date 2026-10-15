@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "test": "npx tsx --test tests/errorHandler.test.ts tests/unassignedLeadsFilters.test.ts tests/authFlow.test.ts"
+    "test": "npx tsx --test tests/errorHandler.test.ts tests/unassignedLeadsFilters.test.ts tests/authFlow.test.ts tests/baseQueryWithReauth.test.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

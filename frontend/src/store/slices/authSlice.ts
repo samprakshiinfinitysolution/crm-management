@@ -3,7 +3,8 @@ import { AuthUser } from "@/types/api.types";
 
 export interface AuthState {
   user: AuthUser | null;
-  token: string | null;
+  accessToken: string | null;
+  token: string | null; // backwards-compatible alias for existing consumers
   isAuthenticated: boolean;
   isLoading: boolean;
   isInitialized: boolean;
@@ -14,6 +15,7 @@ export interface AuthState {
 
 const initialState: AuthState = {
   user: null,
+  accessToken: null,
   token: null,
   isAuthenticated: false,
   isLoading: false,
@@ -29,11 +31,20 @@ export const authSlice = createSlice({
   reducers: {
     setCredentials: (
       state,
-      action: PayloadAction<{ user: AuthUser; token?: string | null }>,
+      action: PayloadAction<{
+        user: AuthUser;
+        accessToken?: string | null;
+        token?: string | null;
+      }>,
     ) => {
       state.user = action.payload.user;
       const incomingToken =
-        action.payload.token ?? action.payload.user.token ?? state.token ?? null;
+        action.payload.accessToken ??
+        action.payload.token ??
+        action.payload.user.token ??
+        state.accessToken ??
+        null;
+      state.accessToken = incomingToken;
       state.token = incomingToken;
       if (incomingToken && typeof window !== "undefined") {
         try {
@@ -47,8 +58,13 @@ export const authSlice = createSlice({
       state.isInitialized = true;
       state.isLoggingOut = false;
     },
+    setAccessToken: (state, action: PayloadAction<string | null>) => {
+      state.accessToken = action.payload;
+      state.token = action.payload;
+    },
     logout: (state) => {
       state.user = null;
+      state.accessToken = null;
       state.token = null;
       if (typeof window !== "undefined") {
         try {
@@ -82,6 +98,7 @@ export const authSlice = createSlice({
 
 export const {
   setCredentials,
+  setAccessToken,
   logout,
   setLoggingOut,
   setLoading,
@@ -89,5 +106,12 @@ export const {
   setAuthMode,
   setSelectedRole,
 } = authSlice.actions;
+
+export const selectCurrentToken = (state: { auth: AuthState }) =>
+  state.auth.accessToken ?? state.auth.token;
+export const selectCurrentUser = (state: { auth: AuthState }) =>
+  state.auth.user;
+export const selectIsAuthenticated = (state: { auth: AuthState }) =>
+  state.auth.isAuthenticated;
 
 export default authSlice.reducer;

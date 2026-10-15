@@ -141,6 +141,7 @@ export default function AuthForm() {
         setCredentials({
           user: res.data.user,
           token: res.data.token || res.data.user.token,
+          accessToken: res.data.accessToken,
         }),
       );
 
@@ -149,12 +150,8 @@ export default function AuthForm() {
       toast.success(
         res.message || `Welcome back, ${res.data.user.name || "User"}!`,
       );
-      if (role === UserRole.ADMIN) {
-        router.replace("/admin");
-      } else {
-        router.replace("/dashboard");
-      }
-      router.refresh();
+      const targetUrl = role === UserRole.ADMIN ? "/admin" : "/dashboard";
+      router.replace(targetUrl);
     } else {
       toast.error(
         "Authentication completed without a session. Please try again.",
