@@ -14,6 +14,8 @@ import { UserRole } from '../types/index.js';
 import { authenticateUser, requireRole } from '../middleware/auth.middleware.js';
 import { config } from '../config/env.js';
 import conversationRouter from './conversation.routes.js';
+import { refresh_token } from '../controllers/auth.controller.js';
+import { verifyOrigin } from '../middleware/csrf.middleware.js';
 
 const apiRouter = Router();
 
@@ -63,6 +65,7 @@ apiRouter.get('/', (req: Request, res: Response) => {
 
 // Auth & User routes
 apiRouter.use('/auth', authRouter);
+apiRouter.post('/refresh', verifyOrigin, refresh_token);
 
 apiRouter.use(authenticateUser);
 apiRouter.use(requireRole(UserRole.ADMIN, UserRole.TEAM_LEADER, UserRole.SALES_EXECUTIVE));

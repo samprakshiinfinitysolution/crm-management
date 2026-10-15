@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken';
 import { config } from '../config/env.js';
 import { AppError } from './errorHandler.js';
 import { UserRole, AuthRequest, AuthenticatedUser } from '../types/index.js';
-
 import { prisma } from '../config/db.js';
 import { CacheService } from '../services/cache.service.js';
 
@@ -141,3 +140,5 @@ export const requireRole = (...roles: UserRole[]) => {
     next();
   };
 };
+
+export { authenticateToken } from './authenticateToken.middleware.js';

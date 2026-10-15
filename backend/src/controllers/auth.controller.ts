@@ -1,11 +1,23 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { AuthService } from '../services/auth.service.js';
-import { ApiResponse, AuthRequest } from '../types/index.js';
+import { ApiResponse, AuthRequest, UserRole } from '../types/index.js';
 import { config } from '../config/env.js';
 import { CacheService } from '../services/cache.service.js';
 import AuditService from '../services/audit.service.js';
-import { clearAuthCookieOptions, getAuthCookieOptions } from '../config/authCookie.js';
+import {
+  clearAuthCookieOptions,
+  getAuthCookieOptions,
+  getRefreshCookieOptions,
+  clearRefreshCookieOptions,
+} from '../config/authCookie.js';
+import {
+  generateTokenPair,
+  hashToken,
+  REFRESH_TOKEN_TTL_MS,
+} from '../utils/token.helper.js';
+import { RefreshTokenService } from '../services/refreshToken.service.js';
+import { AppError } from '../middleware/errorHandler.js';
 
 const register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
@@ -39,7 +51,24 @@ const register = async (req: Request, res: Response, next: NextFunction): Promis
 
 const login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { user, token } = await AuthService.login(req.body);
+    const { user } = await AuthService.login(req.body);
+
+    // 1. Generate Access Token (15m) & Refresh Token (7d) with family tracking
+    const { accessToken, refreshToken, family } = generateTokenPair({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role as UserRole,
+    });
+
+    // 2. Persist hashed refresh token to PostgreSQL
+    const tokenHash = hashToken(refreshToken);
+    await RefreshTokenService.saveRefreshToken({
+      userId: user.id,
+      tokenHash,
+      family,
+      expiresAt: new Date(Date.now() + REFRESH_TOKEN_TTL_MS),
+    });
 
     await AuditService.log({
       action: 'LOGIN',
@@ -50,14 +79,20 @@ const login = async (req: Request, res: Response, next: NextFunction): Promise<v
       newValue: { email: user.email, role: user.role },
     });
 
-    res.cookie(config.tokenKey, token, getAuthCookieOptions());
+    // 3. Set Refresh Token in secure HTTP-Only cookie
+    res.cookie('refreshToken', refreshToken, getRefreshCookieOptions());
+    res.cookie(config.tokenKey, refreshToken, getRefreshCookieOptions());
+    if (config.tokenKey !== 'CRM_Management') {
+      res.cookie('CRM_Management', refreshToken, getRefreshCookieOptions());
+    }
 
     const response: ApiResponse = {
       success: true,
       message: 'User logged in successfully',
       data: {
         user,
-        token,
+        accessToken,
+        token: accessToken, // backwards compatibility
       },
     };
 
@@ -69,32 +104,34 @@ const login = async (req: Request, res: Response, next: NextFunction): Promise<v
 
 const logout = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    // 1. Extract the presented token from the Authorization header or auth cookie.
-    //    Logout must work even for an expired/invalid token so a stale session can
-    //    always be cleared, so we read the raw token rather than relying on the
-    //    auth middleware having populated req.user.
     let token: string | undefined;
     const authHeader = req.headers.authorization;
     if (authHeader && authHeader.startsWith('Bearer ')) {
       token = authHeader.split(' ')[1];
     } else if (req.cookies) {
-      token = req.cookies[config.tokenKey];
+      token = req.cookies.refreshToken || req.cookies[config.tokenKey];
     }
 
-    // 2. Identify the user for session invalidation + auditing. Prefer the
-    //    authenticated identity when present, otherwise decode the token claims
-    //    (signature is irrelevant here — we only need the subject to clean up).
+    // Revoke Refresh Token in PostgreSQL if presented
+    if (token) {
+      try {
+        const tokenHash = hashToken(token);
+        await RefreshTokenService.revokeToken(tokenHash, 'USER_LOGOUT');
+      } catch {
+        // Token might not exist in refresh_tokens table (e.g. was access token)
+      }
+    }
+
     let userId: string | undefined = (req as AuthRequest).user?.id;
     if (!userId && token) {
       try {
         const decoded = jwt.decode(token) as { id?: string } | null;
         userId = decoded?.id;
       } catch {
-        // Malformed token — nothing to invalidate server-side.
+        // Malformed token
       }
     }
 
-    // 3. Invalidate the server-side session and record the audit entry.
     if (userId) {
       await CacheService.invalidateUserSession(userId);
       await AuditService.log({
@@ -106,10 +143,8 @@ const logout = async (req: Request, res: Response, next: NextFunction): Promise<
       });
     }
 
-    // 4. Blacklist the exact token until it would have expired naturally, so an
-    //    already-issued (possibly copied) JWT cannot be replayed after logout.
     if (token) {
-      let ttlSeconds = 7 * 24 * 3600; // Default: match the 7-day session window.
+      let ttlSeconds = config.jwt.refreshTokenTtlMs;
       try {
         const decoded = jwt.decode(token) as { exp?: number } | null;
         if (decoded?.exp) {
@@ -117,13 +152,16 @@ const logout = async (req: Request, res: Response, next: NextFunction): Promise<
           if (remaining > 0) ttlSeconds = remaining;
         }
       } catch {
-        // Ignore decode errors; keep the default TTL.
+        // Keep default TTL
       }
       await CacheService.blacklistToken(token, ttlSeconds);
     }
 
-    // 5. Clear the auth cookie using the same name/path/domain used to set it.
+    // Clear HTTP-Only cookies
     res.clearCookie(config.tokenKey, clearAuthCookieOptions());
+    if (req.cookies?.refreshToken && config.tokenKey !== 'refreshToken') {
+      res.clearCookie('refreshToken', clearRefreshCookieOptions());
+    }
 
     const response: ApiResponse = {
       success: true,
@@ -136,40 +174,43 @@ const logout = async (req: Request, res: Response, next: NextFunction): Promise<
   }
 };
 
-const refresh_token = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+const refresh_token = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const user = req.user;
-    if (!user) {
-      res.status(401).json({ success: false, message: 'Authentication required' });
-      return;
+    const presentedToken =
+      req.cookies?.refreshToken ||
+      req.cookies?.[config.tokenKey] ||
+      req.body?.refreshToken;
+
+    if (!presentedToken) {
+      throw new AppError('Refresh token required', 401, 'REFRESH_TOKEN_REQUIRED');
     }
 
-    const token = jwt.sign(
-      {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-      },
-      config.jwt.secret,
-      { expiresIn: config.jwt.expiresIn } as jwt.SignOptions
-    );
-
-    await CacheService.saveUserSession(user.id, {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      role: user.role,
-      isActive: true,
+    // Rotate token with exploit & reuse detection
+    const { accessToken, newRefreshToken, user } = await RefreshTokenService.rotateToken({
+      presentedToken,
+      ipAddress: req.ip || req.socket?.remoteAddress,
     });
 
-    res.cookie(config.tokenKey, token, getAuthCookieOptions());
+    // Update HTTP-Only cookies with newly rotated refresh token
+    res.cookie('refreshToken', newRefreshToken, getRefreshCookieOptions());
+    res.cookie(config.tokenKey, newRefreshToken, getRefreshCookieOptions());
+    if (config.tokenKey !== 'CRM_Management') {
+      res.cookie('CRM_Management', newRefreshToken, getRefreshCookieOptions());
+    }
 
     res.status(200).json({
       success: true,
       message: 'Token refreshed successfully',
-      data: { user, token },
+      data: {
+        accessToken,
+        token: accessToken, // backwards compatibility
+        user,
+      },
     });
   } catch (error) {
+    // On error, clear refresh cookies to stop loops
+    res.clearCookie('refreshToken', clearRefreshCookieOptions());
+    res.clearCookie(config.tokenKey, clearAuthCookieOptions());
     next(error);
   }
 };

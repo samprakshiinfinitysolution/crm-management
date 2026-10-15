@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import type jwt from "jsonwebtoken";
 
 dotenv.config();
 
@@ -22,6 +23,19 @@ if (jwtSecret === "crm_default_secret_key_change_in_production") {
   );
 }
 
+const parseTtlMs = (val?: string): number => {
+  if (!val) return 7 * 24 * 60 * 60 * 1000;
+  const cleaned = val.replace(/['"]/g, "").trim();
+  if (cleaned.includes("*")) {
+    const parts = cleaned.split("*").map((p) => parseFloat(p.trim()));
+    if (parts.every((p) => !isNaN(p))) {
+      return parts.reduce((acc, curr) => acc * curr, 1);
+    }
+  }
+  const parsed = parseInt(cleaned, 10);
+  return !isNaN(parsed) && parsed > 0 ? parsed : 7 * 24 * 60 * 60 * 1000;
+};
+
 export const config = {
   port: process.env.PORT ? parseInt(process.env.PORT, 10) : 5000,
 
@@ -31,7 +45,12 @@ export const config = {
 
   jwt: {
     secret: jwtSecret,
-    expiresIn: process.env.JWT_EXPIRES_IN || "7d",
+    accessTokenSecret: process.env.ACCESS_TOKEN_SECRET?.replace(/['"]/g, "").trim() || jwtSecret,
+    refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET?.replace(/['"]/g, "").trim() || jwtSecret,
+    accessTokenExpiresIn: (process.env.ACCESS_TOKEN_EXPIRY?.replace(/['"]/g, "").trim() || "15m") as jwt.SignOptions["expiresIn"],
+    refreshTokenExpiresIn: (process.env.REFRESH_TOKEN_EXPIRY?.replace(/['"]/g, "").trim() || "7d") as jwt.SignOptions["expiresIn"],
+    refreshTokenTtlMs: parseTtlMs(process.env.REFRESH_TOKEN_TTL_MS),
+    expiresIn: process.env.JWT_EXPIRES_IN?.replace(/['"]/g, "").trim() || "7d",
   },
 
   tokenKey: process.env.AUTH_COOKIE_NAME || process.env.TOKEN_KEY || "CRM_Management",

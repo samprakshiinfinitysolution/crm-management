@@ -16,3 +16,19 @@ export const clearAuthCookieOptions = (): CookieOptions => ({
   sameSite: "lax",
   path: "/",
 });
+
+/** Refresh Token Cookie Options: 7-day TTL, HTTP-Only, Secure in production */
+export const getRefreshCookieOptions = (): CookieOptions => ({
+  httpOnly: true,
+  secure: config.nodeEnv === "production",
+  sameSite: "lax",
+  path: "/",
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+});
+
+export const clearRefreshCookieOptions = (): CookieOptions => ({
+  httpOnly: true,
+  secure: config.nodeEnv === "production",
+  sameSite: "lax",
+  path: "/",
+});

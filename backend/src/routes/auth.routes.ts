@@ -8,7 +8,8 @@ const apiRouter = Router();
 
 apiRouter.post('/register', authLimiter, register);
 apiRouter.post('/login', authLimiter, login);
-apiRouter.post('/refresh-token', verifyOrigin, authenticateUser, refresh_token);
+apiRouter.post('/refresh', verifyOrigin, refresh_token);
+apiRouter.post('/refresh-token', verifyOrigin, refresh_token);
 apiRouter.post('/logout', verifyOrigin, logout);
 apiRouter.get('/me', authenticateUser, me);
 apiRouter.post('/change-password', verifyOrigin, authenticateUser, authLimiter, changePassword);
