@@ -48,11 +48,7 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
   },
   icons: {
-    icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
-      { url: "/favicon.ico" },
-    ],
+    icon: "/favicon.ico",
     shortcut: "/favicon.ico",
     apple: "/apple-touch-icon.png",
   },
@@ -65,10 +61,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: BRAND_COLOR },
-    { media: "(prefers-color-scheme: dark)", color: "#020617" },
-  ],
+  themeColor: BRAND_COLOR,
   colorScheme: "light dark",
 };
 
@@ -112,19 +105,21 @@ export default function RootLayout({
         "font-sans"
       )}
     >
-      <head>
+      <body
+        suppressHydrationWarning
+        className="min-h-full flex flex-col font-sans bg-crm-canvas text-crm-primary antialiased selection:bg-blue-600 selection:text-white"
+      >
         <script
-          key="org-ld"
+          id="organization-jsonld"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
         <script
-          key="software-ld"
+          id="software-jsonld"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
         />
         <Script
-          key="theme-init"
           id="theme-init"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
@@ -149,11 +144,6 @@ export default function RootLayout({
             `,
           }}
         />
-      </head>
-      <body
-        suppressHydrationWarning
-        className="min-h-full flex flex-col font-sans bg-crm-canvas text-crm-primary antialiased selection:bg-blue-600 selection:text-white"
-      >
         <ThemeProvider>
           <QueryProvider>
             {children}

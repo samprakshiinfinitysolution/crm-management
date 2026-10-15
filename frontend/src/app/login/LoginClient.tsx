@@ -83,13 +83,6 @@ export default function LoginClient() {
           <span>© 2025 LeadFlow Inc. All rights reserved.</span>
         </footer>
       </section>
-
-      {/* ------------------------------------------------------------- */}
-      {/* Right Column: Dark Analytics Showcase Dashboard (50% desktop) */}
-      {/* ------------------------------------------------------------- */}
-      {/*<section className="hidden lg:flex lg:w-1/2 min-h-screen relative border-l border-slate-800/60 overflow-hidden">
-        <LoginShowcase />
-      </section>*/}
     </main>
   );
 }

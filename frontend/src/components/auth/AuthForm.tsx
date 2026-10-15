@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { getAuthErrorMessage } from "@/lib/authService";
 import { useRegisterMutation, useLoginMutation } from "@/store/api/authApi";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2, ArrowRight } from "lucide-react";
 import { registerSchema, loginSchema, cn } from "@/lib/utils";
 import { resetSessionGuard } from "@/lib/sessionGuard";
 import { UserRole, AuthResponse } from "@/types/api.types";
@@ -16,26 +16,6 @@ import {
 } from "@/store";
 import { crmApi } from "@/store/api/baseApi";
 import { useRouter } from "next/navigation";
-
-function LeadFlowLogo({ className = "w-12 h-12" }: { className?: string }) {
-  return (
-    <div
-      className={cn(
-        "relative rounded-2xl overflow-hidden shadow-lg shadow-blue-600/25 flex items-center justify-center mx-auto transition-transform hover:scale-105 ring-2 ring-blue-500/20",
-        className,
-      )}
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/favicon.ico"
-        alt="LeadFlow CRM Logo"
-        width={52}
-        height={52}
-        className="w-full h-full object-contain"
-      />
-    </div>
-  );
-}
 
 export default function AuthForm() {
   const dispatch = useAppDispatch();
@@ -194,18 +174,16 @@ export default function AuthForm() {
       )}
     >
       {/* ------------------------------------------------------------- */}
-      {/* Brand Icon & Heading */}
+      {/* Heading */}
       {/* ------------------------------------------------------------- */}
-      <div className="text-center mb-8">
-        <LeadFlowLogo className="w-13 h-13 mb-6" />
-
-        <h1 className="text-2xl sm:text-[28px] font-bold text-slate-900 dark:text-white tracking-tight leading-tight">
+      <div className="text-center mb-6">
+        <h1 className="text-2xl sm:text-[26px] font-bold text-slate-900 dark:text-white tracking-tight leading-tight">
           {authMode === "register"
             ? "Welcome to LeadFlow"
             : "Welcome Back to LeadFlow"}
         </h1>
 
-        <p className="text-slate-700 dark:text-slate-300 text-sm mt-2 font-normal">
+        <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1.5 font-normal">
           {authMode === "register"
             ? "Enter your details to create your workspace account."
             : "Enter your username and password to continue."}
@@ -219,8 +197,8 @@ export default function AuthForm() {
         <div
           className={cn(
             authMode === "register"
-              ? "grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5"
-              : "flex flex-col gap-4 mb-5",
+              ? "grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-5"
+              : "flex flex-col gap-3.5 mb-5",
           )}
         >
           {/* Register: Full Name */}
@@ -228,7 +206,7 @@ export default function AuthForm() {
             <div>
               <label
                 htmlFor="name-input"
-                className="block text-sm font-medium text-slate-800 dark:text-slate-200 mb-1.5"
+                className="block text-xs font-semibold text-slate-800 dark:text-slate-200 mb-1.5"
               >
                 Full Name
               </label>
@@ -239,7 +217,7 @@ export default function AuthForm() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Enter your full name"
-                className="w-full h-11 px-3.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 dark:focus:ring-white dark:focus:border-white transition-all"
+                className="w-full h-11 px-4 rounded-xl border border-transparent focus:border-[#0F3A7A]/30 focus:bg-white bg-[#EEF4FC] dark:bg-slate-800/90 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#0F3A7A]/15 dark:focus:ring-blue-500/20 transition-all"
               />
             </div>
           )}
@@ -248,7 +226,7 @@ export default function AuthForm() {
           <div>
             <label
               htmlFor="email-input"
-              className="block text-sm font-medium text-slate-800 dark:text-slate-200 mb-1.5"
+              className="block text-xs font-semibold text-slate-800 dark:text-slate-200 mb-1.5"
             >
               Email
             </label>
@@ -259,7 +237,7 @@ export default function AuthForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email address"
-              className="w-full h-11 px-3.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 dark:focus:ring-white dark:focus:border-white transition-all"
+              className="w-full h-11 px-4 rounded-xl border border-transparent focus:border-[#0F3A7A]/30 focus:bg-white bg-[#EEF4FC] dark:bg-slate-800/90 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#0F3A7A]/15 dark:focus:ring-blue-500/20 transition-all"
             />
           </div>
 
@@ -268,7 +246,7 @@ export default function AuthForm() {
             <div className="sm:col-span-2">
               <label
                 htmlFor="phone-input"
-                className="block text-sm font-medium text-slate-800 dark:text-slate-200 mb-1.5"
+                className="block text-xs font-semibold text-slate-800 dark:text-slate-200 mb-1.5"
               >
                 Phone Number
               </label>
@@ -278,7 +256,7 @@ export default function AuthForm() {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="Enter your phone number (optional)"
-                className="w-full h-11 px-3.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 dark:focus:ring-white dark:focus:border-white transition-all"
+                className="w-full h-11 px-4 rounded-xl border border-transparent focus:border-[#0F3A7A]/30 focus:bg-white bg-[#EEF4FC] dark:bg-slate-800/90 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#0F3A7A]/15 dark:focus:ring-blue-500/20 transition-all"
               />
             </div>
           )}
@@ -287,7 +265,7 @@ export default function AuthForm() {
           <div>
             <label
               htmlFor="password-input"
-              className="block text-sm font-medium text-slate-800 dark:text-slate-200 mb-1.5"
+              className="block text-xs font-semibold text-slate-800 dark:text-slate-200 mb-1.5"
             >
               Password
             </label>
@@ -299,12 +277,12 @@ export default function AuthForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
-                className="w-full h-11 pl-3.5 pr-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 dark:focus:ring-white dark:focus:border-white transition-all"
+                className="w-full h-11 pl-4 pr-11 rounded-xl border border-transparent focus:border-[#0F3A7A]/30 focus:bg-white bg-[#EEF4FC] dark:bg-slate-800/90 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#0F3A7A]/15 dark:focus:ring-blue-500/20 transition-all"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-1 cursor-pointer transition-colors"
+                className="absolute right-3.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-1 cursor-pointer transition-colors"
                 title={showPassword ? "Hide password" : "Show password"}
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
@@ -322,7 +300,7 @@ export default function AuthForm() {
             <div>
               <label
                 htmlFor="confirm-password-input"
-                className="block text-sm font-medium text-slate-800 dark:text-slate-200 mb-1.5"
+                className="block text-xs font-semibold text-slate-800 dark:text-slate-200 mb-1.5"
               >
                 Confirm Password
               </label>
@@ -334,7 +312,7 @@ export default function AuthForm() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirm your password"
-                  className="w-full h-11 pl-3.5 pr-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 dark:focus:ring-white dark:focus:border-white transition-all"
+                  className="w-full h-11 pl-4 pr-11 rounded-xl border border-transparent focus:border-[#0F3A7A]/30 focus:bg-white bg-[#EEF4FC] dark:bg-slate-800/90 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#0F3A7A]/15 dark:focus:ring-blue-500/20 transition-all"
                 />
               </div>
             </div>
@@ -342,7 +320,7 @@ export default function AuthForm() {
 
           {/* Remember me & Forgot password Row (Login Mode) */}
           {authMode === "login" && (
-            <div className="flex items-center justify-between mt-1 mb-1">
+            <div className="flex items-center justify-between mt-0.5 mb-1">
               <label
                 htmlFor="remember-me"
                 className="flex items-center gap-2 cursor-pointer select-none"
@@ -352,9 +330,9 @@ export default function AuthForm() {
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="w-4 h-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900 dark:border-slate-700 dark:bg-slate-800 cursor-pointer"
+                  className="w-4 h-4 rounded border-slate-300 text-[#0F3A7A] focus:ring-[#0F3A7A] dark:border-slate-700 dark:bg-slate-800 cursor-pointer accent-[#0F3A7A]"
                 />
-                <span className="text-sm text-slate-600 dark:text-slate-400 font-normal">
+                <span className="text-xs text-slate-600 dark:text-slate-400 font-medium">
                   Remember me
                 </span>
               </label>
@@ -362,7 +340,7 @@ export default function AuthForm() {
               <button
                 type="button"
                 onClick={handleForgotPassword}
-                className="text-sm font-medium text-slate-900 dark:text-slate-200 hover:underline cursor-pointer"
+                className="text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-[#0F3A7A] dark:hover:text-blue-400 hover:underline cursor-pointer transition-colors"
               >
                 Forgot password
               </button>
@@ -371,12 +349,12 @@ export default function AuthForm() {
         </div>
 
         {/* ------------------------------------------------------------- */}
-        {/* Solid Dark Sign In Button (matching image) */}
+        {/* Navy Blue Action Button (matching reference image) */}
         {/* ------------------------------------------------------------- */}
         <button
           type="submit"
           disabled={isLoading || isRedirecting}
-          className="w-full h-11 bg-[#1A202C] hover:bg-[#2D3748] active:bg-[#111620] text-white rounded-lg text-sm font-medium transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed"
+          className="w-full h-11 bg-[#0F3A7A] hover:bg-[#0c2f63] active:bg-[#09244d] text-white rounded-xl text-sm font-semibold transition-all shadow-md shadow-[#0F3A7A]/20 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed"
         >
           {isLoading || isRedirecting ? (
             <div className="flex items-center gap-2">
@@ -390,16 +368,19 @@ export default function AuthForm() {
               </span>
             </div>
           ) : (
-            <span>{authMode === "register" ? "Register" : "Sign In"}</span>
+            <>
+              <span>{authMode === "register" ? "Register" : "Sign In"}</span>
+              <ArrowRight className="w-4 h-4 ml-0.5" />
+            </>
           )}
         </button>
 
         {/* ------------------------------------------------------------- */}
         {/* Switch Between Login and Register */}
         {/* ------------------------------------------------------------- */}
-        <div className="text-center mt-6 text-sm text-sm text-brand-hover">
+        <div className="text-center mt-5 text-xs text-slate-500 dark:text-slate-400">
           {authMode === "register" ? (
-            <p className="">
+            <p>
               Already have an account?{" "}
               <button
                 type="button"
@@ -410,7 +391,7 @@ export default function AuthForm() {
               </button>
             </p>
           ) : (
-            <p className="">
+            <p>
               Don&apos;t have an account?{" "}
               <button
                 type="button"
