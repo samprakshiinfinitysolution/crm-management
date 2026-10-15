@@ -23,7 +23,7 @@ export const getRefreshCookieOptions = (): CookieOptions => ({
   secure: config.nodeEnv === "production",
   sameSite: "lax",
   path: "/",
-  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  maxAge: config.jwt.refreshTokenTtlMs, // 7 days (or configured REFRESH_TOKEN_TTL_MS)
 });
 
 export const clearRefreshCookieOptions = (): CookieOptions => ({
