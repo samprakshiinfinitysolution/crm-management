@@ -42,7 +42,7 @@ export default function LoginClient() {
   }, [router, dispatch, user]);
 
   return (
-    <main className="min-h-screen w-full relative flex flex-col lg:flex-row bg-white dark:bg-slate-900 transition-colors">
+    <main className="min-h-screen w-full px-4 relative flex flex-col justify-center items-center lg:flex-row bg-white dark:bg-slate-900 transition-colors">
       <Image
         src={CLOUDINARY_IMAGES.signIn}
         alt="Background Image"
@@ -56,7 +56,7 @@ export default function LoginClient() {
       {/* ------------------------------------------------------------- */}
       {/* Left Column: Auth Form Panel */}
       {/* ------------------------------------------------------------- */}
-      <section className="w-fit mx-auto flex flex-col justify-between my-auto py-6 px-12 relative z-10 bg-white dark:bg-slate-900 rounded-lg border border-secondary shadow-lg transition-colors">
+      <section className="w-fit flex flex-col justify-between my-auto py-6 px-12 relative z-10 bg-white dark:bg-slate-900 rounded-lg border border-secondary shadow-lg transition-colors">
         {/* Top utility row: Back to Home + Theme Toggle */}
         <div className="flex items-center justify-between w-full mb-2">
           <Link
@@ -74,7 +74,7 @@ export default function LoginClient() {
         </div>
 
         {/* Center: Interactive Form */}
-        <div className="w-full">
+        <div className="w-full ">
           <AuthForm />
         </div>
 

@@ -2,8 +2,22 @@ import { getToken } from '@/lib/utils';
 import type { ExportLeadsPayload } from '@/types/api.types';
 import { toast } from 'sonner';
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const getApiBaseUrl = (): string => {
+  if (typeof window !== 'undefined') {
+    return '/api';
+  }
+  const backend = (
+    process.env.INTERNAL_BACKEND_URL ||
+    process.env.BACKEND_URL ||
+    'http://localhost:5000'
+  )
+    .replace(/\/api\/?$/, '')
+    .replace(/\/+$/, '');
+
+  return `${backend}/api`;
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 /**
  * Downloads leads export file (.xlsx or .csv) from the backend API.

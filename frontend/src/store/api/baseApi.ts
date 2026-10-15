@@ -10,14 +10,22 @@ import { handleUnauthorized } from "@/lib/sessionGuard";
 import type { RootState } from "../store";
 
 const getApiBaseUrl = (): string => {
-  if (process.env.NEXT_PUBLIC_API_URL) {
-    return process.env.NEXT_PUBLIC_API_URL;
-  }
-  // In production browser, route through Next.js proxy rewrites (/api)
-  if (typeof window !== "undefined" && window.location.hostname !== "localhost") {
+  // In the browser, ALWAYS use relative "/api" so requests go through the reverse proxy.
+  // This completely conceals the backend remote IP/port from client DevTools and prevents CORS.
+  if (typeof window !== "undefined") {
     return "/api";
   }
-  return "http://localhost:5000/api";
+
+  // Server-side (SSR / Edge): reach the backend via internal/private service URL
+  const backend = (
+    process.env.INTERNAL_BACKEND_URL ||
+    process.env.BACKEND_URL ||
+    "http://localhost:5000"
+  )
+    .replace(/\/api\/?$/, "")
+    .replace(/\/+$/, "");
+
+  return `${backend}/api`;
 };
 
 const API_BASE_URL = getApiBaseUrl();

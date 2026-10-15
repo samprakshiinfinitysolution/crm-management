@@ -1,0 +1,63 @@
+# ==============================================================================
+# CRM Platform — Modern Reverse Proxy (Caddy)
+# ==============================================================================
+# Caddy provides automatic HTTPS with Let's Encrypt / ZeroSSL, HTTP/3, and
+# instant reverse proxying while concealing the backend remote address.
+# ==============================================================================
+
+{
+    admin off
+    email admin@yourcrmdomain.com
+}
+
+yourcrmdomain.com {
+    # Strip server and technology fingerprint headers
+    header {
+        -Server
+        -X-Powered-By
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Referrer-Policy "strict-origin-when-cross-origin"
+    }
+
+    # Compress responses
+    encode gzip zstd
+
+    # 1. API Reverse Proxy: Hide backend address from client DevTools
+    handle /api/* {
+        reverse_proxy backend:5000 {
+            header_up Host {host}
+            header_up X-Real-IP {remote_host}
+            header_up X-Forwarded-For {remote_host}
+            header_up X-Forwarded-Proto {scheme}
+
+            # Strip upstream headers
+            header_down -Server
+            header_down -X-Powered-By
+        }
+    }
+
+    # 2. WebSocket Reverse Proxy: Route Socket.IO traffic
+    handle /socket.io/* {
+        reverse_proxy backend:5000 {
+            header_up Host {host}
+            header_up X-Real-IP {remote_host}
+            header_up X-Forwarded-For {remote_host}
+            header_up X-Forwarded-Proto {scheme}
+        }
+    }
+
+    # 3. Next.js Frontend App: Default handler
+    handle {
+        reverse_proxy frontend:3000 {
+            header_up Host {host}
+            header_up X-Real-IP {remote_host}
+            header_up X-Forwarded-For {remote_host}
+            header_up X-Forwarded-Proto {scheme}
+
+            header_down -Server
+            header_down -X-Powered-By
+        }
+    }
+}

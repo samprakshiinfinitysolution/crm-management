@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
 
 function getSafeBackendUrl(): string {
-  let raw = (process.env.BACKEND_URL || "").trim();
+  // Support internal Docker/VPC backend URL (e.g. http://backend:5000) or standard BACKEND_URL
+  let raw = (
+    process.env.INTERNAL_BACKEND_URL ||
+    process.env.BACKEND_URL ||
+    ""
+  ).trim();
 
   // Remove trailing /api and trailing slashes
   raw = raw.replace(/\/api\/?$/, "").replace(/\/+$/, "");
@@ -28,6 +33,8 @@ function getSafeBackendUrl(): string {
 const backendUrl = getSafeBackendUrl();
 
 const nextConfig: NextConfig = {
+  // Hide Next.js fingerprint from response headers
+  poweredByHeader: false,
   images: {
     remotePatterns: [
       {
@@ -36,6 +43,18 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
+  },
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+        ],
+      },
+    ];
   },
   async rewrites() {
     return [

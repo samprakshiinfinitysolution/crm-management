@@ -25,43 +25,36 @@ let socket: Socket | null = null;
 let registeredToken: string | null = null;
 
 export const getSocketUrl = (): string => {
-  // 1. Explicitly configured WebSocket URL takes highest precedence
+  // 1. Explicitly configured WebSocket URL (e.g. dedicated WSS gateway or CDN endpoint)
   if (process.env.NEXT_PUBLIC_SOCKET_URL) {
     return process.env.NEXT_PUBLIC_SOCKET_URL.trim().replace(/\/+$/, "");
   }
 
-  // 2. Explicitly configured backend URL
+  // 2. Explicitly configured backend URL override
   if (process.env.NEXT_PUBLIC_BACKEND_URL) {
     return process.env.NEXT_PUBLIC_BACKEND_URL.trim()
       .replace(/\/api\/?$/, "")
       .replace(/\/+$/, "");
   }
 
-  const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "").trim();
-
-  // 3. Absolute API URL (e.g. http://localhost:5000/api or http://192.168.1.9:5000/api)
-  if (apiUrl.startsWith("http://") || apiUrl.startsWith("https://")) {
-    return apiUrl.replace(/\/api\/?$/, "").replace(/\/+$/, "");
-  }
-
-  // 4. Browser environment resolution:
-  // Next.js rewrites do NOT proxy persistent WebSocket upgrades (Upgrade: websocket).
-  // Therefore, client WebSockets must connect directly to the real backend instance.
+  // 3. Browser environment resolution:
+  // When running behind a reverse proxy (Nginx / Caddy / Cloudflare / Docker),
+  // connecting to same-origin path /socket.io ensures the remote address shown in
+  // browser DevTools is the reverse proxy domain/IP and NOT the backend's private address.
   if (typeof window !== "undefined") {
     const hostname = window.location.hostname;
-    // Local / LAN development: connect directly to port 5000
+    // Local development standalone without reverse proxy: direct to port 5000
     if (
       hostname === "localhost" ||
-      hostname === "127.0.0.1" ||
-      hostname.startsWith("192.168.") ||
-      hostname.startsWith("10.") ||
-      hostname.startsWith("172.")
+      hostname === "127.0.0.1"
     ) {
+      // In local dev, check if running behind a local reverse proxy or direct
       return `${window.location.protocol}//${hostname}:5000`;
     }
 
-    // Production deployment (e.g. Vercel): point to Render production backend
-    return "https://crm-management-hju6.onrender.com";
+    // In production behind reverse proxy: connect to frontend/proxy origin.
+    // The reverse proxy intercepts /socket.io/ and forwards to the private backend.
+    return window.location.origin;
   }
 
   return "http://localhost:5000";

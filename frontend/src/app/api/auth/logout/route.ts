@@ -19,7 +19,11 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 /** Resolve the backend origin from validated env (mirrors next.config.ts). */
 function getBackendOrigin(): string {
-  let raw = (process.env.BACKEND_URL || '').trim();
+  let raw = (
+    process.env.INTERNAL_BACKEND_URL ||
+    process.env.BACKEND_URL ||
+    ''
+  ).trim();
   raw = raw.replace(/\/api\/?$/, '').replace(/\/+$/, '');
   if (!raw || raw === 'undefined' || raw === 'null') {
     return process.env.NODE_ENV === 'production'
