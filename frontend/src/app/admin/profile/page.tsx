@@ -1,5 +1,6 @@
-import ProfilePage from "@/app/dashboard/profile/page";
-import React from "react";
+import ProfilePage from "@/components/profile/ProfilePage";
+
+
 
 const Profile = () => {
   return <ProfilePage />;

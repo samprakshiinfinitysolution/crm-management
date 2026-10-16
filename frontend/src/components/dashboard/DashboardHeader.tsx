@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -26,15 +26,14 @@ import { useGetNotificationsQuery } from "@/store/api/notificationApi";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 // Code splitting: Modals are only loaded on-demand when activated
-const LogoutDialog = dynamic(
-  () => import("@/components/auth/LogoutDialog"),
-  { ssr: false }
-);
+const LogoutDialog = dynamic(() => import("@/components/auth/LogoutDialog"), {
+  ssr: false,
+});
 
 const CRMHelpModal = dynamic(
   () =>
     import("@/components/dashboard/CRMHelpModal").then((m) => m.CRMHelpModal),
-  { ssr: false }
+  { ssr: false },
 );
 
 interface DashboardHeaderProps {
@@ -51,6 +50,25 @@ export default function DashboardHeader({
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const profileMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close profile dropdown when clicking outside
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+    if (isProfileMenuOpen) {
+      document.addEventListener("mousedown", handleOutsideClick);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [isProfileMenuOpen]);
 
   const isAdmin = user?.role === UserRole.ADMIN;
   const isTL = user?.role === UserRole.TEAM_LEADER;
@@ -255,7 +273,7 @@ export default function DashboardHeader({
             {/* Orders ⌄ (Follow-ups) */}
             <div
               className="relative h-full flex items-center"
-              onMouseEnter={() => setActiveDropdown("orders")}
+              onMouseEnter={() => setActiveDropdown("follow-ups")}
               onMouseLeave={() => setActiveDropdown(null)}
             >
               <Link
@@ -266,11 +284,11 @@ export default function DashboardHeader({
                     : ""
                 }`}
               >
-                <span>Orders</span>
+                <span>Follow-ups</span>
                 <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
               </Link>
 
-              {activeDropdown === "orders" && (
+              {activeDropdown === "follow-ups" && (
                 <div className="absolute top-14 left-0 w-56 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl rounded-b-md py-1.5 z-50 animate-in fade-in-50 duration-150">
                   <Link
                     href="/dashboard/follow-ups"
@@ -438,7 +456,7 @@ export default function DashboardHeader({
             </Link>
 
             {/* User Profile Avatar Circle (like [21 W] or [1 P] in CRM Management Hub) */}
-            <div className="relative">
+            <div className="relative" ref={profileMenuRef}>
               <button
                 type="button"
                 onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
@@ -475,7 +493,7 @@ export default function DashboardHeader({
                   </div>
 
                   <Link
-                    href="/admin/profile"
+                    href={`${basePath}/profile`}
                     onClick={() => setIsProfileMenuOpen(false)}
                     className="flex items-center gap-2 px-3.5 py-2 text-xs text-slate-700 dark:text-slate-200 hover:bg-[#f2f7fe] dark:hover:bg-slate-800 hover:text-[#2874f0]"
                   >
@@ -490,16 +508,14 @@ export default function DashboardHeader({
 
                   <div className="border-t border-slate-100 dark:border-slate-800 my-1" />
                   {/* Logout Confirmation Modal - Code split & rendered on-demand */}
-                  {isLogoutModalOpen && (
-                    <LogoutDialog
-                      open={isLogoutModalOpen}
-                      setOpen={setIsLogoutModalOpen}
-                      onClose={() => setIsLogoutModalOpen(false)}
-                      onLogout={handleSignOut}
-                      isPending={isLoggingOut}
-                      className="w-[90%] mx-auto"
-                    />
-                  )}
+                  <LogoutDialog
+                    open={isLogoutModalOpen}
+                    setOpen={setIsLogoutModalOpen}
+                    onClose={() => setIsLogoutModalOpen(false)}
+                    onLogout={handleSignOut}
+                    isPending={isLoggingOut}
+                    className="w-[90%] mx-auto"
+                  />
                 </div>
               )}
             </div>

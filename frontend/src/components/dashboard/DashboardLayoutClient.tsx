@@ -24,7 +24,7 @@ export default function DashboardLayoutClient({
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   return (
-    <ProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.TEAM_LEADER]}>
+    <ProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.TEAM_LEADER, UserRole.SALES_EXECUTIVE]}>
       <div className="min-h-screen bg-[#f1f3f6] dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans relative transition-colors">
         {/* Top Header - CRM Management Hub Marketplace Bar */}
         <DashboardHeader
