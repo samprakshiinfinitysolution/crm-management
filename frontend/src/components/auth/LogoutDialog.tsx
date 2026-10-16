@@ -21,6 +21,7 @@ export interface LogoutDialogProps {
   isPending: boolean;
   isText?: boolean;
   className?: string;
+  showTrigger?: boolean;
 }
 
 export const LogoutDialog: React.FC<LogoutDialogProps> = ({
@@ -31,34 +32,44 @@ export const LogoutDialog: React.FC<LogoutDialogProps> = ({
   isPending,
   isText = true,
   className,
+  showTrigger = true,
 }) => {
+  const handleOpenChange = (isOpen: boolean) => {
+    setOpen?.(isOpen);
+    if (!isOpen) {
+      onClose?.();
+    }
+  };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        render={
-          <button
-            type="button"
-            aria-label="Sign Out"
-            title="Sign Out"
-            disabled={isPending}
-            className={cn(
-              `h-9 px-2.5 flex w-fit items-center gap-1.5 rounded-lg bg-crm-info text-crm-dark hover:border-crm-brand text-accent-foreground hover:text-rose-600 hover:bg-rose-50 border border-crm-subtle transition-all text-xs font-semibold disabled:opacity-50 cursor-pointer`,
-              className
-            )}
-          >
-            {isPending ? (
-              <Loader2 className="w-3.5 h-3.5 animate-spin text-rose-600" />
-            ) : (
-              <LogOut className="w-3.5 h-3.5" />
-            )}
-            {isText && (
-              <span className="inline">
-                {isPending ? "Signing out..." : "Sign Out"}
-              </span>
-            )}
-          </button>
-        }
-      />
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      {showTrigger && (
+        <DialogTrigger
+          render={
+            <button
+              type="button"
+              aria-label="Sign Out"
+              title="Sign Out"
+              disabled={isPending}
+              className={cn(
+                `h-9 px-2.5 flex w-fit items-center gap-1.5 rounded-lg bg-crm-info text-crm-dark hover:border-crm-brand text-accent-foreground hover:text-rose-600 hover:bg-rose-50 border border-crm-subtle transition-all text-xs font-semibold disabled:opacity-50 cursor-pointer`,
+                className
+              )}
+            >
+              {isPending ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-rose-600" />
+              ) : (
+                <LogOut className="w-3.5 h-3.5" />
+              )}
+              {isText && (
+                <span className="inline">
+                  {isPending ? "Signing out..." : "Sign Out"}
+                </span>
+              )}
+            </button>
+          }
+        />
+      )}
       <DialogContent className="bg-card max-sm:w-[90%] border border-crm-subtle text-crm-primary shadow-xl rounded-lg p-5 max-w-sm">
         <DialogHeader className="gap-1.5">
           <DialogTitle className="text-sm font-bold text-crm-primary flex items-center gap-2">

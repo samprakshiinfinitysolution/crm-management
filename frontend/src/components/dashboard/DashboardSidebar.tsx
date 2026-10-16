@@ -554,6 +554,7 @@ export default function DashboardSidebar({
           onLogout={handleSignOut}
           onClose={() => setIsLogoutModalOpen(false)}
           isPending={isLoggingOut}
+          showTrigger={false}
         />
       )}
     </>
