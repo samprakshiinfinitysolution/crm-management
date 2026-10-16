@@ -5,6 +5,7 @@ export { default as RegisterFields } from './RegisterFields';
 export { default as AuthForm } from './AuthForm';
 export { default as AuthFooter } from './AuthFooter';
 export { default as ProtectedRoute, withAuth } from './ProtectedRoute';
+export { LogoutDialog, type LogoutDialogProps } from './LogoutDialog';
 
 export const routePermissions = {
   "/dashboard": ["TEAM_LEADER", "SALES_EXECUTIVE"],

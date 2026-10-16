@@ -22,7 +22,7 @@ import {
   getNotificationLink,
   getNotificationMeta,
 } from "@/lib/notificationUtils";
-import { NotificationSkeleton } from "@/components/ui/NotificationSkelation";
+import { NotificationSkeleton } from "@/components/ui/NotificationSkeleton";
 import { PageHeader } from "@/components/shared/PageHeader";
 
 export default function NotificationsCenterPage() {

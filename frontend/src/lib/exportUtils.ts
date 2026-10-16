@@ -231,7 +231,8 @@ export interface ExportReportsPayload {
  * Endpoint: POST /api/exports/reports or GET /api/exports/reports
  */
 export async function downloadReportsExport(payload: ExportReportsPayload = {}): Promise<boolean> {
-  const toastId = toast.loading('Generating executive performance & intelligence report...');
+  const isCsv = payload.format === 'csv';
+  const toastId = toast.loading(`Generating executive performance & intelligence report (${isCsv ? 'CSV' : 'Excel'})...`);
 
   try {
     const token = getToken();
@@ -259,7 +260,7 @@ export async function downloadReportsExport(payload: ExportReportsPayload = {}):
     }
 
     const contentDisposition = response.headers.get('Content-Disposition');
-    let fileName = `crm_report_${payload.timeRange || '7d'}_${new Date().toISOString().split('T')[0]}.xlsx`;
+    let fileName = `crm_report_${payload.timeRange || '7d'}_${new Date().toISOString().split('T')[0]}.${isCsv ? 'csv' : 'xlsx'}`;
 
     if (contentDisposition) {
       const match = contentDisposition.match(/filename=["']?([^"';]+)["']?/i);

@@ -7,3 +7,4 @@ export * from './DataTable';
 export * from './ErrorBoundary';
 export * from './ThemeToggle';
 export * from './CloudinaryAdaptiveImage';
+export * from './NotificationSkeleton';

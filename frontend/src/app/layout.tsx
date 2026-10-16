@@ -4,8 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/components/providers/query-provider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import { cn } from "@/lib/utils";
-import { FloatingChatWidget } from "@/components/shared/FloatingChatWidget";
+import { ServiceWorkerRegistration } from "@/components/pwa/ServiceWorkerRegistration";
 import {
   SITE_URL,
   SITE_NAME,
@@ -13,10 +12,22 @@ import {
   SITE_DESCRIPTION,
   BRAND_COLOR,
 } from "@/lib/seo";
+import { cn } from "@/lib/utils";
+import { FloatingChatWidget } from "@/components/shared/FloatingChatWidget";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+  preload: true,
+  fallback: [
+    "system-ui",
+    "-apple-system",
+    "BlinkMacSystemFont",
+    "Segoe UI",
+    "Roboto",
+    "sans-serif",
+  ],
 });
 
 export const metadata: Metadata = {
@@ -102,7 +113,7 @@ export default function RootLayout({
         "scroll-smooth",
         "antialiased",
         inter.variable,
-        "font-sans"
+        "font-sans",
       )}
     >
       <body
@@ -113,7 +124,9 @@ export default function RootLayout({
           key="organization-jsonld"
           id="organization-jsonld"
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd),
+          }}
         />
         <script
           key="software-jsonld"
@@ -148,6 +161,7 @@ export default function RootLayout({
           }}
         />
         <ThemeProvider>
+          <ServiceWorkerRegistration />
           <QueryProvider>
             {children}
             <FloatingChatWidget />

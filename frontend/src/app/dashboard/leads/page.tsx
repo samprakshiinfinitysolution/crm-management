@@ -2,29 +2,66 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Plus, GitFork, UploadCloud, Download, Tag } from "lucide-react";
+import { Play, Search, Plus, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
-import { useGetLeadsQuery, useAppSelector } from "@/store";
-import { UserRole, LeadStatus, type LeadItem } from "@/types/api.types";
-import { RecallLeadModal, ReassignLeadModal } from "@/components/team_leader";
+import { useGetLeadsQuery, useGetPipelineMetricsQuery, useAppSelector } from "@/store";
+import dynamic from "next/dynamic";
+import { UserRole, LeadStatus } from "@/types/api.types";
 import {
-  ExportLeadsModal,
-  LeadFiltersToolbar,
-  LeadsBulkActionBar,
   LeadsDirectoryTable,
-  StatusChangeModal,
+  ListingsSummaryMetrics,
+  ListingsActionBar,
+  ListingsFilterBar,
 } from "@/components/leads";
-import { PageHeader } from "@/components/shared/PageHeader";
+import { downloadLeadsExport } from "@/lib/exportUtils";
 import { useDebounce } from "@/lib/useDebounce";
+
+// Code splitting: Modals are only loaded on-demand when user clicks actions
+const ExportLeadsModal = dynamic(
+  () =>
+    import("@/components/leads/ExportLeadsModal").then(
+      (m) => m.ExportLeadsModal
+    ),
+  { ssr: false }
+);
+
+const StatusChangeModal = dynamic(
+  () =>
+    import("@/components/leads/StatusChangeModal").then(
+      (m) => m.StatusChangeModal
+    ),
+  { ssr: false }
+);
+
+const RecallLeadModal = dynamic(
+  () => import("@/components/team_leader/RecallLeadModal"),
+  { ssr: false }
+);
+
+const ReassignLeadModal = dynamic(
+  () => import("@/components/team_leader/ReassignLeadModal"),
+  { ssr: false }
+);
+
+const CRMHelpModal = dynamic(
+  () =>
+    import("@/components/dashboard/CRMHelpModal").then((m) => m.CRMHelpModal),
+  { ssr: false }
+);
 
 export default function LeadsListPage() {
   const { user } = useAppSelector((state) => state.auth);
   const isTL = user?.role === UserRole.TEAM_LEADER;
+  const isAdmin = user?.role === UserRole.ADMIN;
+  const isElevated = isTL || isAdmin;
 
   // Filter and pagination states
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [sourceFilter, setSourceFilter] = useState("ALL");
+  const [priorityFilter, setPriorityFilter] = useState("ALL");
+  const [activeTab, setActiveTab] = useState("ACTIVE");
+  const [sortBy, setSortBy] = useState("newest");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
 
@@ -40,47 +77,48 @@ export default function LeadsListPage() {
     setSearch("");
     setStatusFilter("ALL");
     setSourceFilter("ALL");
+    setPriorityFilter("ALL");
+    setActiveTab("ACTIVE")
     setPage(1);
   };
 
   // Modals and selection state
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
   const [selectedLeadIds, setSelectedLeadIds] = useState<string[]>([]);
 
   // Single/bulk Recall state
   const [isRecallModalOpen, setIsRecallModalOpen] = useState(false);
   const [recallTargetLeadIds, setRecallTargetLeadIds] = useState<string[]>([]);
-  const [recallTargetLeadCodes, setRecallTargetLeadCodes] = useState<string[]>(
-    [],
-  );
-  const [recallTargetExecutiveName, setRecallTargetExecutiveName] = useState<
-    string | undefined
-  >();
+  const [recallTargetLeadCodes, setRecallTargetLeadCodes] = useState<string[]>([]);
+  const [recallTargetExecutiveName, setRecallTargetExecutiveName] = useState<string | undefined>();
 
   // Single/bulk Reassign state
   const [isReassignModalOpen, setIsReassignModalOpen] = useState(false);
-  const [reassignTargetLeadIds, setReassignTargetLeadIds] = useState<string[]>(
-    [],
-  );
-  const [reassignTargetLeadCodes, setReassignTargetLeadCodes] = useState<
-    string[]
-  >([]);
-  const [reassignTargetAssigneeId, setReassignTargetAssigneeId] = useState<
-    string | undefined
-  >();
-  const [reassignTargetAssigneeName, setReassignTargetAssigneeName] = useState<
-    string | undefined
-  >();
+  const [reassignTargetLeadIds, setReassignTargetLeadIds] = useState<string[]>([]);
+  const [reassignTargetLeadCodes, setReassignTargetLeadCodes] = useState<string[]>([]);
+  const [reassignTargetAssigneeId, setReassignTargetAssigneeId] = useState<string | undefined>();
+  const [reassignTargetAssigneeName, setReassignTargetAssigneeName] = useState<string | undefined>();
 
   // Single/Bulk Status Change
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [statusTargetLeadIds, setStatusTargetLeadIds] = useState<string[]>([]);
-  const [statusTargetLeadCodes, setStatusTargetLeadCodes] = useState<string[]>(
-    [],
-  );
-  const [statusTargetStatus, setStatusTargetStatus] = useState<
-    LeadStatus | undefined
-  >();
+  const [statusTargetLeadCodes, setStatusTargetLeadCodes] = useState<string[]>([]);
+  const [statusTargetStatus, setStatusTargetStatus] = useState<LeadStatus | undefined>();
+
+  // Determine query status parameter based on tab & filter
+  const queryStatus =
+    statusFilter !== "ALL"
+      ? (statusFilter as LeadStatus)
+      : activeTab === "READY"
+      ? LeadStatus.NEW
+      : activeTab === "BLOCKED"
+      ? LeadStatus.CONTACTED
+      : activeTab === "INACTIVE"
+      ? LeadStatus.LOST
+      : activeTab === "ARCHIVED"
+      ? LeadStatus.WON_SOLD
+      : undefined;
 
   const {
     data: leadsResponse,
@@ -88,14 +126,31 @@ export default function LeadsListPage() {
     refetch,
   } = useGetLeadsQuery({
     search: debouncedSearch.trim() || undefined,
-    status: statusFilter !== "ALL" ? (statusFilter as LeadStatus) : undefined,
+    status: queryStatus,
     source: sourceFilter !== "ALL" ? sourceFilter : undefined,
+    priority: priorityFilter !== "ALL" ? priorityFilter : undefined,
+    sortBy: sortBy !== "newest" ? sortBy : undefined,
     page,
     limit,
   });
 
   const leads = leadsResponse?.data || [];
   const pagination = leadsResponse?.pagination;
+  const totalCount = pagination?.total || leads.length;
+
+  const { data: metricsRes } = useGetPipelineMetricsQuery(undefined, {
+    pollingInterval: 30000,
+  });
+  const metrics = metricsRes?.data;
+
+  // Counts mapping for Flipkart summary cards using real API metrics
+  const summaryCounts = {
+    active: metrics?.totalLeads ?? totalCount,
+    readyForActivation: metrics?.unassignedCount ?? leads.filter((l) => l.status === "NEW" || !l.assignedTo).length,
+    blocked: leads.filter((l) => l.status === "CONTACTED" || l.status === "ON_HOLD").length,
+    inactive: leads.filter((l) => l.status === "LOST" || l.status === "NOT_INTERESTED").length,
+    archived: metrics?.convertedCount ?? leads.filter((l) => l.status === "WON_SOLD").length,
+  };
 
   const handleToggleSelectLead = (id: string) => {
     setSelectedLeadIds((prev) =>
@@ -111,251 +166,250 @@ export default function LeadsListPage() {
     }
   };
 
-  const handleTriggerSingleRecall = (lead: LeadItem, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setRecallTargetLeadIds([lead.id]);
-    setRecallTargetLeadCodes([lead.leadCode]);
-    setRecallTargetExecutiveName(lead.assignedTo?.name);
-    setIsRecallModalOpen(true);
-  };
-
-  const handleTriggerBulkRecall = () => {
-    if (selectedLeadIds.length === 0) return;
-    const selectedLeads = leads.filter((l) => selectedLeadIds.includes(l.id));
-    setRecallTargetLeadIds(selectedLeadIds);
-    setRecallTargetLeadCodes(selectedLeads.map((l) => l.leadCode));
-    setRecallTargetExecutiveName(undefined);
-    setIsRecallModalOpen(true);
-  };
-
-  const handleTriggerSingleReassign = (lead: LeadItem, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setReassignTargetLeadIds([lead.id]);
-    setReassignTargetAssigneeId(
-      lead.assignedTo?.id || lead.assignedToUserId || undefined,
-    );
-    setReassignTargetAssigneeName(lead.assignedTo?.name || undefined);
-    setIsReassignModalOpen(true);
-  };
-
-  const handleTriggerBulkReassign = () => {
-    if (selectedLeadIds.length === 0) return;
-    const selectedLeads = leads.filter((l) => selectedLeadIds.includes(l.id));
-    setReassignTargetLeadIds(selectedLeadIds);
-    setReassignTargetLeadCodes(selectedLeads.map((l) => l.leadCode));
-    setReassignTargetAssigneeId(undefined);
-    setReassignTargetAssigneeName(undefined);
-    setIsReassignModalOpen(true);
-  };
-
-  const handleStatusChange = () => {
-    if (selectedLeadIds.length === 0) {
-      toast.info(
-        "Please select at least one lead from the table to update status",
-      );
-      return;
+  const handleQuickDownload = async (format: "csv" | "excel") => {
+    try {
+      toast.info(`Preparing ${format.toUpperCase()} export download...`);
+      await downloadLeadsExport({
+        search: debouncedSearch || undefined,
+        status: queryStatus,
+        source: sourceFilter !== "ALL" ? sourceFilter : undefined,
+      });
+      toast.success("Download ready and initiated");
+    } catch {
+      toast.error("Export download failed. Please try again.");
     }
-    const selectedLeads = leads.filter((l) => selectedLeadIds.includes(l.id));
-    setStatusTargetLeadIds(selectedLeadIds);
-    setStatusTargetLeadCodes(selectedLeads.map((l) => l.leadCode));
-    setStatusTargetStatus(undefined);
-    setIsStatusModalOpen(true);
   };
 
   return (
-    <div className="flex flex-col gap-3.5">
-      {/* Header & Quick Action Buttons */}
-      <PageHeader
-        breadcrumbs={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Lead Directory" },
-        ]}
-        title="Lead Directory"
-        description={
-          isTL
-            ? "Complete overview of unassigned pool, active pipelines, and converted leads"
-            : "Review your assigned customer inquiries and track deal progress"
-        }
-        actions={
-          <div className="flex flex-wrap items-center gap-2 [&>a]:hover:cursor-pointer [&>a]:hover:active:scale-95">
-            {isTL && (
-              <>
-                <Link
-                  href="/dashboard/leads/create"
-                  className="px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>Create Lead</span>
-                </Link>
+    <div className="space-y-3 animate-in fade-in duration-150">
+      {/* Breadcrumb matching Image 1: Home > Listings Management */}
+      <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+        <Link href="/dashboard" className="text-[#2874f0] hover:underline font-medium">
+          Home
+        </Link>
+        <ChevronRight className="w-3 h-3 text-slate-400" />
+        <span className="text-slate-700 dark:text-slate-300">Listings Management</span>
+      </div>
 
-                <Link
-                  href="/dashboard/distributions/create"
-                  className="px-3.5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-800 dark:hover:bg-slate-700 dark:border dark:border-slate-700 text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
-                >
-                  <GitFork className="w-4 h-4" />
-                  <span>Distribute</span>
-                </Link>
+      {/* Title & Top Action Bar matching Image 1 */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">
+          Listings Management
+        </h1>
 
-                <Link
-                  href="/dashboard/imports/upload"
-                  className="px-3.5 py-2 rounded-lg bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
-                >
-                  <UploadCloud className="w-4 h-4 text-slate-500 dark:text-slate-400" />
-                  <span>Import Sheet</span>
-                </Link>
-              </>
-            )}
+        <div className="flex flex-wrap items-center gap-2.5">
+          {/* Learn about listing button */}
+          <button
+            type="button"
+            onClick={() => setIsHelpModalOpen(true)}
+            className="h-8.5 px-3 rounded-sm bg-white dark:bg-slate-900 border border-[#e0e0e0] dark:border-slate-800 text-xs font-semibold text-[#2874f0] dark:text-blue-400 hover:bg-blue-50/40 dark:hover:bg-slate-800 flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
+          >
+            <div className="w-4 h-4 rounded-full bg-[#2874f0] text-white flex items-center justify-center">
+              <Play className="w-2.5 h-2.5 fill-current ml-0.5" />
+            </div>
+            <span>Learn about listing</span>
+          </button>
 
+          {/* Search box with blue square magnifying button */}
+          <div className="flex items-center h-8.5">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              placeholder="Search for FSN, Title or SKU ID"
+              className="h-full w-48 sm:w-64 px-3 rounded-l-sm bg-white dark:bg-slate-900 border border-r-0 border-[#e0e0e0] dark:border-slate-800 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-[#2874f0]"
+            />
             <button
               type="button"
-              onClick={handleStatusChange}
-              className="px-3.5 py-2 rounded-lg bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
-              title="Update pipeline status for selected leads"
+              onClick={() => setPage(1)}
+              className="h-full px-3 rounded-r-sm bg-[#2874f0] hover:bg-[#1a5bb8] text-white flex items-center justify-center transition-colors cursor-pointer"
+              title="Search"
             >
-              <Tag className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-              <span>
-                Update Status
-                {selectedLeadIds.length > 0 ? ` (${selectedLeadIds.length})` : ""}
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setIsExportModalOpen(true)}
-              className="px-3.5 py-2 rounded-lg bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
-              title="Export Leads to Excel or CSV"
-            >
-              <Download className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-              <span>Export</span>
+              <Search className="w-4 h-4" />
             </button>
           </div>
-        }
+
+          {/* Add New Listings CTA button */}
+          <Link
+            href="/dashboard/leads/create"
+            className="h-8.5 px-4 rounded-sm bg-[#2874f0] hover:bg-[#1a5bb8] text-white font-bold text-xs uppercase tracking-wide flex items-center gap-1.5 transition-colors shadow-xs"
+          >
+            <Plus className="w-4 h-4 stroke-[2.5]" />
+            <span>ADD NEW LISTINGS</span>
+          </Link>
+        </div>
+      </div>
+
+      {/* 5-Card Metric Summary Tabs matching Image 1 */}
+      <ListingsSummaryMetrics
+        activeTab={activeTab}
+       
+        counts={summaryCounts}
       />
 
-      {/* Filter and Search Bar Component */}
-      <LeadFiltersToolbar
-        search={search}
-        onSearchChange={handleSearchChange}
+      {/* Action Toolbar (Bulk Actions, Request Download, Upload, Sort, Customize) */}
+      <ListingsActionBar
+        selectedCount={selectedLeadIds.length}
+        onRequestDownload={handleQuickDownload}
+        onSortChange={(val) => {
+          setSortBy(val);
+          setPage(1);
+        }}
+        currentSort={sortBy}
+        isElevatedUser={isElevated}
+        onBulkAssign={() => {
+          setReassignTargetLeadIds(selectedLeadIds);
+          setReassignTargetLeadCodes(
+            leads.filter((l) => selectedLeadIds.includes(l.id)).map((l) => l.leadCode),
+          );
+          setIsReassignModalOpen(true);
+        }}
+        onBulkStatusChange={() => {
+          setStatusTargetLeadIds(selectedLeadIds);
+          setStatusTargetLeadCodes(
+            leads.filter((l) => selectedLeadIds.includes(l.id)).map((l) => l.leadCode),
+          );
+          setIsStatusModalOpen(true);
+        }}
+        onBulkRecall={() => {
+          setRecallTargetLeadIds(selectedLeadIds);
+          setRecallTargetLeadCodes(
+            leads.filter((l) => selectedLeadIds.includes(l.id)).map((l) => l.leadCode),
+          );
+          setIsRecallModalOpen(true);
+        }}
+      />
+
+      {/* Filter Bar with Funnel Icon & Dropdown Chips */}
+      <ListingsFilterBar
         statusFilter={statusFilter}
-        onStatusFilterChange={(val) => {
-          setStatusFilter(val);
+        onStatusFilterChange={(s) => {
+          setStatusFilter(s);
           setPage(1);
         }}
         sourceFilter={sourceFilter}
-        onSourceFilterChange={(val) => {
-          setSourceFilter(val);
+        onSourceFilterChange={(src) => {
+          setSourceFilter(src);
           setPage(1);
         }}
+        priorityFilter={priorityFilter}
+        onPriorityFilterChange={(p) => {
+          setPriorityFilter(p);
+          setPage(1);
+        }}
+        onApply={() => setPage(1)}
         onReset={handleResetFilters}
       />
 
-      {/* Leads Directory Table Component */}
+      {/* High Density Flipkart Seller Marketplace Table */}
       <LeadsDirectoryTable
         leads={leads}
         isLoading={isLoading}
         selectedLeadIds={selectedLeadIds}
-        isTL={isTL}
-        search={search}
+        isTL={isElevated}
+        search={debouncedSearch}
         statusFilter={statusFilter}
         sourceFilter={sourceFilter}
         pagination={pagination}
         page={page}
-        onPageChange={(p) => setPage(p)}
-        onPageSizeChange={(s) => setLimit(s)}
+        onPageChange={setPage}
+        onPageSizeChange={(newSize) => {
+          setLimit(newSize);
+          setPage(1);
+        }}
         limit={limit}
         onToggleSelectLead={handleToggleSelectLead}
         onToggleSelectAll={handleToggleSelectAll}
-        onTriggerSingleRecall={handleTriggerSingleRecall}
-        onTriggerSingleReassign={handleTriggerSingleReassign}
+        onTriggerSingleRecall={(lead, e) => {
+          e.stopPropagation();
+          setRecallTargetLeadIds([lead.id]);
+          setRecallTargetLeadCodes([lead.leadCode]);
+          setRecallTargetExecutiveName(lead.assignedTo?.name);
+          setIsRecallModalOpen(true);
+        }}
+        onTriggerSingleReassign={(lead, e) => {
+          e.stopPropagation();
+          setReassignTargetLeadIds([lead.id]);
+          setReassignTargetLeadCodes([lead.leadCode]);
+          setReassignTargetAssigneeId(lead.assignedTo?.id);
+          setReassignTargetAssigneeName(lead.assignedTo?.name);
+          setIsReassignModalOpen(true);
+        }}
+        onTriggerSingleStatusChange={(lead, e) => {
+          e.stopPropagation();
+          setStatusTargetLeadIds([lead.id]);
+          setStatusTargetLeadCodes([lead.leadCode]);
+          setStatusTargetStatus(lead.status);
+          setIsStatusModalOpen(true);
+        }}
       />
 
-      {/* Floating Bulk Actions Bar Component */}
-      <LeadsBulkActionBar
-        selectedCount={selectedLeadIds.length}
-        isTL={isTL}
-        onExport={() => setIsExportModalOpen(true)}
-        onReassign={handleTriggerBulkReassign}
-        onRecall={handleTriggerBulkRecall}
-        onStatusChange={handleStatusChange}
-        onClear={() => setSelectedLeadIds([])}
-      />
 
-      {/* Export Leads Modal */}
-      {isExportModalOpen && (
-        <ExportLeadsModal
-          open={isExportModalOpen}
-          onClose={() => setIsExportModalOpen(false)}
-          selectedLeadIds={selectedLeadIds}
-          selectedLeadCodes={leads
-            .filter((l) => selectedLeadIds.includes(l.id))
-            .map((l) => l.leadCode)}
-          currentFilters={{
-            search: search.trim() || undefined,
-            status: statusFilter !== "ALL" ? statusFilter : undefined,
-            source: sourceFilter !== "ALL" ? sourceFilter : undefined,
-          }}
-          totalMatchingCount={pagination?.total}
+      {/* CRM Help & Support Modal - Rendered on-demand */}
+      {isHelpModalOpen && (
+        <CRMHelpModal
+          isOpen={isHelpModalOpen}
+          onClose={() => setIsHelpModalOpen(false)}
         />
       )}
 
-      {/* Recall Lead Modal */}
-      {isRecallModalOpen && (
+      {/* Status Change Modal - Rendered on-demand */}
+      {isStatusModalOpen && (
+        <StatusChangeModal
+          open={isStatusModalOpen}
+          onClose={() => setIsStatusModalOpen(false)}
+          leadIds={statusTargetLeadIds}
+          leadCodes={statusTargetLeadCodes}
+          currentStatus={statusTargetStatus}
+          onSuccess={() => {
+            refetch();
+            setSelectedLeadIds([]);
+          }}
+        />
+      )}
+
+      {/* Recall Modal - Rendered on-demand */}
+      {isElevated && isRecallModalOpen && (
         <RecallLeadModal
           open={isRecallModalOpen}
-          onClose={() => {
-            setIsRecallModalOpen(false);
-            setRecallTargetLeadIds([]);
-            setRecallTargetLeadCodes([]);
-            setRecallTargetExecutiveName(undefined);
-          }}
+          onClose={() => setIsRecallModalOpen(false)}
           leadIds={recallTargetLeadIds}
           leadCodes={recallTargetLeadCodes}
           assignedExecutiveName={recallTargetExecutiveName}
           onSuccess={() => {
-            setSelectedLeadIds([]);
             refetch();
+            setSelectedLeadIds([]);
           }}
         />
       )}
 
-      {/* Reassign Lead Modal */}
-      {isReassignModalOpen && (
+      {/* Reassign Modal - Rendered on-demand */}
+      {isElevated && isReassignModalOpen && (
         <ReassignLeadModal
           open={isReassignModalOpen}
-          onClose={() => {
-            setIsReassignModalOpen(false);
-            setReassignTargetLeadIds([]);
-            setReassignTargetLeadCodes([]);
-            setReassignTargetAssigneeId(undefined);
-            setReassignTargetAssigneeName(undefined);
-          }}
+          onClose={() => setIsReassignModalOpen(false)}
           leadIds={reassignTargetLeadIds}
           leadCodes={reassignTargetLeadCodes}
           currentAssigneeId={reassignTargetAssigneeId}
           currentAssigneeName={reassignTargetAssigneeName}
           onSuccess={() => {
-            setSelectedLeadIds([]);
             refetch();
+            setSelectedLeadIds([]);
           }}
         />
       )}
 
-      {isStatusModalOpen && (
-        <StatusChangeModal
-          open={isStatusModalOpen}
-          onClose={() => {
-            setIsStatusModalOpen(false);
-            setStatusTargetLeadIds([]);
-            setStatusTargetLeadCodes([]);
-            setStatusTargetStatus(undefined);
+      {/* Export Modal - Rendered on-demand */}
+      {isExportModalOpen && (
+        <ExportLeadsModal
+          open={isExportModalOpen}
+          onClose={() => setIsExportModalOpen(false)}
+          currentFilters={{
+            search: debouncedSearch || undefined,
+            status: queryStatus,
+            source: sourceFilter !== "ALL" ? sourceFilter : undefined,
           }}
-          leadIds={statusTargetLeadIds}
-          leadCodes={statusTargetLeadCodes}
-          currentStatus={statusTargetStatus}
-          onSuccess={() => {
-            setSelectedLeadIds([]);
-            refetch();
-          }}
+          selectedLeadIds={selectedLeadIds}
         />
       )}
     </div>

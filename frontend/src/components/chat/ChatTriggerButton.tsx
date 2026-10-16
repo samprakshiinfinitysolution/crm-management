@@ -8,6 +8,7 @@ interface ChatTriggerButtonProps {
   hasNewMessage: boolean;
   unreadCount?: number;
   onToggle: () => void;
+  isDragging?: boolean;
 }
 
 export function ChatTriggerButton({
@@ -15,6 +16,7 @@ export function ChatTriggerButton({
   hasNewMessage,
   unreadCount = 0,
   onToggle,
+  isDragging = false,
 }: ChatTriggerButtonProps) {
   const showBadge = !isOpen && (hasNewMessage || unreadCount > 0);
 
@@ -22,7 +24,12 @@ export function ChatTriggerButton({
     <button
       type="button"
       onClick={onToggle}
-      className="group relative p-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg hover:shadow-blue-500/25 transition-all duration-200 active:scale-95 flex items-center justify-center cursor-pointer"
+      className={`group relative p-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg hover:shadow-blue-500/25 transition-all duration-200 flex items-center justify-center select-none ${
+        isDragging
+          ? "scale-105 shadow-2xl ring-4 ring-blue-400/40 cursor-grabbing"
+          : "active:scale-95 cursor-grab"
+      }`}
+      title={isDragging ? "Moving chat button..." : "Drag to reposition • Click to chat"}
       aria-label="Open Workspace Chat"
     >
       <MessageSquare

@@ -23,9 +23,15 @@ import {
 } from "lucide-react";
 import { useAppSelector } from "@/store";
 import { UserRole } from "@/types/api.types";
+import dynamic from "next/dynamic";
 import { performLogout } from "@/lib/authService";
-import LogOutPopUp from "../LogOutPopUp";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+
+// Code splitting: Logout dialog is loaded on-demand
+const LogoutDialog = dynamic(
+  () => import("@/components/auth/LogoutDialog"),
+  { ssr: false }
+);
 
 interface NavItem {
   label: string;
@@ -321,7 +327,7 @@ export default function DashboardSidebar({
     <>
       {/* Sidebar Container */}
       <aside
-        className={`fixed top-0 lg:top-16 bottom-0 left-0 z-50 lg:z-30 w-64 bg-card dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 shadow-xs flex flex-col transition-all duration-300 lg:translate-x-0 ${
+        className={`fixed md:hidden top-0 lg:top-16 bottom-0 left-0 z-50 lg:z-30 w-64 bg-card dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 shadow-xs flex flex-col transition-all duration-300 lg:translate-x-0 ${
           isOpenMobile ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -541,13 +547,15 @@ export default function DashboardSidebar({
         </div>
       </aside>
 
-      <LogOutPopUp
-        open={isLogoutModalOpen}
-        setOpen={setIsLogoutModalOpen}
-        onLogout={handleSignOut}
-        onClose={() => setIsLogoutModalOpen(false)}
-        isPending={isLoggingOut}
-      />
+      {isLogoutModalOpen && (
+        <LogoutDialog
+          open={isLogoutModalOpen}
+          setOpen={setIsLogoutModalOpen}
+          onLogout={handleSignOut}
+          onClose={() => setIsLogoutModalOpen(false)}
+          isPending={isLoggingOut}
+        />
+      )}
     </>
   );
 }

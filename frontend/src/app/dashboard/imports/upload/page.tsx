@@ -7,12 +7,26 @@ import { ArrowLeft, Download } from "lucide-react";
 import { toast } from "sonner";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { UserRole } from "@/types/api.types";
+import dynamic from "next/dynamic";
 import {
   IntakeStatsCards,
   SheetUploadZone,
-  SheetPreviewTable,
-  StagedLeadRow,
+  type StagedLeadRow,
 } from "@/components/team_leader/intake";
+
+// Code splitting: Sheet preview table is only loaded when file is staged
+const SheetPreviewTable = dynamic(
+  () =>
+    import("@/components/team_leader/intake/SheetPreviewTable").then(
+      (m) => m.SheetPreviewTable
+    ),
+  {
+    loading: () => (
+      <div className="h-64 animate-pulse bg-slate-100 dark:bg-slate-800 rounded-sm" />
+    ),
+    ssr: false,
+  }
+);
 import { useCommitImportMutation, useGetLeadsQuery } from "@/store";
 import { handleApiError } from "@/lib/errorHandler";
 import { downloadImportTemplate } from "@/lib/exportUtils";

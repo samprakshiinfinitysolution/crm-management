@@ -71,6 +71,12 @@ export default function HomePage() {
   const targetRoute = isAdmin ? "/admin" : "/dashboard";
   const targetLabel = isAdmin ? "Go to Admin Panel" : "Go to Dashboard";
 
+  React.useEffect(() => {
+    if (effectiveUser && typeof window !== "undefined") {
+      window.location.replace(targetRoute);
+    }
+  }, [effectiveUser, targetRoute]);
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDistributionTab, setActiveDistributionTab] = useState<
     "EQUAL" | "CUSTOM" | "MANUAL"

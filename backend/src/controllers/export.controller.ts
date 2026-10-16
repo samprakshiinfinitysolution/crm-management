@@ -60,12 +60,13 @@ export const exportReports = async (
 ): Promise<void> => {
   try {
     const user = getAuthUser(req);
-    const {timeRange} = req.query;
+    const { timeRange, format } = req.query;
     const filterInput = req.body || {};
 
     const { buffer, contentType, fileName, count } = await ExportService.exportReportsToExcel(
       {
-        timeRange: timeRange as string,
+        timeRange: (timeRange as string) || filterInput.timeRange,
+        format: ((format as string) || filterInput.format || 'xlsx') as 'xlsx' | 'csv',
         ...filterInput,
       },
       { id: user.id, role: user.role }

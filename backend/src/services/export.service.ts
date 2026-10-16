@@ -4,6 +4,7 @@ import {
   generateLeadsExcelBuffer,
   generateLeadsCsvString,
   generateReportExcelBuffer,
+  generateReportCsvString,
   LeadExportRow,
   ReportExportData,
 } from '../utils/excel.util.js';
@@ -517,6 +518,16 @@ export class ExportService {
       executives,
       leads: leadRows,
     };
+
+    if (filter.format === 'csv') {
+      const csvString = generateReportCsvString(reportData);
+      return {
+        buffer: Buffer.from(csvString, 'utf-8'),
+        count: totalIntake,
+        fileName: `crm_performance_report_${range}_${dateStamp}.csv`,
+        contentType: 'text/csv; charset=utf-8',
+      };
+    }
 
     const buffer = await generateReportExcelBuffer(reportData);
 

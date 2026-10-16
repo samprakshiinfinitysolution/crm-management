@@ -1,12 +1,41 @@
 {
+  "id": "/dashboard",
   "name": "LeadFlow CRM",
   "short_name": "LeadFlow",
+  "description": "Real-time client management system with offline capabilities.",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "any",
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
+  "categories": [
+    "business",
+    "productivity"
+  ],
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "/web-app-manifest-512x512.png",
@@ -15,7 +44,38 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#2563eb",
-  "background_color": "#ffffff",
-  "display": "standalone"
+  "screenshots": [
+    {
+      "src": "/screenshot-desktop.jpg",
+      "sizes": "1376x768",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "LeadFlow CRM Desktop Overview"
+    },
+    {
+      "src": "/screenshot-mobile.jpg",
+      "sizes": "768x1376",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "LeadFlow CRM Mobile Activity Queue"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "url": "/dashboard",
+      "description": "Open LeadFlow CRM Overview"
+    },
+    {
+      "name": "Leads Directory",
+      "url": "/dashboard/leads",
+      "description": "View and manage active leads"
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+leadflow",
+      "url": "/dashboard?lead=%s"
+    }
+  ]
 }

@@ -4,7 +4,19 @@ import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { getAuthErrorMessage } from "@/lib/authService";
 import { useRegisterMutation, useLoginMutation } from "@/store/api/authApi";
-import { Eye, EyeOff, Loader2, ArrowRight } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Loader2,
+  ArrowRight,
+  LogIn,
+  UserPlus,
+  User,
+  Mail,
+  Phone,
+  Lock,
+  ShieldCheck,
+} from "lucide-react";
 import { registerSchema, loginSchema, cn } from "@/lib/utils";
 import { resetSessionGuard } from "@/lib/sessionGuard";
 import { UserRole, AuthResponse } from "@/types/api.types";
@@ -39,20 +51,19 @@ export default function AuthForm() {
 
   const isLoading = isRegisterLoading || isLoginLoading;
 
-  // Restore remembered email on mount
+  // Restore remembered email on mount without blocking initial paint
   useEffect(() => {
-    const timer = setTimeout(() => {
-      try {
-        const savedEmail = localStorage.getItem("crm_remember_email");
-        if (savedEmail) {
-          setEmail(savedEmail);
+    try {
+      const savedEmail = localStorage.getItem("crm_remember_email");
+      if (savedEmail) {
+        queueMicrotask(() => {
+          setEmail((prev) => prev || savedEmail);
           setRememberMe(true);
-        }
-      } catch {
-        // Ignore storage access errors
+        });
       }
-    }, 0);
-    return () => clearTimeout(timer);
+    } catch {
+      // Ignore storage access errors
+    }
   }, []);
 
   const handleAuthSubmit = async (e?: React.FormEvent) => {
@@ -137,6 +148,11 @@ export default function AuthForm() {
     if (res.data?.user) {
       resetSessionGuard();
       dispatch(crmApi.util.resetApiState());
+      const token = res.data.token || res.data.user.token || res.data.accessToken;
+      if (token && typeof window !== "undefined") {
+        document.cookie = `CRM_Management=${token}; path=/; SameSite=Lax`;
+        document.cookie = `refreshToken=${token}; path=/; SameSite=Lax`;
+      }
       dispatch(
         setCredentials({
           user: res.data.user,
@@ -151,7 +167,11 @@ export default function AuthForm() {
         res.message || `Welcome back, ${res.data.user.name || "User"}!`,
       );
       const targetUrl = role === UserRole.ADMIN ? "/admin" : "/dashboard";
-      router.replace(targetUrl);
+      if (typeof window !== "undefined") {
+        window.location.assign(targetUrl);
+      } else {
+        router.replace(targetUrl);
+      }
     } else {
       toast.error(
         "Authentication completed without a session. Please try again.",
@@ -164,48 +184,71 @@ export default function AuthForm() {
   };
 
   return (
-    <div
-      className={cn(
-        "w-full mx-auto flex flex-col justify-center transition-all duration-200",
-        authMode === "register" ? "max-w-xl sm:max-w-2xl" : "max-w-105",
-      )}
-    >
+    <div className="w-full select-none">
       {/* ------------------------------------------------------------- */}
-      {/* Heading */}
+      {/* 1. Flipkart Segmented Tabs Header */}
       {/* ------------------------------------------------------------- */}
-      <div className="text-center mb-6">
-        <h1 className="text-2xl sm:text-[26px] font-bold text-slate-900 dark:text-white tracking-tight leading-tight">
-          {authMode === "register"
-            ? "Welcome to LeadFlow"
-            : "Welcome Back to LeadFlow"}
-        </h1>
+      <div className="grid grid-cols-2 border-b border-[#e0e0e0] dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40">
+        <button
+          type="button"
+          onClick={() => dispatch(setAuthMode("login"))}
+          className={cn(
+            "h-11 px-4 flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer",
+            authMode === "login"
+              ? "bg-white dark:bg-slate-900 text-[#2874f0] border-b-2 border-[#2874f0]"
+              : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 border-b border-transparent",
+          )}
+        >
+          <LogIn className="w-3.5 h-3.5" />
+          <span>Sign In</span>
+        </button>
 
-        <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1.5 font-normal">
-          {authMode === "register"
-            ? "Enter your details to create your workspace account."
-            : "Enter your username and password to continue."}
-        </p>
+        <button
+          type="button"
+          onClick={() => dispatch(setAuthMode("register"))}
+          className={cn(
+            "h-11 px-4 flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer",
+            authMode === "register"
+              ? "bg-white dark:bg-slate-900 text-[#2874f0] border-b-2 border-[#2874f0]"
+              : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 border-b border-transparent",
+          )}
+        >
+          <UserPlus className="w-3.5 h-3.5" />
+          <span>Register</span>
+        </button>
       </div>
 
       {/* ------------------------------------------------------------- */}
-      {/* Form Fields */}
+      {/* 2. Form Body */}
       {/* ------------------------------------------------------------- */}
-      <form onSubmit={handleAuthSubmit} noValidate className="flex flex-col">
-        <div
-          className={cn(
-            authMode === "register"
-              ? "grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-5"
-              : "flex flex-col gap-3.5 mb-5",
-          )}
-        >
+      <div className="p-5 sm:p-6 space-y-4">
+        {/* Header Text */}
+        <div className="space-y-0.5">
+          <h2 className="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+            <span>
+              {authMode === "register"
+                ? "Create Workspace Account"
+                : "Sign In to CRM Workspace"}
+            </span>
+          </h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            {authMode === "register"
+              ? "Join the LeadFlow CRM sales distribution network"
+              : "Enter your registered credentials to access your pipeline"}
+          </p>
+        </div>
+
+        <form onSubmit={handleAuthSubmit} noValidate className="space-y-3.5">
           {/* Register: Full Name */}
           {authMode === "register" && (
             <div>
               <label
                 htmlFor="name-input"
-                className="block text-xs font-semibold text-slate-800 dark:text-slate-200 mb-1.5"
+                className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1"
               >
-                Full Name
+                <User className="w-3 h-3 text-[#2874f0]" />
+                <span>Full Name</span>
+                <span className="text-rose-500">*</span>
               </label>
               <input
                 id="name-input"
@@ -213,19 +256,21 @@ export default function AuthForm() {
                 required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="Enter your full name"
-                className="w-full h-11 px-4 rounded-xl border border-transparent focus:border-[#0F3A7A]/30 focus:bg-white bg-[#EEF4FC] dark:bg-slate-800/90 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#0F3A7A]/15 dark:focus:ring-blue-500/20 transition-all"
+                placeholder="e.g. John Doe"
+                className="w-full h-8.5 px-3 rounded-sm bg-white dark:bg-slate-800 border border-[#e0e0e0] dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#2874f0] focus:border-[#2874f0] transition-colors"
               />
             </div>
           )}
 
-          {/* Email Field */}
+          {/* Email Address */}
           <div>
             <label
               htmlFor="email-input"
-              className="block text-xs font-semibold text-slate-800 dark:text-slate-200 mb-1.5"
+              className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1"
             >
-              Email
+              <Mail className="w-3 h-3 text-[#2874f0]" />
+              <span>Email Address</span>
+              <span className="text-rose-500">*</span>
             </label>
             <input
               id="email-input"
@@ -233,38 +278,44 @@ export default function AuthForm() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email address"
-              className="w-full h-11 px-4 rounded-xl border border-transparent focus:border-[#0F3A7A]/30 focus:bg-white bg-[#EEF4FC] dark:bg-slate-800/90 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#0F3A7A]/15 dark:focus:ring-blue-500/20 transition-all"
+              placeholder="e.g. user@leadflow.io"
+              className="w-full h-8.5 px-3 rounded-sm bg-white dark:bg-slate-800 border border-[#e0e0e0] dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#2874f0] focus:border-[#2874f0] transition-colors"
             />
           </div>
 
           {/* Register: Phone Number */}
           {authMode === "register" && (
-            <div className="sm:col-span-2">
+            <div>
               <label
                 htmlFor="phone-input"
-                className="block text-xs font-semibold text-slate-800 dark:text-slate-200 mb-1.5"
+                className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1"
               >
-                Phone Number
+                <Phone className="w-3 h-3 text-[#2874f0]" />
+                <span>Phone Number</span>
+                <span className="text-slate-400 font-normal lowercase">
+                  (optional)
+                </span>
               </label>
               <input
                 id="phone-input"
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                placeholder="Enter your phone number (optional)"
-                className="w-full h-11 px-4 rounded-xl border border-transparent focus:border-[#0F3A7A]/30 focus:bg-white bg-[#EEF4FC] dark:bg-slate-800/90 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#0F3A7A]/15 dark:focus:ring-blue-500/20 transition-all"
+                placeholder="e.g. +91 98765 43210"
+                className="w-full h-8.5 px-3 rounded-sm bg-white dark:bg-slate-800 border border-[#e0e0e0] dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#2874f0] focus:border-[#2874f0] transition-colors"
               />
             </div>
           )}
 
-          {/* Password Field */}
+          {/* Password */}
           <div>
             <label
               htmlFor="password-input"
-              className="block text-xs font-semibold text-slate-800 dark:text-slate-200 mb-1.5"
+              className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1"
             >
-              Password
+              <Lock className="w-3 h-3 text-[#2874f0]" />
+              <span>Password</span>
+              <span className="text-rose-500">*</span>
             </label>
             <div className="relative flex items-center">
               <input
@@ -273,20 +324,20 @@ export default function AuthForm() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
-                className="w-full h-11 pl-4 pr-11 rounded-xl border border-transparent focus:border-[#0F3A7A]/30 focus:bg-white bg-[#EEF4FC] dark:bg-slate-800/90 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#0F3A7A]/15 dark:focus:ring-blue-500/20 transition-all"
+                placeholder="Enter password"
+                className="w-full h-8.5 pl-3 pr-9 rounded-sm bg-white dark:bg-slate-800 border border-[#e0e0e0] dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#2874f0] focus:border-[#2874f0] transition-colors"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-1 cursor-pointer transition-colors"
+                className="absolute right-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-1 cursor-pointer transition-colors"
                 title={showPassword ? "Hide password" : "Show password"}
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? (
-                  <EyeOff className="w-4 h-4" />
+                  <EyeOff className="w-3.5 h-3.5" />
                 ) : (
-                  <Eye className="w-4 h-4" />
+                  <Eye className="w-3.5 h-3.5" />
                 )}
               </button>
             </div>
@@ -297,110 +348,108 @@ export default function AuthForm() {
             <div>
               <label
                 htmlFor="confirm-password-input"
-                className="block text-xs font-semibold text-slate-800 dark:text-slate-200 mb-1.5"
+                className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1"
               >
-                Confirm Password
+                <ShieldCheck className="w-3 h-3 text-[#2874f0]" />
+                <span>Confirm Password</span>
+                <span className="text-rose-500">*</span>
               </label>
-              <div className="relative flex items-center">
-                <input
-                  id="confirm-password-input"
-                  type={showPassword ? "text" : "password"}
-                  required
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Confirm your password"
-                  className="w-full h-11 pl-4 pr-11 rounded-xl border border-transparent focus:border-[#0F3A7A]/30 focus:bg-white bg-[#EEF4FC] dark:bg-slate-800/90 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#0F3A7A]/15 dark:focus:ring-blue-500/20 transition-all"
-                />
-              </div>
+              <input
+                id="confirm-password-input"
+                type={showPassword ? "text" : "password"}
+                required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Re-enter password"
+                className="w-full h-8.5 px-3 rounded-sm bg-white dark:bg-slate-800 border border-[#e0e0e0] dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#2874f0] focus:border-[#2874f0] transition-colors"
+              />
             </div>
           )}
 
-          {/* Remember me & Forgot password Row (Login Mode) */}
+          {/* Remember Me & Forgot Password (Login Mode) */}
           {authMode === "login" && (
-            <div className="flex items-center justify-between mt-0.5 mb-1">
+            <div className="flex items-center justify-between pt-0.5 text-xs">
               <label
                 htmlFor="remember-me"
-                className="flex items-center gap-2 cursor-pointer select-none"
+                className="flex items-center gap-1.5 cursor-pointer select-none text-slate-600 dark:text-slate-400 hover:text-slate-800"
               >
                 <input
                   id="remember-me"
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="w-4 h-4 rounded border-slate-300 text-[#0F3A7A] focus:ring-[#0F3A7A] dark:border-slate-700 dark:bg-slate-800 cursor-pointer accent-[#0F3A7A]"
+                  className="w-3.5 h-3.5 rounded-xs border-slate-300 text-[#2874f0] focus:ring-[#2874f0] accent-[#2874f0] cursor-pointer"
                 />
-                <span className="text-xs text-slate-600 dark:text-slate-400 font-medium">
-                  Remember me
-                </span>
+                <span className="text-[11px] font-medium">Remember me</span>
               </label>
 
               <button
                 type="button"
                 onClick={handleForgotPassword}
-                className="text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-[#0F3A7A] dark:hover:text-blue-400 hover:underline cursor-pointer transition-colors"
+                className="text-[11px] font-semibold text-[#2874f0] hover:underline cursor-pointer"
               >
-                Forgot password
+                Forgot password?
               </button>
             </div>
           )}
-        </div>
 
-        {/* ------------------------------------------------------------- */}
-        {/* Navy Blue Action Button (matching reference image) */}
-        {/* ------------------------------------------------------------- */}
-        <button
-          type="submit"
-          disabled={isLoading || isRedirecting}
-          className="w-full h-11 bg-[#0F3A7A] hover:bg-[#0c2f63] active:bg-[#09244d] text-white rounded-xl text-sm font-semibold transition-all shadow-md shadow-[#0F3A7A]/20 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed"
-        >
-          {isLoading || isRedirecting ? (
-            <div className="flex items-center gap-2">
-              <Loader2 className="w-4 h-4 animate-spin" />
-              <span>
-                {isRedirecting
-                  ? "Redirecting..."
-                  : authMode === "register"
-                    ? "Creating Account..."
-                    : "Signing in..."}
-              </span>
-            </div>
-          ) : (
-            <>
-              <span>{authMode === "register" ? "Register" : "Sign In"}</span>
-              <ArrowRight className="w-4 h-4 ml-0.5" />
-            </>
-          )}
-        </button>
+          {/* Primary Action Button */}
+          <div className="pt-2">
+            <button
+              type="submit"
+              disabled={isLoading || isRedirecting}
+              className="w-full h-9 bg-[#2874f0] hover:bg-[#1a5bb8] active:bg-[#154b98] text-white rounded-sm text-xs font-bold uppercase tracking-wider transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading || isRedirecting ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <span>
+                    {isRedirecting
+                      ? "Redirecting..."
+                      : authMode === "register"
+                        ? "Creating Account..."
+                        : "Signing In..."}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span>
+                    {authMode === "register" ? "Create Account" : "Sign In"}
+                  </span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </>
+              )}
+            </button>
+          </div>
 
-        {/* ------------------------------------------------------------- */}
-        {/* Switch Between Login and Register */}
-        {/* ------------------------------------------------------------- */}
-        <div className="text-center mt-5 text-xs text-slate-500 dark:text-slate-400">
-          {authMode === "register" ? (
-            <p>
-              Already have an account?{" "}
-              <button
-                type="button"
-                onClick={() => dispatch(setAuthMode("login"))}
-                className="font-semibold text-slate-900 dark:text-white hover:underline cursor-pointer transition-colors"
-              >
-                Sign In
-              </button>
-            </p>
-          ) : (
-            <p>
-              Don&apos;t have an account?{" "}
-              <button
-                type="button"
-                onClick={() => dispatch(setAuthMode("register"))}
-                className="font-semibold text-slate-900 dark:text-white hover:underline cursor-pointer transition-colors"
-              >
-                Register
-              </button>
-            </p>
-          )}
-        </div>
-      </form>
+          {/* Bottom Switch Link */}
+          <div className="text-center pt-2 text-xs text-slate-500 dark:text-slate-400">
+            {authMode === "register" ? (
+              <p>
+                Already have a workspace account?{" "}
+                <button
+                  type="button"
+                  onClick={() => dispatch(setAuthMode("login"))}
+                  className="font-bold text-[#2874f0] hover:underline cursor-pointer"
+                >
+                  Sign In
+                </button>
+              </p>
+            ) : (
+              <p>
+                New to LeadFlow CRM?{" "}
+                <button
+                  type="button"
+                  onClick={() => dispatch(setAuthMode("register"))}
+                  className="font-bold text-[#2874f0] hover:underline cursor-pointer"
+                >
+                  Register Account
+                </button>
+              </p>
+            )}
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { MoreHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface ChartCardProps {
@@ -58,17 +57,7 @@ export const ChartCard: React.FC<ChartCardProps> = ({
           </div>
         </div>
 
-        {action ? (
-          action
-        ) : (
-          <button
-            type="button"
-            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-300 transition-colors cursor-pointer"
-            title="Options"
-          >
-            <MoreHorizontal className="h-4 w-4" />
-          </button>
-        )}
+        {action && action}
       </div>
 
       {/* Card Body */}

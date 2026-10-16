@@ -6,24 +6,36 @@
 html {
   scroll-behavior: smooth;
   overflow-y: scroll;
-  font-family: 'Inter';
+  font-family:
+    var(--font-inter),
+    "Inter",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
 }
 
 :root {
-  /* CRM Canvas & Surface Backgrounds */
-  --crm-bg-canvas: #f7f9fb;
+  /* CRM Management Hub Canvas & Surface Backgrounds */
+  --crm-bg-canvas: #f1f3f6;
   --crm-bg-card: #ffffff;
   --crm-bg-subtle: #f8fafc;
-  --crm-bg-muted: #f1f5f9;
-  --crm-bg-active: #e2e8f0;
+  --crm-bg-muted: #f1f3f6;
+  --crm-bg-active: #e5e9f2;
   --crm-bg-dark: #0f172a;
   --crm-bg-dark-hover: #1e293b;
 
-  /* Brand Palette (Enterprise Blue) */
-  --crm-brand-primary: #2563eb;
-  --crm-brand-hover: #1d4ed8;
-  --crm-brand-subtle: #eff6ff;
+  /* Flipkart Brand Palette */
+  --crm-brand-primary: #2874f0;
+  --crm-brand-hover: #1a5bb8;
+  --crm-brand-subtle: #f2f7fe;
   --crm-brand-border: #bfdbfe;
+  --crm-seller-yellow: #ffe500;
+  --crm-seller-orange: #fb641b;
+  --crm-brand-primary-soft: rgba(40, 116, 240, 0.08);
+  --crm-brand-primary-strong: rgba(40, 116, 240, 0.15);
 
   /* Typography / Text Hierarchy */
   --crm-text-primary: #0f172a;

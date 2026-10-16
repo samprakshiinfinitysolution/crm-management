@@ -4,8 +4,14 @@ import React, { useState } from "react";
 import { Bell, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { useAppSelector } from "@/store";
+import dynamic from "next/dynamic";
 import { performLogout } from "@/lib/authService";
-import LogOutPopUp from "../LogOutPopUp";
+
+// Code splitting: Logout dialog loaded on-demand
+const LogoutDialog = dynamic(
+  () => import("@/components/auth/LogoutDialog"),
+  { ssr: false }
+);
 
 export default function TLHeader() {
   const { user } = useAppSelector((state) => state.auth);
@@ -80,7 +86,7 @@ export default function TLHeader() {
             {initials}
           </div>
 
-          <LogOutPopUp
+          <LogoutDialog
             open={isLoggingOut}
             setOpen={setIsLoggingOut}
             onLogout={handleSignOut}

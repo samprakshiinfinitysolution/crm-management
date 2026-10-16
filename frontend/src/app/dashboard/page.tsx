@@ -2,29 +2,59 @@
 
 import React, { useMemo } from "react";
 import Link from "next/link";
-import { useAppSelector, useGetAdminDashboardMetricsQuery } from "@/store";
+import { useAppSelector } from "@/store";
 import { UserRole } from "@/types/api.types";
 import {
+  useGetAdminDashboardMetricsQuery,
   useGetTLDashboardMetricsQuery,
   useGetSEDashboardMetricsQuery,
+  useGetNotificationsQuery,
+  useGetCriticalEscalationsQuery,
 } from "@/store";
-import {
-  Plus,
-  Download,
-  MoreHorizontal,
-  ArrowUpRight,
-  TrendingUp,
-  PieChart as PieChartIcon,
-  BarChart3,
-  Layers,
-} from "lucide-react";
-import {
-  ChartCard,
-  AreaChart,
-  PieChart,
-  BarChart,
-} from "@/components/ui/charts";
-import { PageHeader } from "@/components/shared/PageHeader";
+import dynamic from "next/dynamic";
+import { ChevronRight } from "lucide-react";
+import { PartnerServicesBanner } from "@/components/dashboard/PartnerServicesBanner";
+
+// Code splitting: Top KPIs and Insights widgets are dynamically streamed
+const CRMDashboardTopKPIs = dynamic(
+  () =>
+    import("@/components/dashboard/CRMDashboardTopKPIs").then(
+      (m) => m.CRMDashboardTopKPIs
+    ),
+  {
+    loading: () => (
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div
+            key={i}
+            className={`h-24 bg-white dark:bg-slate-900 border border-[#e0e0e0] dark:border-slate-800 rounded-sm p-4 animate-pulse ${
+              i === 4 ? "col-span-2" : ""
+            }`}
+          />
+        ))}
+      </div>
+    ),
+  }
+);
+
+const CRMDashboardInsights = dynamic(
+  () =>
+    import("@/components/dashboard/CRMDashboardInsights").then(
+      (m) => m.CRMDashboardInsights
+    ),
+  {
+    loading: () => (
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div
+            key={i}
+            className="h-44 bg-white dark:bg-slate-900 border border-[#e0e0e0] dark:border-slate-800 rounded-sm p-4 animate-pulse"
+          />
+        ))}
+      </div>
+    ),
+  }
+);
 
 export default function DashboardOverviewPage() {
   const { user } = useAppSelector((state) => state.auth);
@@ -33,463 +63,301 @@ export default function DashboardOverviewPage() {
   const isSE = user?.role === UserRole.SALES_EXECUTIVE;
 
   // Admin Metrics Query (GET /reports/dashboard-metrics/admin)
-  const { data: adminResponse, isLoading: isAdminLoading } =
+  const { data: adminResponse } =
     useGetAdminDashboardMetricsQuery(undefined, {
       skip: !isAdmin,
       pollingInterval: 30000,
     });
 
   // TL Metrics Query (GET /reports/dashboard-metrics/team-lead)
-  const { data: tlResponse, isLoading: isTLLoading } =
+  const { data: tlResponse } =
     useGetTLDashboardMetricsQuery(undefined, {
       skip: !isTL,
       pollingInterval: 30000,
     });
 
   // Sales Executive Metrics Query (GET /reports/dashboard-metrics/sales-executive)
-  const { data: seMetricsRes, isLoading: isSEMetricsLoading } =
+  const { data: seMetricsRes } =
     useGetSEDashboardMetricsQuery(undefined, {
       skip: !isSE,
       pollingInterval: 30000,
     });
 
-  const isLoading = isAdmin ? isAdminLoading : isTL ? isTLLoading : isSE ? isSEMetricsLoading : false;
+  // Live Notifications Query
+  const { data: notifData } = useGetNotificationsQuery(undefined, {
+    pollingInterval: 30000,
+    skip: !user,
+  });
+
+  // Critical Escalations Query
+  const { data: escalationsData } = useGetCriticalEscalationsQuery(undefined, {
+    skip: isSE,
+    pollingInterval: 30000,
+  });
 
   const adminData = adminResponse?.data;
   const tlData = tlResponse?.data;
   const seMetrics = seMetricsRes?.data;
+
   const recentLeads = useMemo(() => {
     return (
       (isAdmin ? adminData?.recentLeads : isTL ? tlData?.recentLeads : seMetrics?.recentLeads) || []
     );
   }, [isAdmin, isTL, adminData, tlData, seMetrics]);
 
-  // Monthly Sales Array from API
+  // Monthly Sales Array from API for sparkline chart
   const monthlySalesData = useMemo(() => {
-    const apiMonthly = isAdmin
+    return isAdmin
       ? adminData?.monthlySales
       : isTL
       ? tlData?.monthlySales
       : seMetrics?.monthlySales;
-    if (apiMonthly && apiMonthly.length > 0) {
-      return apiMonthly.map((m) => ({
-        month: m.month,
-        height: m.height,
-        value: m.formattedValue,
-        totalLeads: m.totalLeads,
-        wonLeads: m.wonLeads,
-        grossAmount: m.grossAmount,
-        netAmount: m.netAmount,
+  }, [isAdmin, isTL, adminData, tlData, seMetrics]);
+
+  const sparklinePoints = useMemo(() => {
+    if (monthlySalesData && monthlySalesData.length > 0) {
+      return monthlySalesData.slice(-5).map((m) => ({
+        date: m.month,
+        value: m.grossAmount || m.totalLeads || 0,
       }));
     }
     return [];
-  }, [isAdmin, isTL, adminData, tlData, seMetrics]);
-
-  // Area Chart Data Points (Gross vs Net Spline)
-  const areaChartData = useMemo(() => {
-    return monthlySalesData.slice(0, 7).map((m) => ({
-      label: m.month,
-      value: m.grossAmount || m.totalLeads || 0,
-      secondaryValue: m.netAmount || m.wonLeads || 0,
-      formattedValue: m.value,
-    }));
   }, [monthlySalesData]);
 
-  // Bar Chart Data Points (Historical Volume)
-  const barChartData = useMemo(() => {
-    return monthlySalesData.map((m) => ({
-      label: m.month,
-      value: m.totalLeads || 0,
-      formattedValue: m.value,
-    }));
-  }, [monthlySalesData]);
-
-  // Category Breakdown Array from API
-  const categoryData = useMemo(() => {
-    const apiCats = isAdmin
-      ? adminData?.categoryBreakdown
-      : isTL
-      ? tlData?.categoryBreakdown
-      : seMetrics?.categoryBreakdown;
-    if (apiCats && apiCats.length > 0) {
-      return apiCats;
-    }
-    return [];
+  // Won Deals Count
+  const wonDealsCount = useMemo(() => {
+    if (isAdmin) return adminData?.overview?.wonLeads ?? 0;
+    if (isTL) return tlData?.pipelineHealth?.wonARR?.wonCount ?? 0;
+    return seMetrics?.wonCount ?? 0;
   }, [isAdmin, isTL, adminData, tlData, seMetrics]);
 
-  // Donut Pie Chart Segments
-  const pieSegments = useMemo(() => {
-    return categoryData.map((cat) => ({
-      label: cat.label,
-      count: cat.count,
-      percentage: cat.percentage,
-      color: cat.color || "#2563eb",
-      dotColor: cat.dotColor,
-    }));
-  }, [categoryData]);
+  // Won Revenue Amount
+  const wonRevenueAmount = useMemo(() => {
+    if (isAdmin) return adminData?.overview?.totalWonRevenue ?? 0;
+    if (isTL) return tlData?.pipelineHealth?.wonARR?.formattedValue?.replace(/[^0-9]/g, "") ?? 0;
+    return seMetrics?.wonValue ?? seMetrics?.formattedWonValue?.replace(/[^0-9]/g, "") ?? seMetrics?.formattedPipelineValue ?? 0;
+  }, [isAdmin, isTL, adminData, tlData, seMetrics]);
 
-  // Total Category Count for Donut Center
-  const totalCategoryCount = useMemo(() => {
-    const sum = categoryData.reduce((acc, c) => acc + c.count, 0);
-    if (sum > 0) return sum;
-    if (isAdmin) return adminData?.overview?.totalLeads ?? adminData?.pipelineHealth?.totalPool?.value ?? 0;
+  // Intake Pool or New Assigned Leads
+  const intakeOrNewCount = useMemo(() => {
+    if (isAdmin) return adminData?.overview?.unassignedLeads ?? 0;
     if (isTL) return tlData?.pipelineHealth?.totalPool?.value ?? 0;
-    return seMetrics?.totalAssigned ?? 0;
-  }, [categoryData, isAdmin, isTL, adminData, tlData, seMetrics]);
+    return seMetrics?.newCount ?? 0;
+  }, [isAdmin, isTL, adminData, tlData, seMetrics]);
 
-  // Top Deals List from API
-  const topDeals = useMemo(() => {
-    const apiDeals =
-      (isAdmin ? adminData?.topDeals : isTL ? tlData?.topDeals : seMetrics?.topDeals) || recentLeads;
-    if (apiDeals && apiDeals.length > 0) {
-      return apiDeals.slice(0, 4).map((d) => ({
-        id: d.id,
-        name: d.name,
-        category: d.category,
-        amount: d.amount,
-        dotColor: d.dotColor || "bg-blue-500",
-        href: `/dashboard/leads/${d.id}`,
-      }));
+  // Active Pipeline In-flight
+  const activePipelineCount = useMemo(() => {
+    if (isAdmin) return adminData?.overview?.activeLeads ?? 0;
+    if (isTL) return tlData?.pipelineHealth?.activeInFlight?.value ?? 0;
+    return seMetrics?.activeCount ?? 0;
+  }, [isAdmin, isTL, adminData, tlData, seMetrics]);
+
+  const criticalEscalations = useMemo(() => {
+    return escalationsData?.data || tlData?.criticalEscalations || [];
+  }, [escalationsData, tlData]);
+  const criticalCount = criticalEscalations.length;
+
+  const escalationReason = useMemo(() => {
+    const first = criticalEscalations[0];
+    if (!first) return undefined;
+    if ("reason" in first && typeof (first as { reason?: string }).reason === "string") {
+      return (first as { reason: string }).reason;
     }
-    return [];
-  }, [isAdmin, isTL, adminData, tlData, seMetrics, recentLeads]);
+    if ("stageInfo" in first && typeof (first as { stageInfo?: string }).stageInfo === "string") {
+      const tlEsc = first as { stageInfo: string; overdueHours: number };
+      return `${tlEsc.stageInfo} (${tlEsc.overdueHours}h overdue)`;
+    }
+    return undefined;
+  }, [criticalEscalations]);
+
+  const notificationsList = useMemo(() => {
+    return (notifData?.data || []).map((n) => ({
+      id: n.id,
+      title: n.title,
+      createdAt: n.createdAt,
+      isRead: n.isRead,
+      link: n.link || "/dashboard/notifications",
+    }));
+  }, [notifData]);
 
   return (
-    <div className="flex flex-col gap-3 pb-8 select-none text-slate-800 dark:text-slate-200 ">
-      {/* ========================================================================= */}
-      {/* 1. TOP HEADER BAR */}
-      {/* ========================================================================= */}
-      <PageHeader
-        title="Dashboard"
-        description={`Welcome back, ${user?.name || "User"} • Real-time pipeline operations`}
-        actions={
-          <>
-            <Link
-              href="/dashboard/reports"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100 text-xs font-semibold shadow-2xs transition-colors"
-            >
-              <Download className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
-              <span>Export</span>
-            </Link>
+    <div className="space-y-4 animate-in fade-in duration-150 select-none">
+      {/* 1. Header: Role-aware dashboard title and primary navigation link */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-baseline gap-2">
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">
+            Your Dashboard
+          </h1>
+          <span className="text-xs text-slate-400 font-medium">· Today</span>
+        </div>
 
-            <Link
-              href={isAdmin || isTL ? "/dashboard/leads/create" : "/dashboard/my-leads"}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer"
-            >
-              <Plus className="w-3.5 h-3.5" />
-              <span>{isAdmin || isTL ? "Create leads" : "My Leads"}</span>
-            </Link>
-          </>
+        {isSE ? (
+          <Link
+            href="/dashboard/my-leads"
+            className="text-xs font-semibold text-[#2874f0] dark:text-blue-400 hover:underline flex items-center gap-1"
+          >
+            <span>View Assigned Pipeline</span>
+            <ChevronRight className="w-3.5 h-3.5 text-[#2874f0]" />
+          </Link>
+        ) : (
+          <Link
+            href="/dashboard/reports"
+            className="text-xs font-semibold text-[#2874f0] dark:text-blue-400 hover:underline flex items-center gap-1"
+          >
+            <span>View All Reports & Metrics</span>
+            <ChevronRight className="w-3.5 h-3.5 text-[#2874f0]" />
+          </Link>
+        )}
+      </div>
+
+      {/* 2. Top Row KPI Cards + Sparkline Chart with CRM pipeline metrics */}
+      <CRMDashboardTopKPIs
+        wonDeals={wonDealsCount}
+        wonRevenue={wonRevenueAmount}
+        intakeOrNewCount={intakeOrNewCount}
+        activePipeline={activePipelineCount}
+        isSE={isSE}
+        monthlyTrends={monthlySalesData}
+        chartData={sparklinePoints}
+      />
+
+      {/* 3. Five Insight Cards in Light Blue Tint with Live API data */}
+      <CRMDashboardInsights
+        notifications={notificationsList}
+        criticalEscalationsCount={criticalCount}
+        criticalEscalationsReason={escalationReason}
+        pipelineAtRiskValue={
+          adminData?.overview?.totalPipelineValue
+            ? Math.round(adminData.overview.totalPipelineValue * 0.15)
+            : criticalCount > 0
+            ? criticalCount * 10000
+            : 0
+        }
+        unassignedLeadsCount={intakeOrNewCount}
+        activeNegotiationsCount={activePipelineCount}
+        slaAdherencePercent={
+          adminData?.followUps?.slaComplianceRate ??
+          tlData?.pipelineHealth?.slaAdherence?.value ??
+          95
+        }
+        wonDealsCount={wonDealsCount}
+        conversionRate={
+          adminData?.overview?.conversionRate ??
+          tlData?.pipelineHealth?.wonARR?.conversionRate ??
+          seMetrics?.conversionRate ??
+          0
+        }
+        isSE={isSE}
+        todayFollowUpsCount={
+          isAdmin
+            ? adminData?.followUps?.dueToday ?? 0
+            : seMetrics?.todayFollowUpsCount ?? 0
+        }
+        overdueFollowUpsCount={
+          isAdmin
+            ? adminData?.followUps?.overdue ?? 0
+            : isTL
+            ? tlData?.pipelineHealth?.slaAdherence?.overdueCount ?? 0
+            : seMetrics?.overdueFollowUpsCount ?? 0
         }
       />
 
-      {/* ========================================================================= */}
-      {/* 2. TOP ROW: 4 SUMMARY KPI CARDS */}
-      {/* ========================================================================= */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
-        {/* Card 1: Total Leads */}
-        <div className="group relative bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3.5 sm:p-4 shadow-xs flex flex-col justify-between hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-200">
-              {isAdmin ? "Total System Leads" : isTL ? "Total Leads" : "Total Assigned Leads"}
-            </span>
-            <button
-              type="button"
-              className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 p-1 cursor-pointer"
-              title="More options"
-            >
-              <MoreHorizontal className="w-4 h-4" />
-            </button>
-          </div>
-          <div className="mt-3 flex items-baseline gap-3">
-            {isLoading ? (
-              <div className="h-8 w-24 bg-slate-100 dark:bg-slate-800 rounded-md animate-pulse" />
-            ) : (
-              <>
-                <span className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-                  {isAdmin
-                    ? (adminData?.pipelineHealth?.totalPool?.formattedValue ??
-                       (adminData?.overview?.totalLeads !== undefined
-                         ? adminData.overview.totalLeads.toLocaleString("en-IN")
-                         : "0"))
-                    : isTL
-                    ? (tlData?.pipelineHealth.totalPool.formattedValue ?? "0")
-                    : seMetrics?.formattedPipelineValue ||
-                      `${seMetrics?.totalAssigned ?? 0}`}
-                </span>
-                <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 text-[11px] font-semibold border border-emerald-200/50 dark:border-emerald-800/50">
-                  <ArrowUpRight className="w-3 h-3" />
-                  {isAdmin
-                    ? (adminData?.pipelineHealth?.totalPool?.change ??
-                       (adminData?.overview?.leadGrowthRateWoW !== undefined
-                         ? `${adminData.overview.leadGrowthRateWoW >= 0 ? "+" : ""}${adminData.overview.leadGrowthRateWoW}%`
-                         : "+10%"))
-                    : isTL
-                    ? (tlData?.pipelineHealth.totalPool.change ?? "+10%")
-                    : "+12%"}
-                </span>
-              </>
-            )}
-          </div>
-        </div>
+      {/* 4. Platform Action Banner with Zero Duplicate Guarantee and Role CTAs */}
+      <PartnerServicesBanner isSE={isSE} />
 
-        {/* Card 2: Active Leads */}
-        <div className="group relative bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3.5 sm:p-4 shadow-xs flex flex-col justify-between hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-200">
-              Active In-Flight Leads
-            </span>
-            <button
-              type="button"
-              className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 p-1 cursor-pointer"
-              title="More options"
-            >
-              <MoreHorizontal className="w-4 h-4" />
-            </button>
+      {/* 5. Recent Lead Allocations & Intake Table */}
+      <div className="bg-white dark:bg-slate-900 border border-[#e0e0e0] dark:border-slate-800 rounded-sm shadow-2xs overflow-hidden">
+        <div className="p-3 sm:p-4 border-b border-[#e0e0e0] dark:border-slate-800 flex items-center justify-between">
+          <div>
+            <h2 className="text-sm font-bold text-slate-800 dark:text-slate-100">
+              {isSE ? "My Assigned Leads & Queue" : "Recent Lead Allocations & Intake"}
+            </h2>
+            <p className="text-[11px] text-slate-400">
+              {isSE
+                ? "Your recent lead assignments, requirements, and deal progression"
+                : "Real-time pipeline intake, stage progression, and representative allocations"}
+            </p>
           </div>
-          <div className="mt-3 flex items-baseline gap-3">
-            {isLoading ? (
-              <div className="h-8 w-20 bg-slate-100 dark:bg-slate-800 rounded-md animate-pulse" />
-            ) : (
-              <>
-                <span className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-                  {isAdmin
-                    ? (adminData?.pipelineHealth?.activeInFlight?.value ??
-                       adminData?.overview?.activeLeads ??
-                       0)
-                    : isTL
-                    ? (tlData?.pipelineHealth.activeInFlight.value ?? 0)
-                    : (seMetrics?.activeCount ?? 0)}
-                </span>
-                <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 text-[11px] font-semibold border border-emerald-200/50 dark:border-emerald-800/50">
-                  <ArrowUpRight className="w-3 h-3" />
-                  {isAdmin
-                    ? `${adminData?.pipelineHealth?.activeInFlight?.callsToday ?? adminData?.followUps?.dueToday ?? 0} today`
-                    : isTL
-                    ? `${tlData?.pipelineHealth.activeInFlight.callsToday ?? 0} today`
-                    : "Active"}
-                </span>
-              </>
-            )}
-          </div>
-        </div>
 
-        {/* Card 3: Closed Won Deals */}
-        <div className="group relative bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3.5 sm:p-4 shadow-xs flex flex-col justify-between hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-200">
-              Closed Won Deals
-            </span>
-            <button
-              type="button"
-              className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 p-1 cursor-pointer"
-              title="More options"
-            >
-              <MoreHorizontal className="w-4 h-4" />
-            </button>
-          </div>
-          <div className="mt-3 flex items-baseline gap-3">
-            {isLoading ? (
-              <div className="h-8 w-20 bg-slate-100 dark:bg-slate-800 rounded-md animate-pulse" />
-            ) : (
-              <>
-                <span className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-                  {isAdmin
-                    ? (adminData?.pipelineHealth?.wonARR?.wonCount ??
-                       adminData?.overview?.wonLeads ??
-                       0)
-                    : isTL
-                    ? (tlData?.pipelineHealth.wonARR.wonCount ?? 0)
-                    : (seMetrics?.wonCount ?? 0)}
-                </span>
-                <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 text-[11px] font-semibold border border-emerald-200/50 dark:border-emerald-800/50">
-                  <ArrowUpRight className="w-3 h-3" />
-                  {isAdmin
-                    ? (adminData?.pipelineHealth?.wonARR?.formattedValue ??
-                       adminData?.overview?.formattedWonRevenue ??
-                       "₹0")
-                    : isTL
-                    ? (tlData?.pipelineHealth.wonARR.formattedValue ?? "₹0")
-                    : (seMetrics?.formattedWonValue ?? "₹0")}
-                </span>
-              </>
-            )}
-          </div>
-        </div>
-
-        {/* Card 4: Conversion Rate */}
-        <div className="group relative bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3.5 sm:p-4 shadow-xs flex flex-col justify-between hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-200">
-              Conversion Rate
-            </span>
-            <button
-              type="button"
-              className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 p-1 cursor-pointer"
-              title="More options"
-            >
-              <MoreHorizontal className="w-4 h-4" />
-            </button>
-          </div>
-          <div className="mt-3 flex items-baseline gap-3">
-            {isLoading ? (
-              <div className="h-8 w-20 bg-slate-100 dark:bg-slate-800 rounded-md animate-pulse" />
-            ) : (
-              <>
-                <span className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-                  {isAdmin
-                    ? `${adminData?.pipelineHealth?.wonARR?.conversionRate ?? adminData?.overview?.conversionRate ?? 0}%`
-                    : isTL
-                    ? `${tlData?.pipelineHealth.wonARR.conversionRate ?? 0}%`
-                    : `${seMetrics?.conversionRate ?? 0}%`}
-                </span>
-                <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400 text-[11px] font-semibold border border-blue-200/50 dark:border-blue-800/50">
-                  {isAdmin
-                    ? (adminData?.pipelineHealth?.slaAdherence?.formattedValue ??
-                       `${adminData?.followUps?.slaComplianceRate ?? 95}%`)
-                    : isTL
-                    ? (tlData?.pipelineHealth.slaAdherence.formattedValue ??
-                       "95%")
-                    : "SLA 98%"}
-                </span>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* ========================================================================= */}
-      {/* 3. MIDDLE ROW: REUSABLE AREA CHART (LEFT) + REUSABLE PIE/DONUT CHART (RIGHT) */}
-      {/* ========================================================================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
-        {/* Left: Reusable Spline Area Chart */}
-        <div className="lg:col-span-7">
-          <ChartCard
-            title="Balance Analytics"
-            subtitle="Monthly Gross vs Net Pipeline Volume"
-            icon={<TrendingUp className="w-4 h-4" />}
-            className="min-h-[320px]"
+          <Link
+            href={isSE ? "/dashboard/my-leads" : "/dashboard/leads"}
+            className="text-xs font-semibold text-[#2874f0] dark:text-blue-400 hover:underline flex items-center gap-1"
           >
-            <AreaChart
-              data={areaChartData}
-              height={220}
-              primaryLabel="Gross Pipeline"
-              secondaryLabel="Net Closed"
-              primaryColor="#2563eb"
-              secondaryColor="#f59e0b"
-              isLoading={isLoading}
-            />
-          </ChartCard>
+            <span>{isSE ? "View My Leads" : "View All Leads"}</span>
+            <ChevronRight className="w-3.5 h-3.5 text-[#2874f0]" />
+          </Link>
         </div>
 
-        {/* Right: Reusable Pie / Donut Chart */}
-        <div className="lg:col-span-5">
-          <ChartCard
-            title="Channel & Source Share"
-            subtitle="Distribution by Inbound Channels"
-            icon={<PieChartIcon className="w-4 h-4" />}
-            className="min-h-[320px]"
-          >
-            <PieChart
-              data={pieSegments}
-              totalLabel="TOTAL"
-              totalValue={totalCategoryCount}
-              variant="donut"
-              isLoading={isLoading}
-            />
-          </ChartCard>
-        </div>
-      </div>
-
-      {/* ========================================================================= */}
-      {/* 4. BOTTOM ROW: REUSABLE BAR CHART (LEFT) + TOP DEALS (RIGHT) */}
-      {/* ========================================================================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
-        {/* Left: Reusable Bar Chart */}
-        <div className="lg:col-span-7">
-          <ChartCard
-            title="Total Volume"
-            subtitle="12-Month Historical Pipeline Volume"
-            icon={<BarChart3 className="w-4 h-4" />}
-            className="min-h-[300px]"
-          >
-            <BarChart
-              data={barChartData}
-              height={180}
-              barColor="#2563eb"
-              showValuesOnTop
-              isLoading={isLoading}
-            />
-          </ChartCard>
-        </div>
-
-        {/* Right: Priority Deals List */}
-        <div className="lg:col-span-5">
-          <ChartCard
-            title="Top Deals & Priority Leads"
-            subtitle="Highest value accounts in pipeline"
-            icon={<Layers className="w-4 h-4" />}
-            action={
-              <Link
-                href="/dashboard/leads"
-                className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
-              >
-                View all &rarr;
-              </Link>
-            }
-            className="min-h-[300px]"
-          >
-            {isLoading ? (
-              <div className="divide-y divide-slate-100 dark:divide-slate-800 flex flex-col animate-pulse">
-                {[...Array(4)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="py-3 flex items-center justify-between px-2"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 rounded-full bg-slate-200 dark:bg-slate-700" />
-                      <div className="flex flex-col gap-1.5">
-                        <div className="h-3 w-28 bg-slate-200 dark:bg-slate-700 rounded" />
-                        <div className="h-2 w-16 bg-slate-200 dark:bg-slate-700 rounded" />
-                      </div>
-                    </div>
-                    <div className="h-3 w-12 bg-slate-200 dark:bg-slate-700 rounded" />
-                  </div>
-                ))}
-              </div>
-            ) : topDeals.length === 0 ? (
-              <div className="py-12 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 gap-2">
-                <p className="text-xs">No active priority deals recorded</p>
-              </div>
-            ) : (
-              <div className="divide-y divide-slate-100 dark:divide-slate-800/80">
-                {topDeals.map((deal) => (
-                  <Link
-                    key={deal.id}
-                    href={deal.href}
-                    className="py-3.5 flex items-center justify-between group hover:bg-slate-50 dark:hover:bg-slate-800/40 px-2 rounded-xl transition-all"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span
-                        className={`w-2.5 h-2.5 rounded-full ${deal.dotColor} shrink-0`}
-                      />
-                      <div className="flex flex-col">
-                        <span className="text-xs font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                          {deal.name}
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs text-slate-700 dark:text-slate-300">
+            <thead className="bg-[#f4f6f8] dark:bg-slate-800/80 border-b border-[#e0e0e0] dark:border-slate-800 text-[11px] font-semibold text-slate-600 dark:text-slate-300">
+              <tr>
+                <th className="py-2.5 px-4">Lead Code</th>
+                <th className="py-2.5 px-4">Client / Requirement</th>
+                <th className="py-2.5 px-4 text-right">Deal Budget</th>
+                <th className="py-2.5 px-4 text-center">Channel Source</th>
+                <th className="py-2.5 px-4 text-center">Pipeline Stage</th>
+                <th className="py-2.5 px-4 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[#e0e0e0] dark:divide-slate-800 bg-white dark:bg-slate-900">
+              {recentLeads.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="py-8 text-center text-slate-400">
+                    {isSE ? "No assigned leads found in your work queue" : "No recent leads logged in the pipeline yet"}
+                  </td>
+                </tr>
+              ) : (
+                recentLeads.slice(0, 5).map((lead) => {
+                  const budgetNum =
+                    typeof lead.budget === "number"
+                      ? lead.budget
+                      : Number(lead.amount) || 0;
+                  return (
+                    <tr
+                      key={lead.id}
+                      className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+                    >
+                      <td className="py-2.5 px-4 font-mono font-bold text-[#2874f0] dark:text-blue-400">
+                        {lead.leadCode || lead.id.substring(0, 8).toUpperCase()}
+                      </td>
+                      <td className="py-2.5 px-4">
+                        <div className="flex flex-col">
+                          <span className="font-semibold text-slate-800 dark:text-slate-100">
+                            {lead.name}
+                          </span>
+                          <span className="text-[10px] text-slate-400 truncate max-w-44">
+                            {lead.category || "Direct Inquiry"}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="py-2.5 px-4 text-right font-mono font-bold text-slate-800 dark:text-slate-100">
+                        {budgetNum > 0
+                          ? `₹${budgetNum.toLocaleString("en-IN")}`
+                          : lead.amount || "₹0"}
+                      </td>
+                      <td className="py-2.5 px-4 text-center font-mono text-[11px] text-slate-500">
+                        {lead.category || "Organic Inflow"}
+                      </td>
+                      <td className="py-2.5 px-4 text-center">
+                        <span className="inline-block px-2 py-0.5 rounded-xs bg-[#eaf4fe] text-[#2874f0] dark:bg-blue-950/60 dark:text-blue-300 font-semibold text-[10px] border border-blue-200 dark:border-blue-800">
+                          {lead.status ? lead.status.replace(/_/g, " ") : "NEW"}
                         </span>
-                        <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">
-                          {deal.category}
-                        </span>
-                      </div>
-                    </div>
-                    <span className="text-xs font-bold text-slate-900 dark:text-slate-100">
-                      {deal.amount}
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </ChartCard>
+                      </td>
+                      <td className="py-2.5 px-4 text-right">
+                        <Link
+                          href={`/dashboard/leads/${lead.id}`}
+                          className="text-[#2874f0] dark:text-blue-400 font-semibold hover:underline"
+                        >
+                          View Lead
+                        </Link>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

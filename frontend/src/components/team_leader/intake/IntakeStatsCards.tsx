@@ -49,28 +49,28 @@ export const IntakeStatsCards: React.FC<IntakeStatsCardsProps> = ({
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
       {cards.map((card, idx) => {
         const Icon = card.icon;
         return (
           <div
             key={idx}
-            className="p-3.5 sm:p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs hover:border-slate-300 dark:hover:border-slate-700 transition-all"
+            className="p-3.5 sm:p-4 rounded-sm bg-white dark:bg-slate-900 border border-[#e0e0e0] dark:border-slate-800 shadow-2xs hover:border-[#2874f0]/50 transition-colors"
           >
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-200">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
                 {card.title}
               </span>
-              <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/50">
+              <div className="p-1.5 rounded-sm bg-[#eaf4fe] dark:bg-blue-950/60 text-[#2874f0] border border-blue-200 dark:border-blue-900/50">
                 <Icon className="w-4 h-4" />
               </div>
             </div>
             <div className="flex items-baseline gap-2">
               <span className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-                {card.value}
+                {card.value.toLocaleString()}
               </span>
             </div>
-            <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 font-medium">{card.sub}</p>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">{card.sub}</p>
           </div>
         );
       })}

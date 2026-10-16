@@ -21,6 +21,7 @@ const DEV_ORIGINS = [
   "http://localhost:5173",
   "http://127.0.0.1:3000",
   "http://127.0.0.1:5173",
+  "http://192.168.1.5:3000",
   "http://192.168.1.10:3000",
 ];
 
@@ -45,6 +46,16 @@ export const getAllowedOrigins = (): Set<string> => {
 export const isOriginAllowed = (origin: string): boolean => {
   const normalized = origin.replace(/\/+$/, "");
   if (getAllowedOrigins().has(normalized)) return true;
+  // Allow local LAN IPs in development mode (e.g. http://192.168.x.x:3000, http://10.x.x.x:3000)
+  if (config.nodeEnv !== "production") {
+    if (
+      /^http:\/\/(?:192\.168\.\d{1,3}\.\d{1,3}|10\.\d{1,3}\.\d{1,3}\.\d{1,3}|172\.(?:1[6-9]|2\d|3[01])\.\d{1,3}\.\d{1,3})(?::\d+)?$/i.test(
+        normalized,
+      )
+    ) {
+      return true;
+    }
+  }
   // Allow Vercel deployment preview and production domains
   if (/^https:\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)*\.vercel\.app$/i.test(normalized)) {
     return true;

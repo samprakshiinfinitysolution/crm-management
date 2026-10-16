@@ -30,8 +30,14 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  // 1. Public Home Page
+  // 1. Public Home Page: redirect authenticated users to their active workspace
   if (pathname === "/") {
+    if (decoded) {
+      if (decoded.role === UserRole.ADMIN) {
+        return NextResponse.redirect(new URL("/admin", request.url));
+      }
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
     return NextResponse.next();
   }
 
@@ -63,7 +69,7 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // 4. Protected /dashboard routes (TL & Sales Executive only)
+  // 4. Protected /dashboard routes (Admin, TL & Sales Executive)
   if (isDashboardRoute) {
     if (!decoded) {
       const response = NextResponse.redirect(new URL("/login", request.url));
@@ -74,14 +80,10 @@ export function proxy(request: NextRequest) {
       return response;
     }
 
-    // Admins operate in the dedicated /admin workspace
-    if (decoded.role === UserRole.ADMIN) {
-      return NextResponse.redirect(new URL("/admin", request.url));
-    }
-
+    const isAdmin = decoded.role === UserRole.ADMIN;
     const isTeamLeader = decoded.role === UserRole.TEAM_LEADER;
 
-    // Team Leader Only Routes
+    // Team Leader / Admin Only Routes
     const tlOnlyRoutes = [
       "/dashboard/leads/create",
       "/dashboard/distributions",
@@ -95,13 +97,13 @@ export function proxy(request: NextRequest) {
       (route) => pathname === route || pathname.startsWith(`${route}/`),
     );
 
-    if (isTLOnly && !isTeamLeader) {
+    if (isTLOnly && !isTeamLeader && !isAdmin) {
       // Sales executive attempting to access TL-only section
       return NextResponse.redirect(new URL("/dashboard/my-leads", request.url));
     }
 
     // Sales Executive Only Routes
-    if (pathname.startsWith("/dashboard/my-leads") && isTeamLeader) {
+    if (pathname.startsWith("/dashboard/my-leads") && (isTeamLeader || isAdmin)) {
       return NextResponse.redirect(new URL("/dashboard/leads", request.url));
     }
   }

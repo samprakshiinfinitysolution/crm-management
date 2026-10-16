@@ -29,6 +29,7 @@ import {
   type TabType,
 } from "@/components/chat";
 
+
 export function FloatingChatWidget() {
   const pathname = usePathname();
   const { user } = useAppSelector((state) => state.auth);
@@ -61,6 +62,167 @@ function FloatingChatWidgetInner({
   const [input, setInput] = useState("");
   const [conversations, setConversations] = useState<Record<string, ChatMessage[]>>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // -------------------------------------------------------------------------
+  // Draggable & Repositionable Floating Trigger State
+  // -------------------------------------------------------------------------
+  const BUTTON_SIZE = 56;
+  const PADDING = 16;
+  const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragRef = useRef<{
+    startX: number;
+    startY: number;
+    origX: number;
+    origY: number;
+    hasMoved: boolean;
+  }>({
+    startX: 0,
+    startY: 0,
+    origX: 0,
+    origY: 0,
+    hasMoved: false,
+  });
+
+  // Load saved position or initialize default on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("crm_floating_chat_pos");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (
+          typeof parsed.x === "number" &&
+          typeof parsed.y === "number" &&
+          !isNaN(parsed.x) &&
+          !isNaN(parsed.y)
+        ) {
+          const clampedX = Math.min(
+            Math.max(PADDING, parsed.x),
+            window.innerWidth - BUTTON_SIZE - PADDING
+          );
+          const clampedY = Math.min(
+            Math.max(PADDING, parsed.y),
+            window.innerHeight - BUTTON_SIZE - PADDING
+          );
+          queueMicrotask(() => {
+            setPosition({ x: clampedX, y: clampedY });
+          });
+          return;
+        }
+      }
+    } catch {
+      // Ignore storage access errors
+    }
+
+    queueMicrotask(() => {
+      setPosition({
+        x: Math.max(PADDING, window.innerWidth - BUTTON_SIZE - 24),
+        y: Math.max(PADDING, window.innerHeight - BUTTON_SIZE - 24),
+      });
+    });
+  }, []);
+
+  // Re-clamp position if viewport resizes
+  useEffect(() => {
+    const handleResize = () => {
+      setPosition((prev) => {
+        if (!prev) return null;
+        return {
+          x: Math.min(
+            Math.max(PADDING, prev.x),
+            window.innerWidth - BUTTON_SIZE - PADDING
+          ),
+          y: Math.min(
+            Math.max(PADDING, prev.y),
+            window.innerHeight - BUTTON_SIZE - PADDING
+          ),
+        };
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Window pointer move and pointer end handlers during active dragging
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const handlePointerMove = (clientX: number, clientY: number) => {
+      const deltaX = clientX - dragRef.current.startX;
+      const deltaY = clientY - dragRef.current.startY;
+
+      if (Math.hypot(deltaX, deltaY) > 4) {
+        dragRef.current.hasMoved = true;
+      }
+
+      const nextX = Math.min(
+        Math.max(PADDING, dragRef.current.origX + deltaX),
+        window.innerWidth - BUTTON_SIZE - PADDING
+      );
+      const nextY = Math.min(
+        Math.max(PADDING, dragRef.current.origY + deltaY),
+        window.innerHeight - BUTTON_SIZE - PADDING
+      );
+
+      setPosition({ x: nextX, y: nextY });
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      handlePointerMove(e.clientX, e.clientY);
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      e.preventDefault();
+      handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
+    };
+
+    const handlePointerEnd = () => {
+      setIsDragging(false);
+      setPosition((curr) => {
+        if (curr && dragRef.current.hasMoved) {
+          try {
+            localStorage.setItem("crm_floating_chat_pos", JSON.stringify(curr));
+          } catch {
+            // Ignore storage write error
+          }
+        }
+        return curr;
+      });
+
+      // Clear hasMoved after small delay so click event doesn't fire toggle
+      setTimeout(() => {
+        dragRef.current.hasMoved = false;
+      }, 80);
+    };
+
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", handlePointerEnd);
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchend", handlePointerEnd);
+    window.addEventListener("touchcancel", handlePointerEnd);
+
+    return () => {
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", handlePointerEnd);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", handlePointerEnd);
+      window.removeEventListener("touchcancel", handlePointerEnd);
+    };
+  }, [isDragging]);
+
+  const handleStartDrag = (clientX: number, clientY: number) => {
+    if (!position) return;
+    dragRef.current = {
+      startX: clientX,
+      startY: clientY,
+      origX: position.x,
+      origY: position.y,
+      hasMoved: false,
+    };
+    setIsDragging(true);
+  };
 
   // Automatically close message box when navigation menus or sidebars are opened
   useEffect(() => {
@@ -126,6 +288,9 @@ function FloatingChatWidgetInner({
   };
 
   const handleToggleOpen = () => {
+    if (dragRef.current.hasMoved) {
+      return;
+    }
     setIsOpen((prev) => {
       const next = !prev;
       if (next && selectedContact) {
@@ -697,11 +862,38 @@ function FloatingChatWidgetInner({
     return null;
   }
 
+  const isPositioned = position !== null;
+  const isLowerHalf = position
+    ? position.y > (typeof window !== "undefined" ? window.innerHeight / 2 : 500)
+    : true;
+  const isRightHalf = position
+    ? position.x > (typeof window !== "undefined" ? window.innerWidth / 2 : 500)
+    : true;
+
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <>
       {/* Chat Modal / Popup */}
       {isOpen && (
-        <div className="mb-4 w-80 sm:w-96 h-130 bg-white dark:bg-slate-900 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col overflow-hidden transition-all transform animate-in fade-in slide-in-from-bottom-4 duration-200 no-scrollbar">
+        <div
+          style={{
+            position: "fixed",
+            ...(isPositioned
+              ? {
+                  ...(isLowerHalf
+                    ? { bottom: `${window.innerHeight - position.y + 12}px` }
+                    : { top: `${position.y + BUTTON_SIZE + 12}px` }),
+                  ...(isRightHalf
+                    ? { right: `${Math.max(16, window.innerWidth - position.x - BUTTON_SIZE)}px` }
+                    : { left: `${Math.max(16, position.x)}px` }),
+                }
+              : {
+                  bottom: "88px",
+                  right: "24px",
+                }),
+            maxHeight: "calc(100vh - 100px)",
+          }}
+          className="z-50 w-80 sm:w-96 h-130 bg-white dark:bg-slate-900 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col overflow-hidden transition-all transform animate-in fade-in duration-200 no-scrollbar"
+        >
           <ChatHeader
             selectedContact={selectedContact}
             onBack={() => {
@@ -745,13 +937,39 @@ function FloatingChatWidgetInner({
         </div>
       )}
 
-      {/* Floating Action Trigger Icon */}
-      <ChatTriggerButton
-        isOpen={isOpen}
-        hasNewMessage={shouldShowPulse}
-        unreadCount={totalUnreadCount}
-        onToggle={handleToggleOpen}
-      />
-    </div>
+      {/* Floating Action Trigger Icon (Draggable & Repositionable) */}
+      <div
+        style={{
+          position: "fixed",
+          ...(isPositioned
+            ? {
+                left: `${position.x}px`,
+                top: `${position.y}px`,
+              }
+            : {
+                bottom: "24px",
+                right: "24px",
+              }),
+          touchAction: "none",
+        }}
+        onMouseDown={(e) => {
+          if (e.button !== 0) return;
+          handleStartDrag(e.clientX, e.clientY);
+        }}
+        onTouchStart={(e) => {
+          if (e.touches.length !== 1) return;
+          handleStartDrag(e.touches[0].clientX, e.touches[0].clientY);
+        }}
+        className="z-50 select-none"
+      >
+        <ChatTriggerButton
+          isOpen={isOpen}
+          hasNewMessage={shouldShowPulse}
+          unreadCount={totalUnreadCount}
+          onToggle={handleToggleOpen}
+          isDragging={isDragging}
+        />
+      </div>
+    </>
   );
 }

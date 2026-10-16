@@ -15,6 +15,7 @@ export const CLOUDINARY_IMAGES = {
   teamLeaderWorkspace: "https://res.cloudinary.com/atr5osne/image/upload/v1791803294/crm-assets/team-leader-workspace.jpg",
   teamPipelineReview: "https://res.cloudinary.com/atr5osne/image/upload/v1791803296/crm-assets/team-pipeline-review.jpg",
   signIn: "/sign-in.png",
+  loginImage: "/sign-in.png",
 } as const;
 
 export type CloudinaryImageKey = keyof typeof CLOUDINARY_IMAGES;

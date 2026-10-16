@@ -1,25 +1,77 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { ArrowLeft, ChevronRight, Info } from "lucide-react";
+import dynamic from "next/dynamic";
 import {
   DistributeStepperHeader,
   DistributeModeSelector,
-  EqualSplitSection,
-  CustomSplitSection,
-  ManualSplitSection,
-  ReassignRecallConsole,
   DistributeCommandBar,
   DistributionStepSummary,
-  DistributionSuccessModal,
   ExecutiveSelectorStep,
   useLeadDistribution,
 } from "@/components/team_leader/distribute";
-import { PageHeader } from "@/components/shared/PageHeader";
+
+// Code splitting: Mode sections and success modal are loaded on-demand
+const EqualSplitSection = dynamic(
+  () =>
+    import("@/components/team_leader/distribute/EqualSplitSection").then(
+      (m) => m.EqualSplitSection
+    ),
+  {
+    loading: () => (
+      <div className="h-64 animate-pulse bg-slate-100 dark:bg-slate-800 rounded-sm" />
+    ),
+  }
+);
+
+const CustomSplitSection = dynamic(
+  () =>
+    import("@/components/team_leader/distribute/CustomSplitSection").then(
+      (m) => m.CustomSplitSection
+    ),
+  {
+    loading: () => (
+      <div className="h-64 animate-pulse bg-slate-100 dark:bg-slate-800 rounded-sm" />
+    ),
+  }
+);
+
+const ManualSplitSection = dynamic(
+  () =>
+    import("@/components/team_leader/distribute/ManualSplitSection").then(
+      (m) => m.ManualSplitSection
+    ),
+  {
+    loading: () => (
+      <div className="h-64 animate-pulse bg-slate-100 dark:bg-slate-800 rounded-sm" />
+    ),
+  }
+);
+
+const ReassignRecallConsole = dynamic(
+  () =>
+    import("@/components/team_leader/distribute/ReassignRecallConsole").then(
+      (m) => m.ReassignRecallConsole
+    ),
+  {
+    loading: () => (
+      <div className="h-64 animate-pulse bg-slate-100 dark:bg-slate-800 rounded-sm" />
+    ),
+  }
+);
+
+const DistributionSuccessModal = dynamic(
+  () =>
+    import(
+      "@/components/team_leader/distribute/DistributionSuccessModal"
+    ).then((m) => m.DistributionSuccessModal),
+  { ssr: false }
+);
 
 export default function AdminCreateDistributionPage() {
-  const router = useRouter();
-  const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(2);
+  const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
 
   const {
     activeMode,
@@ -149,17 +201,63 @@ export default function AdminCreateDistributionPage() {
   ]);
 
   return (
-    <div className="flex flex-col gap-3.5 pb-8 max-w-7xl mx-auto w-full animate-in fade-in duration-200">
-      {/* Page Header */}
-      <PageHeader
-        breadcrumbs={[
-          { label: "Admin", href: "/admin" },
-          { label: "Distributions", href: "/admin/distributions" },
-          { label: "Wizard" },
-        ]}
-        title="Lead Distribution Engine"
-        description="Allocate unassigned intake inventory or rebalance leads among sales executives."
-      />
+    <div className="space-y-4 animate-in fade-in duration-150 select-none pb-12">
+      {/* Breadcrumb Navigation matching CRM Management Hub */}
+      <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+        <Link
+          href="/admin"
+          className="text-[#2874f0] hover:underline font-medium"
+        >
+          Admin Console
+        </Link>
+        <ChevronRight className="w-3 h-3 text-slate-400" />
+        <Link
+          href="/admin/distributions"
+          className="text-[#2874f0] hover:underline font-medium"
+        >
+          Distributions Management
+        </Link>
+        <ChevronRight className="w-3 h-3 text-slate-400" />
+        <span className="text-slate-700 dark:text-slate-300 font-medium">
+          Distribute Intake Inventory
+        </span>
+      </div>
+
+      {/* Top Header Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#e0e0e0] dark:border-slate-800 pb-3">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">
+            Distribute Intake Inventory
+          </h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            Admin engine for automated equal split, quota-based, or manual lead
+            allocations
+          </p>
+        </div>
+
+        <Link
+          href="/admin/distributions"
+          className="h-8 px-3 rounded-sm bg-white dark:bg-slate-900 border border-[#e0e0e0] dark:border-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-1.5 transition-colors self-start sm:self-auto shadow-2xs"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" />
+          <span>Back to Distributions</span>
+        </Link>
+      </div>
+
+      {/* Marketplace Guidance Notice Banner */}
+      <div className="px-4 py-3 bg-[#eaf4fe] dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 rounded-sm flex items-start gap-3 text-xs">
+        <Info className="w-4 h-4 text-[#2874f0] shrink-0 mt-0.5" />
+        <div className="space-y-0.5 text-slate-700 dark:text-slate-300">
+          <p className="font-semibold text-slate-900 dark:text-white">
+            Administrative Lead Distribution Engine
+          </p>
+          <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+            Follow the 3-step wizard to choose active representatives, select an
+            allocation strategy (Equal Split, Custom Quota, or Manual Pick), and
+            commit the assignments atomically.
+          </p>
+        </div>
+      </div>
 
       {/* Three-Step Stepper Header */}
       <DistributeStepperHeader
@@ -258,6 +356,8 @@ export default function AdminCreateDistributionPage() {
               executives={selectedExecutives}
               assignedLeads={assignedLeads}
               onReassignLeads={handleReassignLeads}
+              handleSelectAllExecutives={handleSelectAllExecutives}
+              handleDeselectAllExecutives={handleDeselectAllExecutives}
               onRecallLeads={handleRecallLeads}
               fetchLeadsForExecutive={fetchLeadsForExecutive}
               isProcessing={isSubmitting || isAssignedLeadsLoading}
@@ -296,17 +396,16 @@ export default function AdminCreateDistributionPage() {
         />
       )}
 
-      {/* Confirmation Success Modal */}
-      <DistributionSuccessModal
-        isOpen={isSuccessModalOpen}
-        onClose={() => {
-          setIsSuccessModalOpen(false);
-          router.push("/admin/distributions");
-        }}
-        totalDistributed={lastDistributedCount}
-        allocations={lastAllocations}
-        mode={activeMode}
-      />
+      {/* Confirmation Success Celebration Modal - Code split & on-demand */}
+      {isSuccessModalOpen && (
+        <DistributionSuccessModal
+          isOpen={isSuccessModalOpen}
+          onClose={() => setIsSuccessModalOpen(false)}
+          totalDistributed={lastDistributedCount}
+          allocations={lastAllocations}
+          mode={activeMode}
+        />
+      )}
     </div>
   );
 }

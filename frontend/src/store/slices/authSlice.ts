@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { AuthUser } from "@/types/api.types";
 
 export interface AuthState {
@@ -30,7 +30,7 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: (
-      state,
+      state: AuthState,
       action: PayloadAction<{
         user: AuthUser;
         accessToken?: string | null;
@@ -49,6 +49,9 @@ export const authSlice = createSlice({
       if (incomingToken && typeof window !== "undefined") {
         try {
           localStorage.setItem("crm_auth_token", incomingToken);
+          // Ensure cookies are readable by Next.js proxy/middleware even over LAN HTTP
+          document.cookie = `CRM_Management=${incomingToken}; path=/; SameSite=Lax`;
+          document.cookie = `refreshToken=${incomingToken}; path=/; SameSite=Lax`;
         } catch {
           // Ignore storage access errors in private browsing modes
         }
@@ -58,17 +61,19 @@ export const authSlice = createSlice({
       state.isInitialized = true;
       state.isLoggingOut = false;
     },
-    setAccessToken: (state, action: PayloadAction<string | null>) => {
+    setAccessToken: (state:AuthState, action: PayloadAction<string | null>) => {
       state.accessToken = action.payload;
       state.token = action.payload;
     },
-    logout: (state) => {
+    logout: (state:AuthState) => {
       state.user = null;
       state.accessToken = null;
       state.token = null;
       if (typeof window !== "undefined") {
         try {
           localStorage.removeItem("crm_auth_token");
+          document.cookie = "CRM_Management=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax";
+          document.cookie = "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax";
         } catch {
           // Ignore storage access errors in private browsing modes
         }
@@ -78,19 +83,19 @@ export const authSlice = createSlice({
       state.isInitialized = true;
       state.isLoggingOut = true;
     },
-    setLoggingOut: (state, action: PayloadAction<boolean>) => {
+    setLoggingOut: (state:AuthState, action: PayloadAction<boolean>) => {
       state.isLoggingOut = action.payload;
     },
-    setLoading: (state, action: PayloadAction<boolean>) => {
+    setLoading: (state:AuthState, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
-    setInitialized: (state, action: PayloadAction<boolean>) => {
+    setInitialized: (state:AuthState, action: PayloadAction<boolean>) => {
       state.isInitialized = action.payload;
     },
-    setAuthMode: (state, action: PayloadAction<"login" | "register">) => {
+    setAuthMode: (state:AuthState, action: PayloadAction<"login" | "register">) => {
       state.authMode = action.payload;
     },
-    setSelectedRole: (state, action: PayloadAction<"tl" | "exec">) => {
+    setSelectedRole: (state:AuthState, action: PayloadAction<"tl" | "exec">) => {
       state.selectedRole = action.payload;
     },
   },

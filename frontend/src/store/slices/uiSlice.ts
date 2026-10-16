@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 export interface UIState {
   activeTab: string;
@@ -17,22 +17,22 @@ const initialState: UIState = {
 };
 
 export const uiSlice = createSlice({
-  name: 'ui',
+  name: "ui",
   initialState,
   reducers: {
-    setActiveTab: (state, action: PayloadAction<string>) => {
+    setActiveTab: (state: UIState, action: PayloadAction<string>) => {
       state.activeTab = action.payload;
     },
-    setSelectedLeadId: (state, action: PayloadAction<string | null>) => {
+    setSelectedLeadId: (state: UIState, action: PayloadAction<string | null>) => {
       state.selectedLeadId = action.payload;
     },
-    setDistributionModalOpen: (state, action: PayloadAction<boolean>) => {
+    setDistributionModalOpen: (state: UIState, action: PayloadAction<boolean>) => {
       state.isDistributionModalOpen = action.payload;
     },
-    setImportModalOpen: (state, action: PayloadAction<boolean>) => {
+    setImportModalOpen: (state: UIState, action: PayloadAction<boolean>) => {
       state.isImportModalOpen = action.payload;
     },
-    setSelectedStageFilter: (state, action: PayloadAction<string | null>) => {
+    setSelectedStageFilter: (state: UIState, action: PayloadAction<string | null>) => {
       state.selectedStageFilter = action.payload;
     },
   },

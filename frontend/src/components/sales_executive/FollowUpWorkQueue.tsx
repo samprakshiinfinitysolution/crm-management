@@ -24,9 +24,19 @@ import type {
   FollowUpScope,
   FollowUpType,
 } from "@/types/api.types";
+import dynamic from "next/dynamic";
 import { Pagination } from "@/components/ui/Pagination";
-import CompleteFollowUpModal from "./CompleteFollowUpModal";
-import RescheduleFollowUpModal from "./RescheduleFollowUpModal";
+
+// Code splitting: Modals are only loaded on-demand when user completes or reschedules
+const CompleteFollowUpModal = dynamic(
+  () => import("./CompleteFollowUpModal"),
+  { ssr: false }
+);
+
+const RescheduleFollowUpModal = dynamic(
+  () => import("./RescheduleFollowUpModal"),
+  { ssr: false }
+);
 
 interface FollowUpWorkQueueProps {
   scope: FollowUpScope;
@@ -48,7 +58,11 @@ export default function FollowUpWorkQueue({
     setPage(1);
   }
 
-  const { data, isLoading } = useGetFollowUpsQuery({ scope, page, limit });
+  const { data, isLoading, refetch } = useGetFollowUpsQuery({
+    scope,
+    page,
+    limit,
+  });
   const followUps = data?.data || [];
   const pagination = data?.pagination;
 
@@ -67,6 +81,7 @@ export default function FollowUpWorkQueue({
     try {
       await deleteFollowUp(id).unwrap();
       toast.success("Follow-up removed.");
+      refetch();
     } catch {
       toast.error("Failed to delete follow-up.");
     }
@@ -77,13 +92,13 @@ export default function FollowUpWorkQueue({
       case "Call":
         return <Phone className="w-3.5 h-3.5 text-emerald-600" />;
       case "Meeting":
-        return <Users className="w-3.5 h-3.5 text-blue-600" />;
+        return <Users className="w-3.5 h-3.5 text-[#2874f0]" />;
       case "Email":
-        return <Mail className="w-3.5 h-3.5 text-blue-600" />;
+        return <Mail className="w-3.5 h-3.5 text-[#2874f0]" />;
       case "WhatsApp":
         return <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />;
       default:
-        return <Clock className="w-3.5 h-3.5 text-crm-muted" />;
+        return <Clock className="w-3.5 h-3.5 text-slate-400" />;
     }
   };
 
@@ -99,23 +114,26 @@ export default function FollowUpWorkQueue({
   };
 
   return (
-    <div className="bg-crm-card border border-crm-subtle rounded-lg overflow-x-hidden p-4 sm:p-5 shadow-xs">
+    <div className="bg-white dark:bg-slate-900 border border-[#e0e0e0] dark:border-slate-800 rounded-sm overflow-hidden p-4 sm:p-5 shadow-2xs space-y-4">
       {/* Top Filter Bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3.5 mb-5 border-b border-crm-subtle pb-4 w-full">
-        <div className="w-full sm:w-auto">
-          <h3 className="text-sm font-bold text-crm-primary flex items-center gap-2 flex-wrap">
-            <span>Follow-Up Work Queue</span>
-            <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
-              ({pagination?.total ?? followUps.length} items)
-            </span>
-          </h3>
-          <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 font-medium">
-            Action items requiring client touchpoint and conversation logging
-          </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#e0e0e0] dark:border-slate-800">
+        <div className="flex items-center gap-2">
+          <span className="w-1 h-3.5 bg-[#2874f0] rounded-xs" />
+          <div>
+            <h3 className="text-xs font-bold text-slate-800 dark:text-slate-100 uppercase tracking-wide flex items-center gap-2">
+              <span>Follow-Up Task Queue</span>
+              <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-xs bg-[#eaf4fe] text-[#2874f0] border border-blue-200">
+                {pagination?.total ?? followUps.length} items
+              </span>
+            </h3>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+              Action items requiring client touchpoint and conversation logging
+            </p>
+          </div>
         </div>
 
-        {/* Scope Tabs */}
-        <div className="w-full sm:w-auto max-w-full overflow-x-auto scrollbar-none [&::-webkit-scrollbar]:hidden flex items-center gap-1 bg-crm-muted p-1 rounded-lg border border-crm-subtle text-xs">
+        {/* Scope Tabs in CRM Management Hub tab bar style */}
+        <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-sm text-xs shrink-0 self-start sm:self-auto overflow-x-auto max-w-full">
           {(
             [
               "today",
@@ -132,41 +150,41 @@ export default function FollowUpWorkQueue({
                 onScopeChange(tabKey);
                 setPage(1);
               }}
-              className={`flex-1 sm:flex-initial px-3 py-1.5 rounded-lg font-medium capitalize transition-all cursor-pointer whitespace-nowrap shrink-0 text-center ${
+              className={`px-3 py-1.5 rounded-xs text-xs font-bold capitalize transition-all cursor-pointer whitespace-nowrap ${
                 scope === tabKey
-                  ? "bg-card text-crm-primary shadow-xs font-semibold"
-                  : "text-crm-muted hover:text-crm-primary"
+                  ? "bg-[#2874f0] text-white shadow-2xs"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
               }`}
             >
-              {tabKey === "today" ? "Today" : tabKey}
+              {tabKey === "today" ? "Due Today" : tabKey}
             </button>
           ))}
         </div>
       </div>
 
-      {/* List */}
+      {/* List of Follow-ups */}
       {isLoading ? (
-        <div className="flex flex-col gap-3">
+        <div className="space-y-2.5">
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="h-20 bg-crm-muted/50 rounded-lg animate-pulse border border-crm-subtle"
+              className="h-18 bg-slate-100 dark:bg-slate-800/60 rounded-sm animate-pulse border border-[#e0e0e0] dark:border-slate-800"
             />
           ))}
         </div>
       ) : followUps.length === 0 ? (
         <div className="py-12 flex flex-col items-center justify-center text-center">
-          <div className="w-12 h-12 rounded-lg bg-crm-subtle border border-crm-subtle flex items-center justify-center text-crm-muted mb-3">
-            <CheckCircle2 className="w-6 h-6 text-emerald-600/70" />
+          <div className="w-10 h-10 rounded-xs bg-[#eaf4fe] border border-blue-200 flex items-center justify-center text-[#2874f0] mb-3">
+            <CheckCircle2 className="w-5 h-5" />
           </div>
-          <h4 className="text-sm font-semibold text-crm-primary mb-1">
+          <h4 className="text-xs font-bold text-slate-800 dark:text-slate-100 uppercase tracking-wide mb-1">
             {scope === "today"
               ? "All caught up for today!"
               : scope === "overdue"
                 ? "No overdue follow-ups!"
                 : "No follow-up items found"}
           </h4>
-          <p className="text-xs text-slate-600 dark:text-slate-300 max-w-sm font-medium">
+          <p className="text-xs text-slate-500 max-w-sm">
             {scope === "today"
               ? "You have completed or cleared all follow-ups scheduled for today."
               : scope === "overdue"
@@ -175,7 +193,7 @@ export default function FollowUpWorkQueue({
           </p>
         </div>
       ) : (
-        <div className="flex flex-col gap-2.5">
+        <div className="space-y-2.5">
           {followUps.map((item) => {
             const isCompleted = item.status === "COMPLETED";
             const isOverdue =
@@ -185,72 +203,72 @@ export default function FollowUpWorkQueue({
             return (
               <div
                 key={item.id}
-                className={`p-3.5 rounded-lg border transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 ${
+                className={`p-3 rounded-sm border transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 ${
                   isOverdue
-                    ? "bg-rose-50/50 border-rose-200 hover:border-rose-300"
+                    ? "bg-rose-50/40 border-rose-200 hover:border-rose-300"
                     : isCompleted
-                      ? "bg-crm-subtle border-crm-subtle opacity-75"
-                      : "bg-card border-crm-subtle hover:border-slate-300 shadow-2xs"
+                      ? "bg-slate-50/60 dark:bg-slate-800/40 border-[#e0e0e0] opacity-75"
+                      : "bg-white dark:bg-slate-800/80 border-[#e0e0e0] dark:border-slate-700 hover:border-slate-300 shadow-2xs"
                 }`}
               >
                 {/* Left Info */}
                 <div className="flex items-start gap-3">
-                  <div className="mt-0.5 p-2 rounded-lg bg-crm-subtle border border-crm-subtle shrink-0">
+                  <div className="mt-0.5 p-2 rounded-xs bg-[#eaf4fe] dark:bg-blue-950/60 border border-blue-200 shrink-0">
                     {getChannelIcon(item.type)}
                   </div>
                   <div>
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-xs font-bold text-crm-primary">
+                      <span className="text-xs font-bold text-slate-800 dark:text-slate-100">
                         {item.lead?.customerName || "Customer"}
                       </span>
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-crm-subtle text-crm-secondary border border-crm-subtle">
+                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-xs bg-[#eaf4fe] text-[#2874f0] border border-blue-200">
                         {item.lead?.leadCode}
                       </span>
                       {item.lead?.priority && (
                         <span
-                          className={`text-[9px] font-bold px-1.5 py-0.5 rounded uppercase ${
+                          className={`text-[9px] font-bold px-1.5 py-0.5 rounded-xs uppercase ${
                             item.lead.priority === "URGENT"
-                              ? "bg-rose-50 text-rose-700 border border-rose-200"
+                              ? "bg-rose-100 text-rose-800 border border-rose-300"
                               : item.lead.priority === "HIGH"
-                                ? "bg-amber-50 text-amber-700 border border-amber-200"
-                                : "bg-blue-50 text-blue-700 border border-blue-200"
+                                ? "bg-orange-100 text-orange-800 border border-orange-300"
+                                : "bg-blue-100 text-[#2874f0] border border-blue-300"
                           }`}
                         >
                           {item.lead.priority}
                         </span>
                       )}
                       {isOverdue && (
-                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200 flex items-center gap-1">
+                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-xs bg-rose-100 text-rose-800 border border-rose-300 flex items-center gap-1">
                           <AlertCircle className="w-2.5 h-2.5 text-rose-600" />
-                          OVERDUE
+                          OVERDUE SLA
                         </span>
                       )}
                     </div>
 
-                    <div className="flex items-center gap-3 text-[11px] text-crm-muted mt-1 flex-wrap">
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-3 h-3 text-crm-muted" />
+                    <div className="flex items-center gap-3 text-[11px] text-slate-500 mt-1 flex-wrap font-mono">
+                      <span className="flex items-center gap-1 text-slate-600 dark:text-slate-400">
+                        <Clock className="w-3 h-3 text-slate-400" />
                         {formatScheduledTime(item.scheduledAt)}
                       </span>
                       {item.lead?.mobile && (
                         <a
                           href={`tel:${item.lead.mobile}`}
-                          className="flex items-center gap-1 text-crm-secondary hover:text-emerald-600 transition-colors font-medium"
+                          className="flex items-center gap-1 text-[#2874f0] hover:underline font-semibold"
                         >
-                          <Phone className="w-3 h-3 text-emerald-600" />
+                          <Phone className="w-3 h-3 text-[#2874f0]" />
                           {item.lead.mobile}
                         </a>
                       )}
                       {item.lead?.companyName && (
-                        <span className="flex items-center gap-1 text-crm-muted">
-                          <Building className="w-3 h-3 text-crm-muted" />
+                        <span className="flex items-center gap-1 text-slate-500 font-sans">
+                          <Building className="w-3 h-3 text-slate-400" />
                           {item.lead.companyName}
                         </span>
                       )}
                     </div>
 
                     {item.notes && (
-                      <p className="text-[11px] text-crm-secondary mt-1.5 italic bg-crm-subtle px-2 py-1 rounded border border-crm-subtle inline-block">
+                      <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-1.5 italic bg-slate-50 dark:bg-slate-800/60 px-2 py-0.5 rounded-xs border border-[#e0e0e0] dark:border-slate-700 inline-block">
                         &ldquo;{item.notes}&rdquo;
                       </p>
                     )}
@@ -264,12 +282,10 @@ export default function FollowUpWorkQueue({
                       type="button"
                       onClick={() => onSelectLead(item.leadId)}
                       title="View Lead Details"
-                      className="p-1.5 rounded-lg bg-crm-subtle hover:bg-crm-muted text-crm-secondary border border-crm-subtle text-xs transition-colors flex items-center gap-1 cursor-pointer"
+                      className="h-7.5 px-2.5 rounded-sm bg-white dark:bg-slate-800 hover:bg-slate-50 text-slate-700 dark:text-slate-300 border border-[#e0e0e0] dark:border-slate-700 text-xs font-semibold transition-colors flex items-center gap-1 cursor-pointer"
                     >
                       <ArrowUpRight className="w-3.5 h-3.5" />
-                      <span className="hidden md:inline text-[11px]">
-                        View Lead
-                      </span>
+                      <span className="text-[11px]">View Listing</span>
                     </button>
                   )}
 
@@ -278,7 +294,7 @@ export default function FollowUpWorkQueue({
                       <button
                         type="button"
                         onClick={() => setReschedulingFollowUp(item)}
-                        className="px-2.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer"
+                        className="h-7.5 px-2.5 rounded-sm bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-semibold transition-colors flex items-center gap-1 cursor-pointer"
                       >
                         <CalendarClock className="w-3.5 h-3.5 text-amber-600" />
                         <span className="text-[11px]">Reschedule</span>
@@ -287,7 +303,7 @@ export default function FollowUpWorkQueue({
                       <button
                         type="button"
                         onClick={() => setCompletingFollowUp(item)}
-                        className="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition-colors flex items-center gap-1.5 shadow-2xs cursor-pointer"
+                        className="h-7.5 px-3 rounded-sm bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold uppercase tracking-wider transition-colors flex items-center gap-1 shadow-2xs cursor-pointer"
                       >
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         <span className="text-[11px]">Complete</span>
@@ -299,7 +315,7 @@ export default function FollowUpWorkQueue({
                     type="button"
                     onClick={(e) => handleDelete(item.id, e)}
                     title="Delete Follow-Up"
-                    className="p-1.5 rounded-lg bg-crm-subtle hover:bg-rose-50 text-crm-muted hover:text-rose-600 border border-crm-subtle transition-colors cursor-pointer"
+                    className="p-1.5 rounded-sm bg-white dark:bg-slate-800 hover:bg-rose-50 text-slate-400 hover:text-rose-600 border border-[#e0e0e0] dark:border-slate-700 transition-colors cursor-pointer"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -312,7 +328,7 @@ export default function FollowUpWorkQueue({
 
       {/* Pagination */}
       {!isLoading && (
-        <div className="pt-4 border-t border-crm-subtle mt-4">
+        <div className="pt-3 border-t border-[#e0e0e0] dark:border-slate-800 mt-3">
           <Pagination
             currentPage={page}
             totalPages={Math.max(1, pagination?.totalPages || 1)}
@@ -333,7 +349,10 @@ export default function FollowUpWorkQueue({
         <CompleteFollowUpModal
           followUp={completingFollowUp}
           open={!!completingFollowUp}
-          onClose={() => setCompletingFollowUp(null)}
+          onClose={() => {
+            setCompletingFollowUp(null);
+            refetch();
+          }}
         />
       )}
 
@@ -342,7 +361,10 @@ export default function FollowUpWorkQueue({
         <RescheduleFollowUpModal
           followUp={reschedulingFollowUp}
           open={!!reschedulingFollowUp}
-          onClose={() => setReschedulingFollowUp(null)}
+          onClose={() => {
+            setReschedulingFollowUp(null);
+            refetch();
+          }}
         />
       )}
     </div>

@@ -160,67 +160,66 @@ export const SheetUploadZone: React.FC<SheetUploadZoneProps> = ({
       {!currentFile ? (
         <div
           onClick={() => fileInputRef.current?.click()}
-          className={`p-8 border-dashed transition-all flex flex-col items-center justify-center text-center cursor-pointer border-2 rounded-lg ${
+          className={`p-8 sm:p-10 border-2 border-dashed rounded-sm transition-all flex flex-col items-center justify-center text-center cursor-pointer ${
             isDragging
-              ? "border-blue-500 bg-blue-500/10"
-              : "border-slate-700 hover:border-slate-500"
+              ? "border-[#2874f0] bg-[#eaf4fe]/50 dark:bg-blue-950/30"
+              : "border-slate-300 dark:border-slate-700 hover:border-[#2874f0] bg-slate-50/50 dark:bg-slate-800/20"
           }`}
         >
-          <div className="p-3.5 bg-blue-500/10 border border-blue-500/20 rounded-lg text-blue-400 mb-3">
+          <div className="p-3 bg-[#eaf4fe] dark:bg-blue-950/60 border border-blue-200 dark:border-blue-900 rounded-sm text-[#2874f0] mb-3">
             {isBusy ? (
-              <RefreshCw className="w-7 h-7 animate-spin" />
+              <RefreshCw className="w-6 h-6 animate-spin" />
             ) : (
-              <UploadCloud className="w-7 h-7" />
+              <UploadCloud className="w-6 h-6" />
             )}
           </div>
-          <h3 className="text-base font-semibold text-accent-foreground mb-1">
+          <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-1">
             {isBusy
-              ? "Processing spreadsheet..."
+              ? "Parsing & Validating Spreadsheet..."
               : "Click or Drag & Drop spreadsheet here"}
           </h3>
-          <p className="text-xs text-slate-400 mb-4 max-w-md">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mb-3 max-w-md">
             Supports{" "}
-            <span className="text-blue-400 font-medium">.xlsx, .xls, .csv</span>{" "}
-            files with columns: Customer Name, Mobile, Email, City, Requirement,
-            Budget, Source.
+            <span className="text-[#2874f0] font-semibold">.xlsx, .xls, .csv</span>{" "}
+            files with standard columns: Customer Name, Mobile, Email, City, Requirement, Budget.
           </p>
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1 rounded-lg bg-card/5 border border-white/10 text-xs font-medium text-accent-foreground/50">
-              Browse from computer
+            <span className="h-8 px-3.5 rounded-sm bg-white dark:bg-slate-800 border border-[#e0e0e0] dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 shadow-2xs hover:bg-slate-50 flex items-center justify-center">
+              Browse Files from Computer
             </span>
           </div>
         </div>
       ) : (
         <div
-          className={`p-5 rounded-lg bg-card/3 border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
+          className={`p-4 sm:p-5 rounded-sm bg-slate-50/60 dark:bg-slate-800/30 border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
             isDragging
-              ? "border-blue-500 bg-blue-500/10 animate-pulse"
-              : "border-white/10"
+              ? "border-[#2874f0] bg-[#eaf4fe]/50 dark:bg-blue-950/30 animate-pulse"
+              : "border-[#e0e0e0] dark:border-slate-800"
           }`}
         >
           <div className="flex items-center gap-3.5">
-            <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-emerald-400">
+            <div className="p-2.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400 rounded-sm">
               {isBusy ? (
-                <RefreshCw className="w-6 h-6 animate-spin" />
+                <RefreshCw className="w-5 h-5 animate-spin" />
               ) : (
-                <FileSpreadsheet className="w-6 h-6" />
+                <FileSpreadsheet className="w-5 h-5" />
               )}
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h4 className="text-sm font-semibold text-accent-foreground truncate max-w-xs sm:max-w-md">
-                  {isBusy ? "Reading file..." : currentFile.name}
+                <h4 className="text-xs font-bold text-slate-800 dark:text-slate-100 truncate max-w-xs sm:max-w-md">
+                  {isBusy ? "Processing File Structure..." : currentFile.name}
                 </h4>
                 {!isBusy && (
-                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-xs bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                     <CheckCircle className="w-3 h-3" /> Ready
                   </span>
                 )}
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
                 {(currentFile.size / 1024).toFixed(1)} KB •{" "}
                 {isDragging
-                  ? "Drop to replace file"
+                  ? "Drop to replace active file"
                   : "Drag a new file or click replace"}
               </p>
             </div>
@@ -231,7 +230,7 @@ export const SheetUploadZone: React.FC<SheetUploadZoneProps> = ({
               type="button"
               disabled={isBusy}
               onClick={() => fileInputRef.current?.click()}
-              className="px-3.5 py-1.5 rounded-lg bg-card/5 hover:bg-card/10 border border-white/10 text-xs font-medium text-slate-300 hover:text-white transition-all disabled:opacity-50"
+              className="h-8 px-3 rounded-sm bg-white dark:bg-slate-800 border border-[#e0e0e0] dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 shadow-2xs transition-colors disabled:opacity-50 cursor-pointer"
             >
               Replace Sheet
             </button>
@@ -239,7 +238,7 @@ export const SheetUploadZone: React.FC<SheetUploadZoneProps> = ({
               type="button"
               disabled={isBusy}
               onClick={handleRemove}
-              className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 transition-all disabled:opacity-50"
+              className="h-8 w-8 rounded-sm bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-400 flex items-center justify-center hover:bg-rose-100 shadow-2xs transition-colors disabled:opacity-50 cursor-pointer"
               title="Remove File"
             >
               <X className="w-4 h-4" />

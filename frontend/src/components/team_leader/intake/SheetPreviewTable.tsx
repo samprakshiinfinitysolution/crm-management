@@ -58,21 +58,21 @@ export const SheetPreviewTable: React.FC<SheetPreviewTableProps> = ({
   const validCount = rows.filter((r) => r.status === "VALID").length;
 
   return (
-    <div className="p-6 rounded-lg bg-card/3 border border-white/10 space-y-5">
+    <div className="bg-white dark:bg-slate-900 rounded-sm border border-[#e0e0e0] dark:border-slate-800 shadow-2xs overflow-hidden">
       {/* Top Bar: Search, Filter Tabs & Ingest CTA */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div className="p-3 sm:p-3.5 border-b border-[#e0e0e0] dark:border-slate-800 flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-slate-50/50 dark:bg-slate-800/20">
         {/* Filter Tabs */}
-        <div className="flex items-center gap-1.5 p-1 bg-card/5 rounded-lg border border-crm-brand/70 overflow-x-auto">
+        <div className="flex items-center gap-1 p-0.5 bg-slate-100 dark:bg-slate-800 rounded-sm border border-[#e0e0e0] dark:border-slate-700 overflow-x-auto">
           <button
             type="button"
             onClick={() => {
               setFilterTab("ALL");
               setCurrentPage(1);
             }}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+            className={`h-7 px-2.5 rounded-xs text-xs font-bold transition-all cursor-pointer ${
               filterTab === "ALL"
-                ? "bg-blue-600 text-card shadow-md"
-                : "text-crm-brand hover:text-crm-brand/40 hover:bg-card/5"
+                ? "bg-[#2874f0] text-white shadow-2xs"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-700"
             }`}
           >
             All Rows ({rows.length})
@@ -83,10 +83,10 @@ export const SheetPreviewTable: React.FC<SheetPreviewTableProps> = ({
               setFilterTab("VALID");
               setCurrentPage(1);
             }}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+            className={`h-7 px-2.5 rounded-xs text-xs font-bold transition-all cursor-pointer ${
               filterTab === "VALID"
-                ? "bg-emerald-600 text-card shadow-md"
-                : "text-crm-brand hover:text-crm-brand/40 hover:bg-card/5"
+                ? "bg-emerald-600 text-white shadow-2xs"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-700"
             }`}
           >
             Valid ({rows.filter((r) => r.status === "VALID").length})
@@ -97,10 +97,10 @@ export const SheetPreviewTable: React.FC<SheetPreviewTableProps> = ({
               setFilterTab("DUPLICATE");
               setCurrentPage(1);
             }}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+            className={`h-7 px-2.5 rounded-xs text-xs font-bold transition-all cursor-pointer ${
               filterTab === "DUPLICATE"
-                ? "bg-amber-600 text-card shadow-md"
-                : "text-crm-brand hover:text-crm-brand/40 hover:bg-card/5"
+                ? "bg-amber-600 text-white shadow-2xs"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-700"
             }`}
           >
             Duplicates ({rows.filter((r) => r.status === "DUPLICATE").length})
@@ -111,10 +111,10 @@ export const SheetPreviewTable: React.FC<SheetPreviewTableProps> = ({
               setFilterTab("INVALID");
               setCurrentPage(1);
             }}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+            className={`h-7 px-2.5 rounded-xs text-xs font-bold transition-all cursor-pointer ${
               filterTab === "INVALID"
-                ? "bg-rose-600 text-card shadow-md"
-                : "text-crm-brand hover:text-crm-brand/40 hover:bg-card/5"
+                ? "bg-rose-600 text-white shadow-2xs"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-700"
             }`}
           >
             Errors ({rows.filter((r) => r.status === "INVALID").length})
@@ -122,18 +122,18 @@ export const SheetPreviewTable: React.FC<SheetPreviewTableProps> = ({
         </div>
 
         {/* Search & Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <div className="relative">
-            <Search className="w-3.5 h-3.5 text-crm-brand absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search leads..."
+              placeholder="Search staged rows..."
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
                 setCurrentPage(1);
               }}
-              className="pl-8 pr-3 py-1.5 bg-card/5 border border-crm-brand/10 rounded-lg text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-crm-brand w-44 sm:w-56"
+              className="h-8 pl-8 pr-3 bg-white dark:bg-slate-800 border border-[#e0e0e0] dark:border-slate-700 rounded-sm text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-[#2874f0] focus:ring-1 focus:ring-[#2874f0] w-48 sm:w-60 transition-colors"
             />
           </div>
 
@@ -144,7 +144,7 @@ export const SheetPreviewTable: React.FC<SheetPreviewTableProps> = ({
                 setSearchTerm("");
                 setCurrentPage(1);
               }}
-              className="h-8 px-2 rounded-lg bg-card/10 hover:bg-card/20 text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer shadow-2xs shrink-0"
+              className="h-8 px-2 rounded-sm bg-white dark:bg-slate-800 border border-[#e0e0e0] dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer shadow-2xs shrink-0"
               title="Reset search"
             >
               <RotateCcw className="w-3.5 h-3.5 text-slate-400" />
@@ -156,7 +156,7 @@ export const SheetPreviewTable: React.FC<SheetPreviewTableProps> = ({
             type="button"
             onClick={onCommit}
             disabled={validCount === 0 || isCommitting}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-lg shadow-blue-500/20 transition-all active:scale-95 disabled:opacity-50"
+            className="h-8 px-4 rounded-sm bg-[#2874f0] hover:bg-[#1a5bb8] active:bg-[#154b98] text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Layers className="w-3.5 h-3.5" />
             <span>
@@ -168,28 +168,28 @@ export const SheetPreviewTable: React.FC<SheetPreviewTableProps> = ({
 
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse ">
-          <thead className="border-b border-crm-brand-subtle">
-            <tr className="border-b border-crm-brand-subtle text-[11px] font-semibold uppercase tracking-wider text-accent-foreground/60">
-              <th className="pb-3 pl-2">#</th>
-              <th className="pb-3">Status</th>
-              <th className="pb-3">Customer Name</th>
-              <th className="pb-3">Mobile</th>
-              <th className="pb-3">Email</th>
-              <th className="pb-3">City</th>
-              <th className="pb-3">Requirement</th>
-              <th className="pb-3">Budget</th>
-              <th className="pb-3 pr-2">Source</th>
+        <table className="w-full text-left border-collapse text-xs">
+          <thead className="bg-slate-50/80 dark:bg-slate-800/50 border-b border-[#e0e0e0] dark:border-slate-800 text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
+            <tr>
+              <th className="py-2.5 px-3">#</th>
+              <th className="py-2.5 px-3">Status</th>
+              <th className="py-2.5 px-3">Customer Name</th>
+              <th className="py-2.5 px-3">Mobile Number</th>
+              <th className="py-2.5 px-3">Email Address</th>
+              <th className="py-2.5 px-3">City</th>
+              <th className="py-2.5 px-3">Requirement</th>
+              <th className="py-2.5 px-3">Budget</th>
+              <th className="py-2.5 px-3 text-right">Source</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/5 text-sm">
+          <tbody className="divide-y divide-[#e0e0e0]/70 dark:divide-slate-800/70">
             {paginatedRows.length === 0 ? (
               <tr>
                 <td
                   colSpan={9}
-                  className="py-12 text-center text-xs text-slate-500"
+                  className="py-12 text-center text-xs text-slate-500 dark:text-slate-400"
                 >
-                  No records match your filter criteria.
+                  No records match the active filter or search criteria.
                 </td>
               </tr>
             ) : (
@@ -201,51 +201,51 @@ export const SheetPreviewTable: React.FC<SheetPreviewTableProps> = ({
                       row.id ||
                       (row.rowNumber ? String(row.rowNumber) : String(idx))
                     }
-                    className="hover:bg-card/2 transition-colors"
+                    className="hover:bg-blue-50/20 dark:hover:bg-slate-800/40 transition-colors"
                   >
-                    <td className="py-3.5 pl-2 text-xs font-mono text-slate-500">
+                    <td className="py-2.5 px-3 font-mono text-[11px] text-slate-500">
                       {globalIndex}
                     </td>
-                    <td className="py-3.5">
+                    <td className="py-2.5 px-3 whitespace-nowrap">
                       {row.status === "VALID" && (
-                        <span className="inline-flex items-center gap-1 text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full font-medium">
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded-xs">
                           <CheckCircle2 className="w-3 h-3" /> Valid
                         </span>
                       )}
                       {row.status === "DUPLICATE" && (
-                        <span className="inline-flex items-center gap-1 text-xs text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full font-medium">
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 px-2 py-0.5 rounded-xs">
                           <AlertTriangle className="w-3 h-3" /> Duplicate
                         </span>
                       )}
                       {row.status === "INVALID" && (
                         <span
-                          className="inline-flex items-center gap-1 text-xs text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded-full font-medium"
+                          className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 px-2 py-0.5 rounded-xs"
                           title={row.validationNote}
                         >
                           <AlertCircle className="w-3 h-3" /> Incomplete
                         </span>
                       )}
                     </td>
-                    <td className="py-3.5 font-medium text-slate-900 dark:text-accent-foreground dark:text-accent-foreground dark:text-white">
+                    <td className="py-2.5 px-3 font-semibold text-slate-900 dark:text-slate-100">
                       {row.customerName}
                     </td>
-                    <td className="py-3.5 font-mono text-xs text-muted-foreground/70">
+                    <td className="py-2.5 px-3 font-mono text-slate-700 dark:text-slate-300 whitespace-nowrap">
                       {row.mobile}
                     </td>
-                    <td className="py-3.5 text-xs text-muted-foreground">
+                    <td className="py-2.5 px-3 text-slate-600 dark:text-slate-400">
                       {row.email || "—"}
                     </td>
-                    <td className="py-3.5 text-xs text-muted-foreground">
+                    <td className="py-2.5 px-3 text-slate-600 dark:text-slate-400">
                       {row.city || "—"}
                     </td>
-                    <td className="py-3.5 text-xs text-muted-foreground max-w-37.5 truncate">
+                    <td className="py-2.5 px-3 text-slate-600 dark:text-slate-400 max-w-48 truncate" title={row.requirement}>
                       {row.requirement || "—"}
                     </td>
-                    <td className="py-3.5 text-xs text-crm-muted">
+                    <td className="py-2.5 px-3 font-mono text-slate-700 dark:text-slate-300">
                       {row.budget || "—"}
                     </td>
-                    <td className="py-3.5 pr-2">
-                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                    <td className="py-2.5 px-3 text-right">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-xs bg-[#eaf4fe] dark:bg-blue-950/40 text-[#2874f0] border border-blue-200 dark:border-blue-900 uppercase">
                         {row.source || row.leadSource || "EXCEL"}
                       </span>
                     </td>
@@ -259,31 +259,33 @@ export const SheetPreviewTable: React.FC<SheetPreviewTableProps> = ({
 
       {/* Pagination Footer */}
       {filteredRows.length > 0 && (
-        <div className="flex items-center justify-between pt-4 border-t border-crm-brand-subtle text-xs text-slate-400">
+        <div className="p-3 sm:p-3.5 border-t border-[#e0e0e0] dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 bg-slate-50/40 dark:bg-slate-800/20">
           <div>
-            Showing {(currentPage - 1) * pageSize + 1} to{" "}
-            {Math.min(currentPage * pageSize, filteredRows.length)} of{" "}
-            {filteredRows.length} records
+            Showing <strong className="font-semibold text-slate-800 dark:text-slate-200">{(currentPage - 1) * pageSize + 1}</strong> to{" "}
+            <strong className="font-semibold text-slate-800 dark:text-slate-200">{Math.min(currentPage * pageSize, filteredRows.length)}</strong> of{" "}
+            <strong className="font-semibold text-slate-800 dark:text-slate-200">{filteredRows.length}</strong> records
           </div>
           <div className="flex items-center gap-2">
             <button
               type="button"
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              className="p-1.5 rounded-lg bg-card/5 hover:bg-card/10 border border-white/10 disabled:opacity-30 transition-all text-slate-300"
+              className="h-7 px-2 rounded-sm bg-white dark:bg-slate-800 border border-[#e0e0e0] dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-30 transition-colors text-slate-700 dark:text-slate-300 flex items-center gap-1 cursor-pointer disabled:cursor-not-allowed shadow-2xs"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-3.5 h-3.5" />
+              <span>Prev</span>
             </button>
-            <span>
+            <span className="text-xs px-1">
               Page {currentPage} of {totalPages}
             </span>
             <button
               type="button"
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              className="p-1.5 rounded-lg bg-card/5 hover:bg-card/10 border border-white/10 disabled:opacity-30 transition-all text-slate-300"
+              className="h-7 px-2 rounded-sm bg-white dark:bg-slate-800 border border-[#e0e0e0] dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-30 transition-colors text-slate-700 dark:text-slate-300 flex items-center gap-1 cursor-pointer disabled:cursor-not-allowed shadow-2xs"
             >
-              <ChevronRight className="w-4 h-4" />
+              <span>Next</span>
+              <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
